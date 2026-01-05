@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 
 const footerLinks = {
@@ -11,14 +12,14 @@ const footerLinks = {
     { href: "/get-started", label: "Contact" },
   ],
   legal: [
-    { href: "#", label: "Privacy Policy" },
-    { href: "#", label: "Terms of Service" },
+    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms of Service" },
   ],
 };
 
-export function Footer() {
+export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer className="bg-tertiary text-tertiary-foreground">
+    <footer ref={ref} className="bg-tertiary text-tertiary-foreground">
       <div className="container mx-auto px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand */}
@@ -40,7 +41,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.platform.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <Link
                     to={link.href}
                     className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
@@ -59,7 +60,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <Link
                     to={link.href}
                     className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
@@ -78,7 +79,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <Link
                     to={link.href}
                     className="text-sm text-primary-foreground/60 hover:text-primary transition-colors"
@@ -105,4 +106,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = "Footer";
