@@ -50,15 +50,315 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_cv: {
+        Row: {
+          bio: string | null
+          contact_email: string | null
+          created_at: string
+          goals: string | null
+          headline: string | null
+          id: string
+          is_published: boolean | null
+          links: Json | null
+          projects: Json | null
+          seo_description: string | null
+          seo_title: string | null
+          skills: string[] | null
+          slug: string | null
+          social_image_url: string | null
+          template: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          contact_email?: string | null
+          created_at?: string
+          goals?: string | null
+          headline?: string | null
+          id?: string
+          is_published?: boolean | null
+          links?: Json | null
+          projects?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          skills?: string[] | null
+          slug?: string | null
+          social_image_url?: string | null
+          template?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          contact_email?: string | null
+          created_at?: string
+          goals?: string | null
+          headline?: string | null
+          id?: string
+          is_published?: boolean | null
+          links?: Json | null
+          projects?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          skills?: string[] | null
+          slug?: string | null
+          social_image_url?: string | null
+          template?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          business_name: string | null
+          business_stage: string | null
+          created_at: string
+          full_name: string | null
+          has_ein: boolean | null
+          has_llc: boolean | null
+          id: string
+          industry: string | null
+          onboarding_completed: boolean | null
+          state: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          business_name?: string | null
+          business_stage?: string | null
+          created_at?: string
+          full_name?: string | null
+          has_ein?: boolean | null
+          has_llc?: boolean | null
+          id?: string
+          industry?: string | null
+          onboarding_completed?: boolean | null
+          state?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          business_name?: string | null
+          business_stage?: string | null
+          created_at?: string
+          full_name?: string | null
+          has_ein?: boolean | null
+          has_llc?: boolean | null
+          id?: string
+          industry?: string | null
+          onboarding_completed?: boolean | null
+          state?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      progress: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          module: string
+          notes: string | null
+          step: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          module: string
+          notes?: string | null
+          step: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          module?: string
+          notes?: string | null
+          step?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          category: string
+          content: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean | null
+          read_time_minutes: number | null
+          sort_order: number | null
+          tier_required: Database["public"]["Enums"]["subscription_plan"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          read_time_minutes?: number | null
+          sort_order?: number | null
+          tier_required?: Database["public"]["Enums"]["subscription_plan"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          read_time_minutes?: number | null
+          sort_order?: number | null
+          tier_required?: Database["public"]["Enums"]["subscription_plan"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan: Database["public"]["Enums"]["subscription_plan"]
+          status: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: Database["public"]["Enums"]["subscription_plan"]
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan?: Database["public"]["Enums"]["subscription_plan"]
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          admin_response: string | null
+          created_at: string
+          id: string
+          message: string
+          module: string | null
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          module?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          module?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      subscription_plan: "free" | "start" | "build" | "scale"
+      subscription_status: "active" | "canceled" | "past_due" | "trialing"
+      ticket_status: "open" | "in_progress" | "resolved" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -185,6 +485,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      subscription_plan: ["free", "start", "build", "scale"],
+      subscription_status: ["active", "canceled", "past_due", "trialing"],
+      ticket_status: ["open", "in_progress", "resolved", "closed"],
+    },
   },
 } as const
