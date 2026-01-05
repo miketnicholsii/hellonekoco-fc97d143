@@ -5,32 +5,75 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const turnstileSecretKey = Deno.env.get("TURNSTILE_SECRET_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Simple rate limiting store (in-memory, resets on cold start)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 5; // max submissions
-const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in ms
+// Enhanced rate limiting with per-minute and per-day limits
+const rateLimitStore = new Map<string, { 
+  minuteCount: number; 
+  minuteReset: number;
+  dayCount: number;
+  dayReset: number;
+  lastRequest: number;
+}>();
 
-function isRateLimited(ip: string): boolean {
+const RATE_LIMIT_PER_MINUTE = 5;
+const RATE_LIMIT_PER_DAY = 30;
+const COOLDOWN_MS = 10000; // 10 second cooldown between requests
+
+function checkRateLimit(ip: string): { allowed: boolean; reason?: string } {
   const now = Date.now();
-  const record = rateLimitStore.get(ip);
+  const oneMinute = 60 * 1000;
+  const oneDay = 24 * 60 * 60 * 1000;
   
-  if (!record || now > record.resetTime) {
-    rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
-    return false;
+  let record = rateLimitStore.get(ip);
+  
+  if (!record) {
+    record = {
+      minuteCount: 0,
+      minuteReset: now + oneMinute,
+      dayCount: 0,
+      dayReset: now + oneDay,
+      lastRequest: 0,
+    };
+    rateLimitStore.set(ip, record);
   }
   
-  if (record.count >= RATE_LIMIT) {
-    return true;
+  // Reset counters if windows have passed
+  if (now > record.minuteReset) {
+    record.minuteCount = 0;
+    record.minuteReset = now + oneMinute;
+  }
+  if (now > record.dayReset) {
+    record.dayCount = 0;
+    record.dayReset = now + oneDay;
   }
   
-  record.count++;
-  return false;
+  // Check cooldown
+  if (record.lastRequest > 0 && (now - record.lastRequest) < COOLDOWN_MS) {
+    return { allowed: false, reason: "Please wait a few seconds before submitting again." };
+  }
+  
+  // Check minute limit
+  if (record.minuteCount >= RATE_LIMIT_PER_MINUTE) {
+    return { allowed: false, reason: "Too many requests. Please try again in a minute." };
+  }
+  
+  // Check day limit
+  if (record.dayCount >= RATE_LIMIT_PER_DAY) {
+    return { allowed: false, reason: "Daily submission limit reached. Please try again tomorrow." };
+  }
+  
+  // Update counters
+  record.minuteCount++;
+  record.dayCount++;
+  record.lastRequest = now;
+  
+  return { allowed: true };
 }
 
 interface ContactFormRequest {
@@ -40,8 +83,8 @@ interface ContactFormRequest {
   stage?: string;
   goal?: string;
   message?: string;
-  // Honeypot field - should always be empty
-  website?: string;
+  website?: string; // Honeypot
+  turnstileToken?: string; // CAPTCHA token
 }
 
 function validateEmail(email: string): boolean {
@@ -51,7 +94,38 @@ function validateEmail(email: string): boolean {
 
 function sanitizeString(str: string | undefined, maxLength: number): string {
   if (!str) return "";
-  return str.slice(0, maxLength).replace(/[<>]/g, "").trim();
+  // Remove potential header injection patterns and HTML
+  return str
+    .slice(0, maxLength)
+    .replace(/[\r\n]/g, " ") // Prevent header injection
+    .replace(/[<>]/g, "") // Basic XSS prevention
+    .trim();
+}
+
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  if (!turnstileSecretKey) {
+    console.warn("TURNSTILE_SECRET_KEY not configured, skipping verification");
+    return true; // Skip if not configured
+  }
+  
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: turnstileSecretKey,
+        response: token,
+        remoteip: ip,
+      }),
+    });
+    
+    const result = await response.json();
+    console.log("Turnstile verification result:", result.success);
+    return result.success === true;
+  } catch (error) {
+    console.error("Turnstile verification error:", error);
+    return false;
+  }
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -74,10 +148,11 @@ const handler = async (req: Request): Promise<Response> => {
                      "unknown";
 
     // Check rate limit
-    if (isRateLimited(clientIp)) {
-      console.log(`Rate limited IP: ${clientIp}`);
+    const rateCheck = checkRateLimit(clientIp);
+    if (!rateCheck.allowed) {
+      console.log(`Rate limited IP: ${clientIp} - ${rateCheck.reason}`);
       return new Response(
-        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        JSON.stringify({ error: rateCheck.reason }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -86,7 +161,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Honeypot check - if website field is filled, it's likely a bot
     if (body.website && body.website.length > 0) {
-      console.log("Honeypot triggered, rejecting submission");
+      console.log("Honeypot triggered, silently rejecting");
       // Return success to not alert bots
       return new Response(
         JSON.stringify({ success: true, message: "Thank you for your submission!" }),
@@ -94,20 +169,37 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Validate required fields
+    // Verify Turnstile CAPTCHA
+    if (!body.turnstileToken) {
+      return new Response(
+        JSON.stringify({ error: "Please complete the security check." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const turnstileValid = await verifyTurnstile(body.turnstileToken, clientIp);
+    if (!turnstileValid) {
+      console.log("Turnstile verification failed for IP:", clientIp);
+      return new Response(
+        JSON.stringify({ error: "Security verification failed. Please try again." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validate and sanitize required fields
     const name = sanitizeString(body.name, 100);
     const email = sanitizeString(body.email, 255);
 
     if (!name || name.length < 2) {
       return new Response(
-        JSON.stringify({ error: "Name is required and must be at least 2 characters" }),
+        JSON.stringify({ error: "Name is required and must be at least 2 characters." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     if (!email || !validateEmail(email)) {
       return new Response(
-        JSON.stringify({ error: "Valid email is required" }),
+        JSON.stringify({ error: "Please provide a valid email address." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -118,7 +210,7 @@ const handler = async (req: Request): Promise<Response> => {
     const goal = sanitizeString(body.goal, 200);
     const message = sanitizeString(body.message, 2000);
 
-    // Store submission in database
+    // Store submission using service role (bypasses RLS)
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     
     const { error: dbError } = await supabase
@@ -136,7 +228,7 @@ const handler = async (req: Request): Promise<Response> => {
     if (dbError) {
       console.error("Database error:", dbError);
       return new Response(
-        JSON.stringify({ error: "Failed to save submission. Please try again." }),
+        JSON.stringify({ error: "Unable to save your submission. Please try again." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -158,13 +250,12 @@ const handler = async (req: Request): Promise<Response> => {
           ${goal ? `<p><strong>Goal:</strong> ${goal}</p>` : ""}
           ${message ? `<p><strong>Message:</strong><br>${message}</p>` : ""}
           <hr>
-          <p style="color: #666; font-size: 12px;">Submitted at ${new Date().toISOString()}</p>
+          <p style="color: #666; font-size: 12px;">Submitted at ${new Date().toISOString()} from IP: ${clientIp}</p>
         `,
       });
-      console.log("Admin notification email sent");
+      console.log("Admin notification sent");
     } catch (emailError) {
-      // Log but don't fail the request - submission is already saved
-      console.error("Failed to send admin notification email:", emailError);
+      console.error("Admin email failed:", emailError);
     }
 
     // Send auto-reply to user
@@ -189,10 +280,9 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
         `,
       });
-      console.log("Auto-reply email sent to:", email);
+      console.log("Auto-reply sent to:", email);
     } catch (emailError) {
-      // Log but don't fail - submission is saved
-      console.error("Failed to send auto-reply email:", emailError);
+      console.error("Auto-reply failed:", emailError);
     }
 
     return new Response(
@@ -201,7 +291,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
   } catch (error) {
-    console.error("Error in contact-submit function:", error);
+    console.error("Unexpected error:", error);
     return new Response(
       JSON.stringify({ error: "An unexpected error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

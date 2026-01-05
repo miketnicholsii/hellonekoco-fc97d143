@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { supabase } from "@/integrations/supabase/client";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
 import { 
   CheckCircle2, 
   Building2, 
@@ -76,10 +77,19 @@ export default function GetStarted() {
     stage: "",
     goal: "",
     message: "",
-    // Honeypot field - hidden from users, bots will fill it
-    website: "",
+    website: "", // Honeypot
   });
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const turnstileRef = useRef<{ reset: () => void } | null>(null);
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +116,15 @@ export default function GetStarted() {
       return;
     }
 
+    if (!turnstileToken) {
+      toast({
+        title: "Please complete the security check",
+        description: "This helps us prevent spam.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -118,6 +137,7 @@ export default function GetStarted() {
           goal: formData.goal,
           message: formData.message.trim(),
           website: formData.website, // Honeypot
+          turnstileToken,
         },
       });
 
@@ -128,6 +148,8 @@ export default function GetStarted() {
           description: "Please try again or email us directly at hello@helloneko.co",
           variant: "destructive",
         });
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
         return;
       }
 
@@ -137,6 +159,8 @@ export default function GetStarted() {
           description: data.error,
           variant: "destructive",
         });
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
         return;
       }
     
@@ -155,6 +179,8 @@ export default function GetStarted() {
         message: "",
         website: "",
       });
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
     } catch (err) {
       console.error("Unexpected error:", err);
       toast({
@@ -162,6 +188,8 @@ export default function GetStarted() {
         description: "Please try again later.",
         variant: "destructive",
       });
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -324,13 +352,22 @@ export default function GetStarted() {
                   />
                 </div>
 
+                {/* Turnstile CAPTCHA */}
+                <div className="flex justify-center">
+                  <TurnstileWidget
+                    ref={turnstileRef}
+                    onVerify={handleTurnstileVerify}
+                    onExpire={handleTurnstileExpire}
+                  />
+                </div>
+
                 {/* Submit */}
                 <Button
                   type="submit"
                   variant="cta"
                   size="xl"
                   className="w-full group"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !turnstileToken}
                 >
                   {isSubmitting ? (
                     <>
