@@ -50,6 +50,36 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_scores: {
+        Row: {
+          bureau: string
+          created_at: string
+          id: string
+          notes: string | null
+          score: number | null
+          score_date: string
+          user_id: string
+        }
+        Insert: {
+          bureau: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          score_date: string
+          user_id: string
+        }
+        Update: {
+          bureau?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          score_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       digital_cv: {
         Row: {
           bio: string | null
@@ -317,6 +347,51 @@ export type Database = {
           subject?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      tradelines: {
+        Row: {
+          account_type: string
+          created_at: string
+          credit_limit: number | null
+          current_balance: number | null
+          id: string
+          notes: string | null
+          opened_date: string | null
+          payment_status: string | null
+          reports_to: string[] | null
+          updated_at: string
+          user_id: string
+          vendor_name: string
+        }
+        Insert: {
+          account_type: string
+          created_at?: string
+          credit_limit?: number | null
+          current_balance?: number | null
+          id?: string
+          notes?: string | null
+          opened_date?: string | null
+          payment_status?: string | null
+          reports_to?: string[] | null
+          updated_at?: string
+          user_id: string
+          vendor_name: string
+        }
+        Update: {
+          account_type?: string
+          created_at?: string
+          credit_limit?: number | null
+          current_balance?: number | null
+          id?: string
+          notes?: string | null
+          opened_date?: string | null
+          payment_status?: string | null
+          reports_to?: string[] | null
+          updated_at?: string
+          user_id?: string
+          vendor_name?: string
         }
         Relationships: []
       }
