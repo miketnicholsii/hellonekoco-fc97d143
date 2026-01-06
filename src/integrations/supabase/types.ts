@@ -80,6 +80,33 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_layouts: {
+        Row: {
+          created_at: string
+          hidden_widgets: Json
+          id: string
+          updated_at: string
+          user_id: string
+          widget_order: Json
+        }
+        Insert: {
+          created_at?: string
+          hidden_widgets?: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+          widget_order?: Json
+        }
+        Update: {
+          created_at?: string
+          hidden_widgets?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+          widget_order?: Json
+        }
+        Relationships: []
+      }
       digital_cv: {
         Row: {
           bio: string | null

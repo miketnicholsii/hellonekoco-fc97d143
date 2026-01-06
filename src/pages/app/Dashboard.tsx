@@ -5,17 +5,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import NextSteps from "@/components/dashboard/NextSteps";
 import TaskManager from "@/components/dashboard/TaskManager";
-import TrelloIntegration from "@/components/dashboard/TrelloIntegration";
-import DashboardStats from "@/components/dashboard/DashboardStats";
-import TierProgress from "@/components/dashboard/TierProgress";
-import FullProductSuite from "@/components/dashboard/FullProductSuite";
-import AchievementsPreview from "@/components/dashboard/AchievementsPreview";
-import StreakTracker from "@/components/dashboard/StreakTracker";
 import WelcomeHeader from "@/components/dashboard/WelcomeHeader";
-import QuickActions from "@/components/dashboard/QuickActions";
-import ActivityFeed from "@/components/dashboard/ActivityFeed";
+import WidgetGrid from "@/components/dashboard/WidgetGrid";
 import {
   ArrowRight,
   Crown,
@@ -47,158 +39,122 @@ export default function Dashboard() {
       {/* Personalized Welcome Header */}
       <WelcomeHeader />
 
-      {/* Stats Cards */}
-      <motion.section
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        aria-label="Dashboard statistics"
-      >
-        <DashboardStats />
-      </motion.section>
+      {/* Main Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="inline-flex h-auto p-1 bg-muted/50 rounded-xl" role="tablist">
+          <TabsTrigger 
+            value="overview" 
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            aria-label="Overview tab"
+          >
+            <LayoutGrid className="h-4 w-4" aria-hidden="true" />
+            <span>Overview</span>
+          </TabsTrigger>
+          <TabsTrigger 
+            value="tasks" 
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            aria-label="Tasks tab"
+          >
+            <ListChecks className="h-4 w-4" aria-hidden="true" />
+            <span>Tasks</span>
+          </TabsTrigger>
+          <TabsTrigger 
+            value="resources" 
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            aria-label="Resources tab"
+          >
+            <BookOpen className="h-4 w-4" aria-hidden="true" />
+            <span>Resources</span>
+          </TabsTrigger>
+          <Link to="/app/analytics" className="inline-flex">
+            <div 
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+              role="link"
+              aria-label="Go to Analytics"
+            >
+              <BarChart3 className="h-4 w-4" aria-hidden="true" />
+              <span>Analytics</span>
+            </div>
+          </Link>
+        </TabsList>
 
-      {/* Main Content Grid with Quick Actions */}
-      <div className="grid lg:grid-cols-[1fr_280px] gap-6">
-        {/* Main Tabs Content */}
-        <div className="min-w-0">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="inline-flex h-auto p-1 bg-muted/50 rounded-xl" role="tablist">
-              <TabsTrigger 
-                value="overview" 
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                aria-label="Overview tab"
-              >
-                <LayoutGrid className="h-4 w-4" aria-hidden="true" />
-                <span>Overview</span>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="tasks" 
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                aria-label="Tasks tab"
-              >
-                <ListChecks className="h-4 w-4" aria-hidden="true" />
-                <span>Tasks</span>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="resources" 
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                aria-label="Resources tab"
-              >
-                <BookOpen className="h-4 w-4" aria-hidden="true" />
-                <span>Resources</span>
-              </TabsTrigger>
-              <Link to="/app/analytics" className="inline-flex">
-                <div 
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
-                  role="link"
-                  aria-label="Go to Analytics"
-                >
-                  <BarChart3 className="h-4 w-4" aria-hidden="true" />
-                  <span>Analytics</span>
-                </div>
-              </Link>
-            </TabsList>
+        {/* Overview Tab - Customizable Widget Grid */}
+        <TabsContent value="overview" className="mt-0" role="tabpanel" aria-label="Overview panel">
+          <WidgetGrid />
+        </TabsContent>
 
-            {/* Overview Tab */}
-            <TabsContent value="overview" className="mt-0 space-y-6" role="tabpanel" aria-label="Overview panel">
-              <FullProductSuite />
-              
-              {/* Activity Feed */}
-              <ActivityFeed />
-              
-              {/* Bottom cards grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <StreakTracker />
-                <AchievementsPreview />
-                <TierProgress />
-                <NextSteps />
+        {/* Tasks Tab */}
+        <TabsContent value="tasks" className="mt-0" role="tabpanel" aria-label="Tasks panel">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <TaskManager />
+          </motion.div>
+        </TabsContent>
+
+        {/* Resources Tab */}
+        <TabsContent value="resources" className="mt-0" role="tabpanel" aria-label="Resources panel">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            <div className="bg-card border border-border rounded-xl p-6">
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">Learning Resources</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  {
+                    title: "LLC Formation Guide",
+                    category: "Business Setup",
+                    readTime: "5 min read",
+                  },
+                  {
+                    title: "Understanding Business Credit",
+                    category: "Credit Building",
+                    readTime: "6 min read",
+                  },
+                  {
+                    title: "Net-30 Vendor Strategies",
+                    category: "Credit Building",
+                    readTime: "8 min read",
+                  },
+                  {
+                    title: "Building Your Brand Online",
+                    category: "Personal Brand",
+                    readTime: "7 min read",
+                  },
+                ].map((resource) => (
+                  <Link
+                    key={resource.title}
+                    to="/app/resources"
+                    className="p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-muted/30 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    aria-label={`${resource.title} - ${resource.category} - ${resource.readTime}`}
+                  >
+                    <p className="text-xs text-primary font-medium mb-1">
+                      {resource.category}
+                    </p>
+                    <h3 className="font-medium text-foreground mb-1">
+                      {resource.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {resource.readTime}
+                    </p>
+                  </Link>
+                ))}
               </div>
-              
-              {/* Trello Integration */}
-              <TrelloIntegration />
-            </TabsContent>
-
-            {/* Tasks Tab */}
-            <TabsContent value="tasks" className="mt-0" role="tabpanel" aria-label="Tasks panel">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <TaskManager />
-              </motion.div>
-            </TabsContent>
-
-            {/* Resources Tab */}
-            <TabsContent value="resources" className="mt-0" role="tabpanel" aria-label="Resources panel">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="space-y-6"
-              >
-                <div className="bg-card border border-border rounded-xl p-6">
-                  <h2 className="font-display text-xl font-bold text-foreground mb-4">Learning Resources</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[
-                      {
-                        title: "LLC Formation Guide",
-                        category: "Business Setup",
-                        readTime: "5 min read",
-                      },
-                      {
-                        title: "Understanding Business Credit",
-                        category: "Credit Building",
-                        readTime: "6 min read",
-                      },
-                      {
-                        title: "Net-30 Vendor Strategies",
-                        category: "Credit Building",
-                        readTime: "8 min read",
-                      },
-                      {
-                        title: "Building Your Brand Online",
-                        category: "Personal Brand",
-                        readTime: "7 min read",
-                      },
-                    ].map((resource) => (
-                      <Link
-                        key={resource.title}
-                        to="/app/resources"
-                        className="p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-muted/30 transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        aria-label={`${resource.title} - ${resource.category} - ${resource.readTime}`}
-                      >
-                        <p className="text-xs text-primary font-medium mb-1">
-                          {resource.category}
-                        </p>
-                        <h3 className="font-medium text-foreground mb-1">
-                          {resource.title}
-                        </h3>
-                        <p className="text-xs text-muted-foreground">
-                          {resource.readTime}
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="mt-4 text-center">
-                    <Link to="/app/resources">
-                      <Button variant="outline">
-                        View All Resources
-                        <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* Quick Actions Sidebar */}
-        <aside className="hidden lg:block" aria-label="Quick actions sidebar">
-          <div className="sticky top-24">
-            <QuickActions />
-          </div>
-        </aside>
-      </div>
+              <div className="mt-4 text-center">
+                <Link to="/app/resources">
+                  <Button variant="outline">
+                    View All Resources
+                    <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </TabsContent>
+      </Tabs>
 
       {/* Upgrade CTA for free users */}
       {subscription.tier === "free" && (
