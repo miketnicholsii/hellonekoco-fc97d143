@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,17 @@ import {
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import {
   Plus,
   Trash2,
@@ -20,6 +30,7 @@ import {
   TrendingDown,
   Minus,
   BarChart3,
+  LineChartIcon,
 } from "lucide-react";
 
 interface CreditScore {
@@ -160,6 +171,42 @@ export default function ScoreMonitoring({ userId }: Props) {
     return "text-red-500";
   };
 
+  // Prepare chart data - group scores by date for multi-line chart
+  const chartData = useMemo(() => {
+    if (scores.length === 0) return [];
+
+    // Get all unique dates and sort them
+    const dateMap = new Map<string, Record<string, number | null>>();
+    
+    scores.forEach(score => {
+      const date = score.score_date;
+      if (!dateMap.has(date)) {
+        dateMap.set(date, {});
+      }
+      const entry = dateMap.get(date)!;
+      entry[score.bureau] = score.score;
+    });
+
+    // Convert to array and sort by date
+    const data = Array.from(dateMap.entries())
+      .map(([date, bureauScores]) => ({
+        date,
+        displayDate: format(parseISO(date), "MMM d"),
+        ...bureauScores,
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    return data;
+  }, [scores]);
+
+  // Chart colors for each bureau
+  const BUREAU_COLORS: Record<string, string> = {
+    duns: "hsl(172, 60%, 45%)",      // Primary teal
+    experian: "hsl(15, 85%, 60%)",   // Secondary coral
+    equifax: "hsl(200, 50%, 45%)",   // Tertiary blue
+    nav: "hsl(48, 95%, 55%)",        // Yellow
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
@@ -221,6 +268,82 @@ export default function ScoreMonitoring({ userId }: Props) {
           </div>
         ))}
       </div>
+
+      {/* Score Trend Chart */}
+      {chartData.length >= 2 && (
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <LineChartIcon className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-foreground">Score Trends</h3>
+          </div>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis 
+                  dataKey="displayDate" 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                />
+                <YAxis 
+                  domain={[0, 100]} 
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  }}
+                  labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                  itemStyle={{ color: "hsl(var(--muted-foreground))" }}
+                  formatter={(value: number, name: string) => {
+                    const bureauInfo = BUREAUS.find(b => b.value === name);
+                    return [value, bureauInfo?.label || name];
+                  }}
+                  labelFormatter={(label) => `Date: ${label}`}
+                />
+                <Legend 
+                  formatter={(value) => {
+                    const bureauInfo = BUREAUS.find(b => b.value === value);
+                    return bureauInfo?.label || value;
+                  }}
+                  wrapperStyle={{ paddingTop: "20px" }}
+                />
+                {BUREAUS.map((bureau) => (
+                  <Line
+                    key={bureau.value}
+                    type="monotone"
+                    dataKey={bureau.value}
+                    stroke={BUREAU_COLORS[bureau.value]}
+                    strokeWidth={2}
+                    dot={{ r: 4, fill: BUREAU_COLORS[bureau.value] }}
+                    activeDot={{ r: 6 }}
+                    connectNulls
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="text-xs text-muted-foreground text-center mt-4">
+            Track your credit score progress over time. Higher scores indicate better creditworthiness.
+          </p>
+        </div>
+      )}
+
+      {chartData.length < 2 && scores.length > 0 && (
+        <div className="bg-muted/50 border border-border rounded-xl p-6 text-center">
+          <LineChartIcon className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground">
+            Record at least 2 scores to see your trend chart
+          </p>
+        </div>
+      )}
 
       {/* Add Score Button */}
       <div className="flex justify-end">
