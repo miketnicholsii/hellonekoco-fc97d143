@@ -6,16 +6,18 @@ import { ArrowUpRight } from "lucide-react";
 const footerLinks = {
   platform: [
     { href: "/services", label: "Services" },
-    { href: "/personal-brand", label: "Personal Brand" },
-    { href: "/pricing", label: "Pricing" },
+    { href: "/get-started", label: "Request Access" },
   ],
   company: [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "/contact", label: "Get in Touch" },
   ],
   legal: [
     { href: "/legal/privacy", label: "Privacy Policy" },
     { href: "/legal/terms", label: "Terms of Service" },
+  ],
+  access: [
+    { href: "/login", label: "Member Access" },
   ],
 };
 
@@ -92,6 +94,17 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   </Link>
                 </li>
               ))}
+              <li className="mt-4 pt-4 border-t border-primary-foreground/10">
+                {footerLinks.access.map((link) => (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className="text-xs text-primary-foreground/40 hover:text-primary-foreground/60 transition-colors duration-300"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </li>
             </ul>
           </div>
 

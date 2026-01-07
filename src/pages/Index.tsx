@@ -79,7 +79,7 @@ export default function Index() {
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0 }} className="mb-6 sm:mb-8">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-md border border-primary-foreground/10 text-primary-foreground text-xs sm:text-sm font-medium">
                 <Sparkles className="h-3.5 w-3.5" />
-                Your Operating System for Success
+                Currently Invite-Only
               </span>
             </motion.div>
 
@@ -89,21 +89,25 @@ export default function Index() {
               <span className="text-primary-foreground/70">Build Your Brand.</span>
             </motion.h1>
 
-            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.15 }} className="text-base sm:text-lg text-primary-foreground/60 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.15 }} className="text-base sm:text-lg text-primary-foreground/60 max-w-2xl mx-auto mb-4 leading-relaxed px-2 sm:px-0">
               NÈKO is a guided platform for building legitimate businesses and personal brands — from zero to scale — with progress tracking at every step.
+            </motion.p>
+            
+            <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.18 }} className="text-sm text-primary-foreground/50 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
+              We're onboarding a limited number of partners. Request access to get started.
             </motion.p>
 
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.22 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/get-started" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   <span className="flex items-center gap-2">
-                    Get Started Free
+                    Request Access
                     <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
               </Link>
-              <Link to="/services" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Explore Services</Button>
+              <Link to="/contact" className="w-full sm:w-auto">
+                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Get in Touch</Button>
               </Link>
             </motion.div>
 
@@ -212,16 +216,16 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
-            <SectionHeading label="Ready to Start?" title="Begin your journey today." description="Join founders building businesses the right way — with NÈKO as their guide." centered light className="mb-8 sm:mb-10" />
+            <SectionHeading label="Ready to Start?" title="Request access today." description="NÈKO is currently invite-only. We're onboarding a limited number of partners." centered light className="mb-8 sm:mb-10" />
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/get-started" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-                  Get Started Free
+                  Request Access
                   <ArrowRight className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
-              <Link to="/pricing" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">View Pricing</Button>
+              <Link to="/contact" className="w-full sm:w-auto">
+                <Button variant="hero-outline" size="xl" className="w-full sm:w-auto">Get in Touch</Button>
               </Link>
             </div>
           </AnimatedSection>
