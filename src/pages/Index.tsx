@@ -94,10 +94,10 @@ export default function Index() {
             </motion.p>
 
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.22 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
                   <span className="flex items-center gap-2">
-                    Get Started Free
+                    Get in Touch
                     <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
@@ -214,9 +214,9 @@ export default function Index() {
           <AnimatedSection>
             <SectionHeading label="Ready to Start?" title="Begin your journey today." description="Join founders building businesses the right way — with NÈKO as their guide." centered light className="mb-8 sm:mb-10" />
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/contact" className="w-full sm:w-auto">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto group">
-                  Get Started Free
+                  Request an Invite
                   <ArrowRight className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
