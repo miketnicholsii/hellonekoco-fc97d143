@@ -10,7 +10,8 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact" },
+  { href: "/personal-brand", label: "Brand" },
+  { href: "/pricing", label: "Pricing" },
 ] as const;
 
 const NavPill = memo(function NavPill({ href, label, isActive, showDarkText }: { href: string; label: string; isActive: boolean; showDarkText: boolean }) {
@@ -59,8 +60,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
-  const ctaHref = user ? "/app" : "/get-started";
-  const ctaLabel = user ? "Dashboard" : "Request Access";
+  const ctaHref = user ? "/app" : "/signup";
+  const ctaLabel = user ? "Dashboard" : "Get Started";
   const showDarkText = !isHeroPage || isScrolled;
 
   return (
@@ -80,10 +81,15 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             </div>
 
             <div className="hidden lg:flex items-center gap-2.5 relative z-10">
+              {!user && (
+                <Link to="/login">
+                  <Button variant="ghost" size="sm" className={`transition-colors duration-200 ${!showDarkText ? "text-white hover:text-white hover:bg-white/10" : ""}`}>Log In</Button>
+                </Link>
+              )}
               <Link to={ctaHref}>
                 <Button variant="cta" size="default" className="shadow-md">
                   <span className="flex items-center gap-1.5">
-                    {user ? <>Dashboard <ArrowRight className="h-4 w-4" /></> : <>{ctaLabel}</>}
+                    {user ? <>Dashboard <ArrowRight className="h-4 w-4" /></> : <><Sparkles className="h-4 w-4" /> Get Started</>}
                   </span>
                 </Button>
               </Link>
@@ -110,6 +116,11 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   ))}
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
+                  {!user && (
+                    <Link to="/login" onClick={closeMenu}>
+                      <Button variant="outline" size="lg" className="w-full">Log In</Button>
+                    </Link>
+                  )}
                   <Link to={ctaHref} onClick={closeMenu}>
                     <Button variant="cta" size="lg" className="w-full">{ctaLabel}</Button>
                   </Link>

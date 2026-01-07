@@ -9,7 +9,8 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact" },
+  { href: "/personal-brand", label: "Personal Brand" },
+  { href: "/pricing", label: "Pricing" },
 ] as const;
 
 export const Navbar = memo(function Navbar() {
@@ -53,8 +54,8 @@ export const Navbar = memo(function Navbar() {
   }, []);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
-  const ctaHref = user ? "/app" : "/get-started";
-  const ctaLabel = user ? "Dashboard" : "Request Access";
+  const ctaHref = user ? "/app" : "/signup";
+  const ctaLabel = user ? "Dashboard" : "Get Started";
   
   // Determine navbar style: hero pages get transparent until scrolled
   const showDarkText = !isHeroPage || isScrolled;
@@ -106,6 +107,17 @@ export const Navbar = memo(function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
+            {!user && (
+              <Link to="/login">
+                <Button 
+                  variant={showDarkText ? "ghost" : "ghost"}
+                  size="sm"
+                  className={!showDarkText ? "text-white hover:text-white hover:bg-white/10" : ""}
+                >
+                  Log In
+                </Button>
+              </Link>
+            )}
             <Link to={ctaHref}>
               <Button 
                 variant="cta" 
@@ -155,6 +167,13 @@ export const Navbar = memo(function Navbar() {
               );
             })}
             <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
+              {!user && (
+                <Link to="/login" onClick={closeMenu}>
+                  <Button variant="outline" size="lg" className="w-full">
+                    Log In
+                  </Button>
+                </Link>
+              )}
               <Link to={ctaHref} onClick={closeMenu}>
                 <Button variant="cta" size="lg" className="w-full">
                   {ctaLabel}

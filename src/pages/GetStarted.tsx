@@ -33,29 +33,30 @@ const journeyOptions = [
   { value: "scaling", label: "Ready to scale", icon: TrendingUp },
 ];
 
-const interestOptions = [
-  "Business formation & legitimacy",
-  "Building business credit",
-  "Personal brand & web presence",
-  "Full platform access",
-  "Just exploring for now",
+const goalOptions = [
+  "Form my LLC properly",
+  "Get my EIN",
+  "Build business credit",
+  "Create my personal brand",
+  "Build a web presence",
+  "All of the above",
 ];
 
 const nextSteps = [
   {
     step: "1",
-    title: "We review your request",
-    description: "Our team reviews your background and goals to understand how NÈKO can help.",
+    title: "We review your submission",
+    description: "Our team reviews your goals and current stage to understand how we can help.",
   },
   {
     step: "2",
-    title: "We reach out personally",
-    description: "Someone from our team will follow up to discuss next steps and answer questions.",
+    title: "You get access",
+    description: "We'll send you login details and a personalized onboarding guide.",
   },
   {
     step: "3",
-    title: "You get access",
-    description: "Once approved, we'll onboard you with a personalized plan.",
+    title: "Start your journey",
+    description: "Begin with the business starter flow or jump to where you are in your journey.",
   },
 ];
 
@@ -213,16 +214,14 @@ export default function GetStarted() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeIn} className="max-w-2xl">
             <span className="inline-block text-xs font-semibold tracking-wide uppercase text-primary mb-3 sm:mb-4">
-              Request Access
+              Get Started
             </span>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6 text-balance">
-              Let's start the conversation.
+              Let's begin your journey.
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-4">
-              NÈKO is currently invite-only. Tell us about yourself and what you're building — someone from our team will follow up personally.
-            </p>
-            <p className="text-sm text-muted-foreground/80 leading-relaxed">
-              We're onboarding a limited number of partners to ensure quality support.
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+              Tell us a bit about yourself and where you are in your business journey. 
+              We'll help you find the right path forward.
             </p>
           </motion.div>
         </div>
@@ -319,20 +318,20 @@ export default function GetStarted() {
                   </div>
                 </div>
 
-                {/* Interest */}
+                {/* Goal */}
                 <div className="space-y-2">
-                  <Label htmlFor="goal">What are you most interested in?</Label>
+                  <Label htmlFor="goal">What's your primary goal?</Label>
                   <Select
                     value={formData.goal}
                     onValueChange={(value) => setFormData({ ...formData, goal: value })}
                   >
                     <SelectTrigger className="h-11 sm:h-12">
-                      <SelectValue placeholder="Select what interests you" />
+                      <SelectValue placeholder="Select your main goal" />
                     </SelectTrigger>
                     <SelectContent>
-                      {interestOptions.map((interest) => (
-                        <SelectItem key={interest} value={interest}>
-                          {interest}
+                      {goalOptions.map((goal) => (
+                        <SelectItem key={goal} value={goal}>
+                          {goal}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -341,12 +340,12 @@ export default function GetStarted() {
 
                 {/* Message */}
                 <div className="space-y-2">
-                  <Label htmlFor="message">Tell us about what you're building</Label>
+                  <Label htmlFor="message">Anything else you'd like to share?</Label>
                   <Textarea
                     id="message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="What's your business idea? What stage are you at? What would be most helpful?"
+                    placeholder="Tell us more about your business idea or goals..."
                     rows={4}
                     className="resize-none"
                     maxLength={2000}
@@ -373,11 +372,11 @@ export default function GetStarted() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      Sending...
+                      Submitting...
                     </>
                   ) : (
                     <>
-                      Request Access
+                      Start Your Journey
                       <Send className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </>
                   )}
