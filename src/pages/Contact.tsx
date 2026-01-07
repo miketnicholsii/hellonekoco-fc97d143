@@ -10,6 +10,13 @@ import { useToast } from "@/hooks/use-toast";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { supabase } from "@/integrations/supabase/client";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Mail, MapPin, Clock, Send, Loader2, CheckCircle2 } from "lucide-react";
 
 const contactInfo = [
@@ -33,12 +40,21 @@ const contactInfo = [
   },
 ];
 
+const interestOptions = [
+  { value: "general", label: "General Inquiry" },
+  { value: "free", label: "Free Tier" },
+  { value: "start", label: "Start Plan ($29/mo)" },
+  { value: "build", label: "Build Plan ($79/mo)" },
+  { value: "scale", label: "Scale Plan ($149/mo)" },
+  { value: "partnership", label: "Partnership" },
+];
+
 export default function Contact() {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
+    interest: "",
     message: "",
     website: "", // Honeypot
   });
@@ -98,13 +114,15 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
+      const interestLabel = interestOptions.find(o => o.value === formData.interest)?.label || "General Inquiry";
+      
       const { data, error } = await supabase.functions.invoke("contact-submit", {
         body: {
           name,
           email,
-          businessName: formData.subject.trim(),
+          businessName: interestLabel,
           stage: "contact",
-          goal: "general-inquiry",
+          goal: formData.interest || "general-inquiry",
           message,
           website: formData.website,
           turnstileToken,
@@ -156,7 +174,7 @@ export default function Contact() {
               Get in touch
             </h1>
             <p className="text-lg text-primary-foreground/70">
-              Have a question or want to learn more? We'd love to hear from you.
+              Have a question or ready to start? We'd like to hear from you.
             </p>
           </motion.div>
         </div>
@@ -174,7 +192,7 @@ export default function Contact() {
                     <CheckCircle2 className="h-8 w-8 text-primary" />
                   </div>
                   <h2 className="font-display text-2xl font-bold text-foreground mb-3">
-                    Message sent!
+                    Message sent
                   </h2>
                   <p className="text-muted-foreground mb-6">
                     Thanks for reaching out. We'll get back to you within 24 hours.
@@ -186,7 +204,7 @@ export default function Contact() {
                       setFormData({
                         name: "",
                         email: "",
-                        subject: "",
+                        interest: "",
                         message: "",
                         website: "",
                       });
@@ -241,15 +259,22 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
-                    <Input
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder="What's this about?"
-                      className="h-12"
-                      maxLength={200}
-                    />
+                    <Label htmlFor="interest">What are you interested in?</Label>
+                    <Select
+                      value={formData.interest}
+                      onValueChange={(value) => setFormData({ ...formData, interest: value })}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {interestOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">
@@ -258,7 +283,7 @@ export default function Contact() {
                       id="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="How can we help?"
+                      placeholder="Tell us about your goals or questions"
                       rows={5}
                       className="resize-none"
                       maxLength={2000}
@@ -330,13 +355,13 @@ export default function Contact() {
 
                 <div className="p-6 rounded-xl bg-card border border-border">
                   <h3 className="font-medium text-foreground mb-2">
-                    Looking to get started?
+                    Already a member?
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Skip the contact form and jump right into NÈKO.
+                    Log in to access your dashboard and continue your journey.
                   </p>
                   <Button asChild variant="outline" className="w-full">
-                    <a href="/signup">Create your free account</a>
+                    <a href="/login">Member Login</a>
                   </Button>
                 </div>
               </div>
