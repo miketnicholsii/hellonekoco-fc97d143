@@ -18,7 +18,6 @@ const PublicProfile = lazy(() => import("@/pages/PublicProfile"));
 
 // Auth pages - lazy load
 const Login = lazy(() => import("@/pages/Login"));
-const Signup = lazy(() => import("@/pages/Signup"));
 const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
 
 // Legal pages - lazy load
@@ -101,7 +100,6 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           
           {/* Auth routes */}
           <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
-          <Route path="/signup" element={<AnimatedPage><Signup /></AnimatedPage>} />
           <Route path="/forgot-password" element={<AnimatedPage><ForgotPassword /></AnimatedPage>} />
           
           {/* Legal routes */}
