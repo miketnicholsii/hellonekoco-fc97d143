@@ -59,44 +59,16 @@ function PageLoader() {
   );
 }
 
-// Animation variants for page transitions
+// Lightweight page transitions for performance
 const pageVariants = {
-  initial: {
-    opacity: 0,
-    y: 12,
-  },
-  enter: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -8,
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 1, 1] as [number, number, number, number],
-    },
-  },
+  initial: { opacity: 0 },
+  enter: { opacity: 1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] as const } },
+  exit: { opacity: 0, transition: { duration: 0.12, ease: [0.4, 0, 1, 1] as const } },
 };
 
-// Wrapper component for animated pages
-const AnimatedPage = memo(function AnimatedPage({ 
-  children 
-}: { 
-  children: React.ReactNode 
-}) {
+const AnimatedPage = memo(function AnimatedPage({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div
-      variants={pageVariants}
-      initial="initial"
-      animate="enter"
-      exit="exit"
-      className="min-h-full"
-    >
+    <motion.div variants={pageVariants} initial="initial" animate="enter" exit="exit" className="min-h-full">
       {children}
     </motion.div>
   );
