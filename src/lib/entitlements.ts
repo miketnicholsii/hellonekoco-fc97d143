@@ -34,6 +34,11 @@ export type Feature =
   | "priority_support"
   // Discounts
   | "bundle_discounts"
+  // Resources
+  | "resources_free"
+  | "resources_starter"
+  | "resources_pro"
+  | "resources_elite"
   // Admin
   | "admin_preview";
 
@@ -157,6 +162,27 @@ export const FEATURE_ENTITLEMENTS: Record<Feature, FeatureConfig> = {
     requiredTier: "pro",
     description: "Access to bundle discounts",
     upgradeMessage: "Upgrade to Pro for bundle discounts",
+  },
+
+  // Resources
+  resources_free: {
+    requiredTier: "free",
+    description: "Access to free resources",
+  },
+  resources_starter: {
+    requiredTier: "starter",
+    description: "Access to Starter-tier resources",
+    upgradeMessage: "Upgrade to Starter to access this resource",
+  },
+  resources_pro: {
+    requiredTier: "pro",
+    description: "Access to Pro-tier resources",
+    upgradeMessage: "Upgrade to Pro to access this resource",
+  },
+  resources_elite: {
+    requiredTier: "elite",
+    description: "Access to Elite-tier resources",
+    upgradeMessage: "Upgrade to Elite to access this resource",
   },
 
   // Admin-only (not customer-facing)
