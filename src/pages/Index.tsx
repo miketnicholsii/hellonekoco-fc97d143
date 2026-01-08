@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { FeatureCard } from "@/components/FeatureCard";
 import { SectionHeading } from "@/components/SectionHeading";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
+import { ConstellationBackground } from "@/components/ConstellationBackground";
 import { 
   ArrowRight, 
   Building2, 
@@ -79,6 +80,11 @@ const NekoLogo = memo(function NekoLogo() {
 const HeroBackground = memo(function HeroBackground({ scrollY }: { scrollY: ReturnType<typeof useTransform> }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
+      {/* Constellation particle effect */}
+      <div className="absolute inset-0 z-0">
+        <ConstellationBackground />
+      </div>
+      
       {/* Primary floating orb */}
       <motion.div 
         style={{ y: scrollY }}
