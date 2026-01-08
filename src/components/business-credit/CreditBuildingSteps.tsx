@@ -21,7 +21,7 @@ import {
   Lock,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 
 interface StepData {
   id: string;
@@ -30,7 +30,7 @@ interface StepData {
   description: string;
   checklist: string[];
   tips: string[];
-  tier: "free" | "start" | "build" | "scale";
+  tier: string;
 }
 
 const CREDIT_STEPS: StepData[] = [
@@ -110,7 +110,7 @@ const CREDIT_STEPS: StepData[] = [
       "Pay early to boost your PAYDEX score",
       "Aim for 5+ tradelines reporting",
     ],
-    tier: "start",
+    tier: "starter",
   },
   {
     id: "store_credit",
@@ -129,7 +129,7 @@ const CREDIT_STEPS: StepData[] = [
       "Low limits initially are normal",
       "Good payment history leads to higher limits",
     ],
-    tier: "start",
+    tier: "starter",
   },
   {
     id: "business_credit_card",
@@ -148,7 +148,7 @@ const CREDIT_STEPS: StepData[] = [
       "Having 6+ months of history helps approval odds",
       "Start with cards for fair/building credit if needed",
     ],
-    tier: "build",
+    tier: "pro",
   },
   {
     id: "credit_monitoring",
@@ -167,7 +167,7 @@ const CREDIT_STEPS: StepData[] = [
       "A PAYDEX of 80+ is considered excellent",
       "Errors are common - check regularly",
     ],
-    tier: "build",
+    tier: "pro",
   },
 ];
 
@@ -185,7 +185,7 @@ export default function CreditBuildingSteps({ progress, setProgress, userId }: P
   const [isSaving, setIsSaving] = useState(false);
   const [showTips, setShowTips] = useState(false);
 
-  const userTier = subscription?.tier || "free";
+  const userTier = normalizeTier(subscription?.tier);
   const currentStepData = CREDIT_STEPS[currentStep];
   const hasAccess = tierMeetsRequirement(userTier, currentStepData.tier);
 

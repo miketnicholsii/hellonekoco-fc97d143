@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { tierMeetsRequirement, SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 import {
   Search,
   BookOpen,
@@ -32,7 +32,7 @@ interface Resource {
   description: string | null;
   content: string | null;
   category: string;
-  tier_required: "free" | "start" | "build" | "scale";
+  tier_required: string; // Allow any string, we'll normalize it
   read_time_minutes: number | null;
   sort_order: number | null;
   is_published: boolean | null;
@@ -47,11 +47,14 @@ const CATEGORIES = [
   { id: "templates", label: "Templates", icon: FolderOpen },
 ];
 
-const TIER_BADGES = {
+const TIER_BADGES: Record<string, { label: string; color: string }> = {
   free: { label: "Free", color: "bg-muted text-muted-foreground" },
-  start: { label: "Start", color: "bg-primary/10 text-primary" },
-  build: { label: "Build", color: "bg-secondary/10 text-secondary" },
-  scale: { label: "Scale", color: "bg-tertiary text-tertiary-foreground" },
+  starter: { label: "Starter", color: "bg-primary/10 text-primary" },
+  start: { label: "Starter", color: "bg-primary/10 text-primary" },
+  pro: { label: "Pro", color: "bg-secondary/10 text-secondary" },
+  build: { label: "Pro", color: "bg-secondary/10 text-secondary" },
+  elite: { label: "Elite", color: "bg-tertiary text-tertiary-foreground" },
+  scale: { label: "Elite", color: "bg-tertiary text-tertiary-foreground" },
 };
 
 export default function Resources() {
@@ -63,7 +66,7 @@ export default function Resources() {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  const userTier = subscription?.tier || "free";
+  const userTier = normalizeTier(subscription?.tier);
 
   useEffect(() => {
     loadResources();

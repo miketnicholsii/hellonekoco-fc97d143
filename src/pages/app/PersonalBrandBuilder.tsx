@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 import ProfileEditor from "@/components/personal-brand/ProfileEditor";
 import ProjectsEditor from "@/components/personal-brand/ProjectsEditor";
 import LinksEditor from "@/components/personal-brand/LinksEditor";
@@ -64,9 +64,9 @@ export default function PersonalBrandBuilder() {
   const [showPreview, setShowPreview] = useState(false);
   const [cv, setCV] = useState<DigitalCV | null>(null);
 
-  const userTier = subscription?.tier || "free";
-  const hasSEOAccess = tierMeetsRequirement(userTier, "build");
-  const hasPublishAccess = tierMeetsRequirement(userTier, "start");
+  const userTier = normalizeTier(subscription?.tier);
+  const hasSEOAccess = tierMeetsRequirement(userTier, "pro");
+  const hasPublishAccess = tierMeetsRequirement(userTier, "starter");
 
   useEffect(() => {
     loadCV();
@@ -168,7 +168,7 @@ export default function PersonalBrandBuilder() {
 
   const handlePublish = async () => {
     if (!hasPublishAccess) {
-      toast.error("Upgrade to Start plan to publish your profile");
+      toast.error("Upgrade to Starter plan to publish your profile");
       return;
     }
 
@@ -201,7 +201,7 @@ export default function PersonalBrandBuilder() {
     { id: "profile", label: "Profile", icon: User },
     { id: "projects", label: "Projects", icon: Briefcase },
     { id: "links", label: "Links", icon: Link2 },
-    { id: "seo", label: "SEO", icon: Search, tier: "build" as const },
+    { id: "seo", label: "SEO", icon: Search, tier: "pro" },
   ];
 
   if (isLoading) {
@@ -326,7 +326,7 @@ export default function PersonalBrandBuilder() {
                 Customize your page title, description, and social sharing image.
               </p>
               <p className="text-sm text-primary font-medium">
-                Upgrade to Build plan to unlock SEO settings
+                Upgrade to Pro plan to unlock SEO settings
               </p>
             </div>
           )}

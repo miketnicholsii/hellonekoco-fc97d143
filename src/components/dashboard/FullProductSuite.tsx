@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useProgress } from "@/hooks/use-progress";
 import { useAuth } from "@/hooks/use-auth";
-import { tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 import {
   Building2,
   CreditCard,
@@ -99,7 +99,7 @@ const MODULES = [
     description: "Form LLC, get EIN, set up bank account, phone & email",
     icon: Building2,
     href: "/app/business-starter",
-    requiredTier: "free" as const,
+    requiredTier: "free",
     color: "primary",
   },
   {
@@ -108,7 +108,7 @@ const MODULES = [
     description: "Progress through credit tiers with strategic vendor accounts",
     icon: CreditCard,
     href: "/app/business-credit",
-    requiredTier: "start" as const,
+    requiredTier: "starter",
     color: "accent-gold",
   },
   {
@@ -117,7 +117,7 @@ const MODULES = [
     description: "Create your Digital CV and professional presence",
     icon: User,
     href: "/app/personal-brand",
-    requiredTier: "start" as const,
+    requiredTier: "starter",
     color: "secondary",
   },
 ];
@@ -125,7 +125,7 @@ const MODULES = [
 export default function FullProductSuite() {
   const { subscription } = useAuth();
   const { progress, getModuleProgress, isLoading } = useProgress();
-  const userTier = subscription?.tier || "free";
+  const userTier = normalizeTier(subscription?.tier);
 
   // Calculate overall journey progress
   const calculateJourneyProgress = () => {

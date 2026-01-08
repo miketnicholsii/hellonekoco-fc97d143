@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { SUBSCRIPTION_TIERS, SubscriptionTier } from "@/lib/subscription-tiers";
+import { SUBSCRIPTION_TIERS, SubscriptionTier, normalizeTier } from "@/lib/subscription-tiers";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, Sparkles } from "lucide-react";
 
-const TIER_ORDER: SubscriptionTier[] = ["free", "start", "build", "scale"];
+const TIER_ORDER: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
 
 const TIER_FEATURES: Record<SubscriptionTier, string[]> = {
-  free: ["Business Starter Module", "Basic Progress Tracking"],
-  start: ["All Free features", "Business Credit Module", "Personal Brand Builder", "Task Management"],
-  build: ["All Start features", "Advanced Analytics", "Priority Support", "Trello Integration"],
-  scale: ["All Build features", "1-on-1 Coaching", "Custom Strategies", "Unlimited Everything"],
+  free: ["Dashboard Access", "Basic Progress Tracking"],
+  starter: ["All Free features", "Business Starter Module", "Digital CV Viewer", "Task Management"],
+  pro: ["All Starter features", "Digital CV Editor", "Personal Brand Page", "Basic Analytics", "Business Tools"],
+  elite: ["All Pro features", "Advanced Analytics", "Compliance Tools", "Priority Support", "Unlimited Everything"],
 };
 
 export default function TierProgress() {
   const { subscription } = useAuth();
-  const currentTier = subscription?.tier || "free";
+  const currentTier = normalizeTier(subscription?.tier);
   const currentIndex = TIER_ORDER.indexOf(currentTier);
 
   return (
@@ -24,7 +24,7 @@ export default function TierProgress() {
       <div className="p-5 border-b border-border">
         <h3 className="font-display text-lg font-bold text-foreground">Your Plan</h3>
         <p className="text-sm text-muted-foreground mt-1">
-          {currentTier === "scale" 
+          {currentTier === "elite" 
             ? "You have access to all features!" 
             : "Upgrade to unlock more features"
           }
@@ -109,7 +109,7 @@ export default function TierProgress() {
         })}
       </div>
 
-      {currentTier !== "scale" && (
+      {currentTier !== "elite" && (
         <div className="p-5 pt-0">
           <Link to="/pricing">
             <Button variant="cta" className="w-full" size="lg">
