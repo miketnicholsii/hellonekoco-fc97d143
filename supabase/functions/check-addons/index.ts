@@ -8,14 +8,46 @@ const corsHeaders = {
 };
 
 // Add-on product IDs matching src/lib/addons.ts
-const ADDON_PRODUCTS: Record<string, { id: string; type: "recurring" | "one_time" }> = {
-  "advanced-reports": {
-    id: "prod_TksrOOJnYbX8lY",
-    type: "recurring",
-  },
-  "credit-monitoring-setup": {
-    id: "prod_TksrXDqr0EkDUB",
+const ADDON_PRODUCTS: Record<string, { productId: string; type: "recurring" | "one_time" | "hybrid"; name: string }> = {
+  "digital_cv_build": {
+    productId: "prod_TksrjTEsUCR5bP",
     type: "one_time",
+    name: "Digital CV Build",
+  },
+  "resume_rewrite": {
+    productId: "prod_TksrX8WrpcKVkW",
+    type: "one_time",
+    name: "Resume Rewrite",
+  },
+  "brand_page_build": {
+    productId: "prod_TkssmTlIwHwi27",
+    type: "one_time",
+    name: "Brand Page Build",
+  },
+  "business_formation_docs": {
+    productId: "prod_Tkssy6h3TwA6q7",
+    type: "one_time",
+    name: "Business Formation Docs",
+  },
+  "credit_monitoring": {
+    productId: "prod_TksvRSnMpyHdib",
+    type: "recurring",
+    name: "Business Credit Monitoring",
+  },
+  "compliance_monitoring": {
+    productId: "prod_Tksv2eRs9paI7I",
+    type: "recurring",
+    name: "Compliance Monitoring",
+  },
+  "advanced_reports": {
+    productId: "prod_TksvxCGn3MF1B8",
+    type: "recurring",
+    name: "Advanced Reports",
+  },
+  "credit_monitoring_full": {
+    productId: "prod_Tksv1ldDXPihrz",
+    type: "hybrid",
+    name: "Business Credit Monitoring (Full Setup)",
   },
 };
 
@@ -57,15 +89,19 @@ serve(async (req) => {
     // Initialize result with all addons as inactive
     const addons: Record<string, { 
       active: boolean; 
-      type: "recurring" | "one_time";
+      type: "recurring" | "one_time" | "hybrid";
+      name: string;
+      subscription_id?: string;
       subscription_end?: string;
       purchased_at?: string;
+      cancel_at_period_end?: boolean;
     }> = {};
     
     for (const [addonId, config] of Object.entries(ADDON_PRODUCTS)) {
       addons[addonId] = { 
         active: false, 
-        type: config.type 
+        type: config.type,
+        name: config.name,
       };
     }
 
@@ -92,11 +128,14 @@ serve(async (req) => {
         
         // Find which addon this product belongs to
         for (const [addonId, config] of Object.entries(ADDON_PRODUCTS)) {
-          if (config.id === productId && config.type === "recurring") {
+          if (config.productId === productId && (config.type === "recurring" || config.type === "hybrid")) {
             addons[addonId] = {
               active: true,
-              type: "recurring",
+              type: config.type,
+              name: config.name,
+              subscription_id: subscription.id,
               subscription_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              cancel_at_period_end: subscription.cancel_at_period_end,
             };
             logStep("Found active recurring addon", { addonId, productId });
           }
@@ -119,10 +158,12 @@ serve(async (req) => {
     for (const session of checkoutSessions.data) {
       if (session.payment_status === "paid" && session.mode === "payment") {
         const addonId = session.metadata?.addon_id;
-        if (addonId && ADDON_PRODUCTS[addonId]?.type === "one_time") {
+        const config = addonId ? ADDON_PRODUCTS[addonId] : null;
+        if (addonId && config && config.type === "one_time") {
           addons[addonId] = {
             active: true,
             type: "one_time",
+            name: config.name,
             purchased_at: new Date((session.created || 0) * 1000).toISOString(),
           };
           logStep("Found completed one-time addon purchase", { addonId });
