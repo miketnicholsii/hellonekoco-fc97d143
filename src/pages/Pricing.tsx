@@ -302,7 +302,7 @@ export default function Pricing() {
             </div>
           </AnimatedSection>
 
-          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-3xl mx-auto">
+          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-2xl mx-auto">
             {brandingPackages.map((pkg) => (
               <motion.div key={pkg.name} variants={staggerItem} className="flex">
                 <PackageCard {...pkg} />
@@ -338,7 +338,7 @@ export default function Pricing() {
             <div className="text-center mt-10 sm:mt-12">
               <Link to="/contact">
                 <Button variant="cta" size="lg" className="group w-full sm:w-auto">
-                  Get Started
+                  Say Hello
                   <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
@@ -390,7 +390,7 @@ export default function Pricing() {
             </p>
             <Link to="/contact" className="inline-block w-full sm:w-auto">
               <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Get Started
+                Say Hello
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
