@@ -176,7 +176,7 @@ export default function Index() {
             
             {/* NEKO Logo */}
             <motion.h1 
-              className="font-display font-bold tracking-tight text-primary-foreground mb-4 sm:mb-6 text-[clamp(3rem,11vw,8rem)] leading-[0.9] neko-title"
+              className="font-logo font-medium tracking-tight text-primary-foreground mb-4 sm:mb-6 text-[clamp(3rem,11vw,8rem)] leading-[0.9] neko-title"
             >
               <NekoLogo />
               <span className="neko-dot">.</span>
