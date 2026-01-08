@@ -29,6 +29,7 @@ import ActivityFeed from "./ActivityFeed";
 import StreakTracker from "./StreakTracker";
 import AchievementsPreview from "./AchievementsPreview";
 import TierProgress from "./TierProgress";
+import AddOnsWidget from "./AddOnsWidget";
 import NextSteps from "./NextSteps";
 import QuickActions from "./QuickActions";
 import {
@@ -58,6 +59,8 @@ function renderWidget(widgetId: string) {
       return <AchievementsPreview />;
     case "tier-progress":
       return <TierProgress />;
+    case "add-ons":
+      return <AddOnsWidget />;
     case "next-steps":
       return <NextSteps />;
     case "quick-actions":
