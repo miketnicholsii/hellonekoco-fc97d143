@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 import CreditBuildingSteps from "@/components/business-credit/CreditBuildingSteps";
 import TradelineTracker from "@/components/business-credit/TradelineTracker";
 import ScoreMonitoring from "@/components/business-credit/ScoreMonitoring";
@@ -20,9 +20,9 @@ export default function BusinessCredit() {
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const userTier = subscription?.tier || "free";
-  const hasTradelineAccess = tierMeetsRequirement(userTier, "start");
-  const hasScoreAccess = tierMeetsRequirement(userTier, "build");
+  const userTier = normalizeTier(subscription?.tier);
+  const hasTradelineAccess = tierMeetsRequirement(userTier, "starter");
+  const hasScoreAccess = tierMeetsRequirement(userTier, "pro");
 
   // Load credit building progress
   useEffect(() => {
@@ -54,9 +54,9 @@ export default function BusinessCredit() {
   }, [user]);
 
   const tabs = [
-    { id: "steps", label: "Credit Building", icon: TrendingUp, tier: "free" as const },
-    { id: "tradelines", label: "Tradelines", icon: CreditCard, tier: "start" as const },
-    { id: "scores", label: "Score Monitoring", icon: BarChart3, tier: "build" as const },
+    { id: "steps", label: "Credit Building", icon: TrendingUp, tier: "free" },
+    { id: "tradelines", label: "Tradelines", icon: CreditCard, tier: "starter" },
+    { id: "scores", label: "Score Monitoring", icon: BarChart3, tier: "pro" },
   ];
 
   if (isLoading) {
@@ -124,7 +124,7 @@ export default function BusinessCredit() {
                 <LockedFeature 
                   title="Tradeline Tracker"
                   description="Track your vendor accounts, credit limits, and payment status."
-                  requiredTier="Start"
+                  requiredTier="Starter"
                 />
               )}
             </TabsContent>
@@ -136,7 +136,7 @@ export default function BusinessCredit() {
                 <LockedFeature 
                   title="Score Monitoring"
                   description="Track your business credit scores across all major bureaus."
-                  requiredTier="Build"
+                  requiredTier="Pro"
                 />
               )}
             </TabsContent>

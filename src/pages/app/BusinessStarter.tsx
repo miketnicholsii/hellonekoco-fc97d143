@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { tierMeetsRequirement } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
 import {
   CheckCircle2,
   Circle,
@@ -29,7 +29,7 @@ interface StepData {
   icon: React.ElementType;
   description: string;
   checklist: string[];
-  resources: { title: string; tier: "free" | "start" | "build" | "scale" }[];
+  resources: { title: string; tier: string }[];
 }
 
 const STEPS: StepData[] = [

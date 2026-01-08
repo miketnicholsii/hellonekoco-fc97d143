@@ -1,34 +1,62 @@
 // NEKO Subscription Tiers Configuration
-// Maps product IDs to subscription tiers
+// Maps product IDs to subscription tiers with pricing
 
 export const SUBSCRIPTION_TIERS = {
   free: {
     name: "Free",
     price: 0,
+    annualPrice: 0,
     product_id: null,
     price_id: null,
+    annual_price_id: null,
   },
-  start: {
-    name: "Start",
-    price: 29,
-    product_id: "prod_TjrJr11KgRexld",
-    price_id: "price_1SmNazLlRyOCUFRXg2YtsQvM",
+  starter: {
+    name: "Starter",
+    price: 19,
+    annualPrice: 190,
+    product_id: "prod_TksqB7NIXg4KNK",
+    price_id: "price_1SnN4SLlRyOCUFRX6VQbrGjr",
+    annual_price_id: "price_1SnN5HLlRyOCUFRXKZNkl7uC",
   },
-  build: {
-    name: "Build",
-    price: 79,
-    product_id: "prod_TjrJLggG2PAity",
-    price_id: "price_1SmNbDLlRyOCUFRXfSntGFev",
+  pro: {
+    name: "Pro",
+    price: 49,
+    annualPrice: 490,
+    product_id: "prod_TksqgwJoMRqpuM",
+    price_id: "price_1SnN4oLlRyOCUFRX7Uw8oAOQ",
+    annual_price_id: "price_1SnN5VLlRyOCUFRXOUTTV8Yl",
   },
-  scale: {
-    name: "Scale",
-    price: 149,
-    product_id: "prod_TjrKR20UBv3ksL",
-    price_id: "price_1SmNbSLlRyOCUFRX2TKdwjJY",
+  elite: {
+    name: "Elite",
+    price: 99,
+    annualPrice: 990,
+    product_id: "prod_Tksqz2DPSSb64V",
+    price_id: "price_1SnN50LlRyOCUFRX80R5vh5u",
+    annual_price_id: "price_1SnN5gLlRyOCUFRXbH0fw7gR",
   },
 } as const;
 
 export type SubscriptionTier = keyof typeof SUBSCRIPTION_TIERS;
+
+// Legacy tier name mapping (for backward compatibility with database)
+const LEGACY_TIER_MAP: Record<string, SubscriptionTier> = {
+  start: "starter",
+  build: "pro",
+  scale: "elite",
+};
+
+// Helper to normalize tier (handles legacy names)
+export function normalizeTier(tier: string | null): SubscriptionTier {
+  if (!tier) return "free";
+  const lowerTier = tier.toLowerCase();
+  if (lowerTier in SUBSCRIPTION_TIERS) {
+    return lowerTier as SubscriptionTier;
+  }
+  if (lowerTier in LEGACY_TIER_MAP) {
+    return LEGACY_TIER_MAP[lowerTier];
+  }
+  return "free";
+}
 
 // Helper to get tier from product ID
 export function getTierFromProductId(productId: string | null): SubscriptionTier {
@@ -42,13 +70,31 @@ export function getTierFromProductId(productId: string | null): SubscriptionTier
   return "free";
 }
 
+// Tier order for comparisons
+const TIER_ORDER: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
+
 // Helper to check if a tier meets minimum requirement
 export function tierMeetsRequirement(
-  currentTier: SubscriptionTier,
-  requiredTier: SubscriptionTier
+  currentTier: SubscriptionTier | string,
+  requiredTier: SubscriptionTier | string
 ): boolean {
-  const tierOrder: SubscriptionTier[] = ["free", "start", "build", "scale"];
-  const currentIndex = tierOrder.indexOf(currentTier);
-  const requiredIndex = tierOrder.indexOf(requiredTier);
+  const normalizedCurrent = normalizeTier(currentTier as string);
+  const normalizedRequired = normalizeTier(requiredTier as string);
+  const currentIndex = TIER_ORDER.indexOf(normalizedCurrent);
+  const requiredIndex = TIER_ORDER.indexOf(normalizedRequired);
   return currentIndex >= requiredIndex;
+}
+
+// Helper to get tier index for comparisons
+export function getTierIndex(tier: SubscriptionTier): number {
+  return TIER_ORDER.indexOf(tier);
+}
+
+// Get next tier for upgrades
+export function getNextTier(currentTier: SubscriptionTier): SubscriptionTier | null {
+  const currentIndex = TIER_ORDER.indexOf(currentTier);
+  if (currentIndex < TIER_ORDER.length - 1) {
+    return TIER_ORDER[currentIndex + 1];
+  }
+  return null;
 }
