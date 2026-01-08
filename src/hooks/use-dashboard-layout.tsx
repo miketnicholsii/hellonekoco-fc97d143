@@ -56,6 +56,13 @@ export const DASHBOARD_WIDGETS: WidgetConfig[] = [
     minWidth: "sm",
   },
   {
+    id: "add-ons",
+    title: "Add-Ons",
+    description: "Premium add-on services",
+    defaultVisible: true,
+    minWidth: "sm",
+  },
+  {
     id: "next-steps",
     title: "Next Steps",
     description: "Recommended actions to take",
