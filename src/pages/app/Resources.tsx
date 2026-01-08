@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
+import { tierMeetsRequirement, normalizeTier, SubscriptionTier } from "@/lib/subscription-tiers";
+import { PageLoader } from "@/components/LoadingStates";
 import {
   Search,
   BookOpen,
@@ -24,6 +28,7 @@ import {
   CheckSquare,
   FolderOpen,
   ChevronRight,
+  ArrowRight,
 } from "lucide-react";
 
 interface Resource {
@@ -32,12 +37,13 @@ interface Resource {
   description: string | null;
   content: string | null;
   category: string;
-  tier_required: string; // Allow any string, we'll normalize it
+  tier_required: string;
   read_time_minutes: number | null;
   sort_order: number | null;
   is_published: boolean | null;
 }
 
+// Category definitions
 const CATEGORIES = [
   { id: "all", label: "All Resources", icon: BookOpen },
   { id: "business-setup", label: "Business Setup", icon: FileText },
@@ -45,20 +51,22 @@ const CATEGORIES = [
   { id: "personal-brand", label: "Personal Brand", icon: User },
   { id: "checklists", label: "Checklists", icon: CheckSquare },
   { id: "templates", label: "Templates", icon: FolderOpen },
-];
+] as const;
 
-const TIER_BADGES: Record<string, { label: string; color: string }> = {
-  free: { label: "Free", color: "bg-muted text-muted-foreground" },
-  starter: { label: "Starter", color: "bg-primary/10 text-primary" },
-  start: { label: "Starter", color: "bg-primary/10 text-primary" },
-  pro: { label: "Pro", color: "bg-secondary/10 text-secondary" },
-  build: { label: "Pro", color: "bg-secondary/10 text-secondary" },
-  elite: { label: "Elite", color: "bg-tertiary text-tertiary-foreground" },
-  scale: { label: "Elite", color: "bg-tertiary text-tertiary-foreground" },
+// Tier badge styling
+const TIER_BADGES: Record<string, { label: string; className: string }> = {
+  free: { label: "Free", className: "bg-muted text-muted-foreground" },
+  starter: { label: "Starter", className: "bg-primary/10 text-primary" },
+  start: { label: "Starter", className: "bg-primary/10 text-primary" },
+  pro: { label: "Pro", className: "bg-secondary/10 text-secondary" },
+  build: { label: "Pro", className: "bg-secondary/10 text-secondary" },
+  elite: { label: "Elite", className: "bg-accent text-accent-foreground" },
+  scale: { label: "Elite", className: "bg-accent text-accent-foreground" },
 };
 
 export default function Resources() {
   const { subscription } = useAuth();
+  const { tier: effectiveTier, isPreviewMode } = useSubscriptionTier();
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,6 +96,11 @@ export default function Resources() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Check resource access using effective tier (supports admin preview)
+  const hasResourceAccess = (resourceTier: string): boolean => {
+    return tierMeetsRequirement(effectiveTier, resourceTier);
   };
 
   // Filter resources based on search and category
@@ -126,18 +139,13 @@ export default function Resources() {
   };
 
   const handleResourceClick = (resource: Resource) => {
-    const hasAccess = tierMeetsRequirement(userTier, resource.tier_required);
-    if (hasAccess) {
+    if (hasResourceAccess(resource.tier_required)) {
       setSelectedResource(resource);
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-pulse text-muted-foreground">Loading resources...</div>
-      </div>
-    );
+    return <PageLoader message="Loading resources..." />;
   }
 
   return (
@@ -166,6 +174,7 @@ export default function Resources() {
             <button
               onClick={() => setSearchQuery("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </button>
@@ -225,19 +234,17 @@ export default function Resources() {
             {/* Tier Legend */}
             <div className="mt-6 pt-4 border-t border-border">
               <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
-                Access Levels
+                Your Access
               </h4>
-              <div className="space-y-1">
-                {Object.entries(TIER_BADGES).map(([tier, badge]) => (
-                  <div key={tier} className="flex items-center gap-2 text-xs">
-                    <span className={`px-2 py-0.5 rounded ${badge.color}`}>
-                      {badge.label}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {tier === userTier && "(Your plan)"}
-                    </span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-xs">
+                  {TIER_BADGES[userTier]?.label || "Free"} Plan
+                </Badge>
+                {isPreviewMode && (
+                  <Badge variant="outline" className="text-xs bg-warning/10 text-warning border-warning/30">
+                    Preview
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
@@ -308,63 +315,15 @@ export default function Resources() {
                     )}
 
                     <div className="grid gap-4">
-                      {categoryResources.map((resource) => {
-                        const hasAccess = tierMeetsRequirement(
-                          userTier,
-                          resource.tier_required
-                        );
-                        const tierBadge = TIER_BADGES[resource.tier_required];
-
-                        return (
-                          <motion.div
-                            key={resource.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className={`bg-card border border-border rounded-xl p-4 transition-all ${
-                              hasAccess
-                                ? "cursor-pointer hover:border-primary/50 hover:shadow-md"
-                                : "opacity-75"
-                            }`}
-                            onClick={() => handleResourceClick(resource)}
-                          >
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <h3 className="font-semibold text-foreground truncate">
-                                    {resource.title}
-                                  </h3>
-                                  {resource.tier_required !== "free" && (
-                                    <span
-                                      className={`px-2 py-0.5 rounded text-xs font-medium ${tierBadge.color}`}
-                                    >
-                                      {tierBadge.label}
-                                    </span>
-                                  )}
-                                </div>
-                                <p className="text-sm text-muted-foreground line-clamp-2">
-                                  {resource.description}
-                                </p>
-                                {resource.read_time_minutes && (
-                                  <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
-                                    <Clock className="h-3 w-3" />
-                                    {resource.read_time_minutes} min read
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex-shrink-0">
-                                {hasAccess ? (
-                                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                                ) : (
-                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                    <Lock className="h-4 w-4" />
-                                    <span>{tierBadge.label}+</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
+                      {categoryResources.map((resource) => (
+                        <ResourceCard
+                          key={resource.id}
+                          resource={resource}
+                          hasAccess={hasResourceAccess(resource.tier_required)}
+                          isPreviewMode={isPreviewMode}
+                          onClick={() => handleResourceClick(resource)}
+                        />
+                      ))}
                     </div>
                   </div>
                 );
@@ -385,19 +344,20 @@ export default function Resources() {
               <DialogHeader>
                 <div className="flex items-center gap-2 mb-2">
                   {selectedResource.tier_required !== "free" && (
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font-medium ${
-                        TIER_BADGES[selectedResource.tier_required].color
-                      }`}
-                    >
-                      {TIER_BADGES[selectedResource.tier_required].label}
-                    </span>
+                    <Badge className={TIER_BADGES[selectedResource.tier_required]?.className}>
+                      {TIER_BADGES[selectedResource.tier_required]?.label}
+                    </Badge>
                   )}
                   {selectedResource.read_time_minutes && (
                     <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
                       {selectedResource.read_time_minutes} min read
                     </span>
+                  )}
+                  {isPreviewMode && (
+                    <Badge variant="outline" className="text-xs bg-warning/10 text-warning border-warning/30">
+                      Preview Mode
+                    </Badge>
                   )}
                 </div>
                 <DialogTitle className="text-xl">
@@ -428,27 +388,32 @@ export default function Resources() {
                     )
                     .slice(0, 3)
                     .map((resource) => {
-                      const hasAccess = tierMeetsRequirement(
-                        userTier,
-                        resource.tier_required
-                      );
+                      const canAccess = hasResourceAccess(resource.tier_required);
+                      const tierBadge = TIER_BADGES[resource.tier_required];
                       return (
                         <button
                           key={resource.id}
-                          onClick={() =>
-                            hasAccess && setSelectedResource(resource)
-                          }
-                          disabled={!hasAccess}
+                          onClick={() => canAccess && setSelectedResource(resource)}
+                          disabled={!canAccess}
                           className={`w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors ${
-                            hasAccess
+                            canAccess
                               ? "border-border hover:border-primary/50"
                               : "border-border/50 opacity-60 cursor-not-allowed"
                           }`}
                         >
-                          <span className="text-sm font-medium text-foreground">
-                            {resource.title}
-                          </span>
-                          {!hasAccess && <Lock className="h-4 w-4 text-muted-foreground" />}
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm text-foreground truncate">
+                              {resource.title}
+                            </p>
+                          </div>
+                          {canAccess ? (
+                            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          ) : (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+                              <Lock className="h-3 w-3" />
+                              <span>{tierBadge?.label}</span>
+                            </div>
+                          )}
                         </button>
                       );
                     })}
@@ -458,6 +423,102 @@ export default function Resources() {
           )}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+// Resource Card Component with FeatureGate-style locked state
+interface ResourceCardProps {
+  resource: Resource;
+  hasAccess: boolean;
+  isPreviewMode: boolean;
+  onClick: () => void;
+}
+
+function ResourceCard({ resource, hasAccess, isPreviewMode, onClick }: ResourceCardProps) {
+  const tierBadge = TIER_BADGES[resource.tier_required];
+  const isLocked = !hasAccess;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`relative bg-card border rounded-xl p-4 transition-all ${
+        hasAccess
+          ? "border-border cursor-pointer hover:border-primary/50 hover:shadow-md"
+          : "border-dashed border-muted-foreground/30 bg-muted/30"
+      }`}
+      onClick={hasAccess ? onClick : undefined}
+    >
+      {/* Preview mode badge */}
+      {hasAccess && isPreviewMode && resource.tier_required !== "free" && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <Badge 
+            variant="outline" 
+            className="bg-warning/10 text-warning border-warning/30 text-[10px] px-1.5 py-0.5"
+          >
+            Preview
+          </Badge>
+        </div>
+      )}
+
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <h3 className={`font-semibold truncate ${isLocked ? "text-muted-foreground" : "text-foreground"}`}>
+              {resource.title}
+            </h3>
+            {resource.tier_required !== "free" && (
+              <Badge variant="secondary" className={`text-xs ${tierBadge?.className}`}>
+                {tierBadge?.label}
+              </Badge>
+            )}
+          </div>
+          <p className={`text-sm line-clamp-2 ${isLocked ? "text-muted-foreground/70" : "text-muted-foreground"}`}>
+            {resource.description}
+          </p>
+          {resource.read_time_minutes && (
+            <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              {resource.read_time_minutes} min read
+            </div>
+          )}
+        </div>
+        <div className="flex-shrink-0">
+          {hasAccess ? (
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          ) : (
+            <LockedIndicator tierLabel={tierBadge?.label || "Upgrade"} />
+          )}
+        </div>
+      </div>
+
+      {/* Locked overlay with upgrade CTA */}
+      {isLocked && (
+        <div className="mt-3 pt-3 border-t border-border/50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Lock className="h-3.5 w-3.5" />
+              <span>Upgrade to {tierBadge?.label} to access</span>
+            </div>
+            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" asChild>
+              <Link to="/pricing">
+                View Plans
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+function LockedIndicator({ tierLabel }: { tierLabel: string }) {
+  return (
+    <div className="flex items-center gap-1 text-xs text-muted-foreground bg-muted rounded-full px-2 py-1">
+      <Lock className="h-3 w-3" />
+      <span>{tierLabel}+</span>
     </div>
   );
 }
