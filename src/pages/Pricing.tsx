@@ -1,18 +1,25 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/AnimatedSection";
-import { CheckCircle2, HelpCircle, ArrowRight, Building2, User, Sparkles } from "lucide-react";
+import { Check, HelpCircle, ArrowRight, Zap, Crown, Rocket, Sparkles } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SUBSCRIPTION_TIERS, SubscriptionTier } from "@/lib/subscription-tiers";
+import { cn } from "@/lib/utils";
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -25,118 +32,74 @@ const HeroBackground = memo(function HeroBackground() {
   );
 });
 
-// Business Enablement packages
-const businessPackages = [
-  {
-    name: "Foundations",
-    description: "Get set up correctly",
-    price: "$29",
-    period: "/month",
+// Tier configurations with features
+const tierConfigs = {
+  free: {
+    name: "Free",
+    description: "Get started for free",
+    icon: Zap,
     features: [
+      "Access to learning resources",
+      "Progress tracking dashboard",
+      "Community support",
+      "Basic guides & checklists",
+    ],
+  },
+  starter: {
+    name: "Starter",
+    description: "Perfect for new entrepreneurs",
+    icon: Rocket,
+    features: [
+      "Everything in Free",
       "Guided LLC formation walkthrough",
-      "EIN application guidance & links",
-      "Business bank account setup checklist",
+      "EIN application guidance",
+      "Business bank account checklist",
       "Business phone & email setup",
       "Legitimacy checklist & tracker",
-      "Progress tracking dashboard",
+      "Email support",
     ],
-    highlighted: false,
   },
-  {
-    name: "Foundations + Credit",
-    description: "Build business credit",
-    price: "$79",
-    period: "/month",
+  pro: {
+    name: "Pro",
+    description: "Build real business credit",
+    icon: Crown,
+    badge: "Most Popular",
     features: [
-      "Everything in Foundations",
+      "Everything in Starter",
       "Full tiered credit roadmap",
       "Vendor recommendations by tier",
       "Application guidance & templates",
       "Credit score tracking (D&B, Experian, Equifax)",
       "Tradeline management dashboard",
+      "Digital CV builder",
       "Priority support",
     ],
-    highlighted: true,
-    badge: "Most Popular",
   },
-  {
-    name: "Growth",
-    description: "Scale your business",
-    price: "$149",
-    period: "/month",
+  elite: {
+    name: "Elite",
+    description: "Scale with advanced tools",
+    icon: Sparkles,
     features: [
-      "Everything in Foundations + Credit",
+      "Everything in Pro",
       "Advanced credit analytics",
-      "Growth diagnostics & planning",
       "Higher-tier credit strategies",
-      "Team collaboration (coming soon)",
+      "Growth diagnostics & planning",
+      "Digital CV Pro features",
+      "Portfolio/project showcase",
+      "Custom domain support",
       "Dedicated support",
     ],
-    highlighted: false,
   },
-];
-
-// Personal Branding packages
-const brandingPackages = [
-  {
-    name: "Digital CV",
-    description: "Your professional presence",
-    price: "$19",
-    period: "/month",
-    features: [
-      "Custom public profile page",
-      "Unique shareable URL",
-      "Skills & experience showcase",
-      "Link aggregation",
-      "Basic SEO optimization",
-      "Professional templates",
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Digital CV Pro",
-    description: "Stand out professionally",
-    price: "$39",
-    period: "/month",
-    features: [
-      "Everything in Digital CV",
-      "Advanced customization",
-      "Portfolio/project showcase",
-      "Analytics & visitor insights",
-      "Priority placement in directory",
-      "Custom domain support",
-    ],
-    highlighted: true,
-    badge: "Best Value",
-  },
-];
-
-// Combined packages
-const combinedPackage = {
-  name: "Complete",
-  description: "Business + Brand together",
-  price: "$99",
-  period: "/month",
-  features: [
-    "Foundations + Credit (full package)",
-    "Digital CV Pro (full package)",
-    "Unified dashboard experience",
-    "Connected business & personal brand",
-    "Priority support across all services",
-    "Save $19/month vs. separate packages",
-  ],
-  highlighted: true,
-  badge: "Best for Founders",
-};
+} as const;
 
 const faqs = [
   {
-    question: "Can I start with just one track?",
-    answer: "Absolutely. Business Enablement and Personal Branding are independent tracks. Start with what you need now, and add the other later if it makes sense for you.",
+    question: "What's the difference between monthly and annual billing?",
+    answer: "Annual billing gives you 2 months free compared to monthly billing. You pay upfront for the full year at a discounted rate.",
   },
   {
-    question: "What's the difference between the tracks?",
-    answer: "Business Enablement focuses on setting up your business correctly — formation, banking, and building business credit. Personal Branding is about your professional identity — your Digital CV, online presence, and credibility as an individual.",
+    question: "Can I upgrade or downgrade my plan?",
+    answer: "Yes! You can upgrade or downgrade at any time. When upgrading, you'll be charged the prorated difference. When downgrading, the change takes effect at your next billing cycle.",
   },
   {
     question: "Is this a credit repair service?",
@@ -148,64 +111,149 @@ const faqs = [
   },
   {
     question: "Can I cancel anytime?",
-    answer: "Yes. All plans are month-to-month with no long-term commitment. Cancel anytime from your account settings.",
+    answer: "Yes. All plans are cancel-anytime with no long-term commitment. Cancel from your account settings and you'll retain access until the end of your billing period.",
   },
   {
-    question: "How do the tracks work together?",
-    answer: "They complement each other. Your personal brand can stand alone, or it can amplify your business — establishing you as credible alongside your company. Many founders use both.",
+    question: "What payment methods do you accept?",
+    answer: "We accept all major credit cards, debit cards, and select digital payment methods through our secure payment processor, Stripe.",
   },
 ];
 
-// Package card component
-const PackageCard = memo(function PackageCard({ 
-  name, 
-  description, 
-  price, 
-  period,
-  features, 
-  highlighted = false,
-  badge
+// Tier card component
+const TierCardComponent = memo(function TierCardComponent({ 
+  tierKey,
+  isAnnual,
+  isCurrentPlan,
+  onSelect,
+  isLoading,
 }: { 
-  name: string; 
-  description: string; 
-  price: string; 
-  period: string;
-  features: string[]; 
-  highlighted?: boolean;
-  badge?: string;
+  tierKey: SubscriptionTier;
+  isAnnual: boolean;
+  isCurrentPlan: boolean;
+  onSelect: (tier: SubscriptionTier) => void;
+  isLoading: boolean;
 }) {
+  const config = tierConfigs[tierKey];
+  const tier = SUBSCRIPTION_TIERS[tierKey];
+  const Icon = config.icon;
+  const isHighlighted = tierKey === "pro";
+  const isFree = tierKey === "free";
+  
+  const price = isFree ? 0 : isAnnual ? tier.annualPrice : tier.price;
+  const period = isFree ? "" : isAnnual ? "/year" : "/month";
+  const savings = isFree ? 0 : tier.price * 12 - tier.annualPrice;
+
   return (
-    <div className={`relative p-5 sm:p-6 rounded-2xl border transition-all duration-300 h-full flex flex-col ${
-      highlighted 
-        ? "bg-card border-primary shadow-lg scale-[1.02]" 
-        : "bg-card border-border hover:border-primary/30 hover:shadow-md"
-    }`}>
-      {badge && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="px-3 py-1 text-xs font-semibold bg-primary text-primary-foreground rounded-full">
-            {badge}
+    <div className={cn(
+      "relative rounded-2xl border transition-all duration-500 ease-out-expo overflow-hidden h-full flex flex-col",
+      isHighlighted
+        ? "bg-tertiary border-tertiary text-tertiary-foreground shadow-xl scale-[1.02]"
+        : "bg-card border-border hover:border-primary/30 hover:shadow-md",
+      isCurrentPlan && "ring-2 ring-primary ring-offset-2 ring-offset-background"
+    )}>
+      {/* Badge */}
+      {'badge' in config && config.badge && !isCurrentPlan && (
+        <div className="absolute top-0 right-0">
+          <span className="inline-block px-3 py-1 text-[10px] font-semibold tracking-wide uppercase rounded-bl-lg bg-primary text-primary-foreground">
+            {config.badge}
           </span>
         </div>
       )}
       
-      <div className="mb-4">
-        <h3 className="font-display font-bold text-lg text-foreground">{name}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+      {isCurrentPlan && (
+        <div className="absolute top-0 right-0">
+          <span className="inline-flex items-center gap-1 px-3 py-1 text-[10px] font-semibold tracking-wide uppercase rounded-bl-lg bg-primary text-primary-foreground">
+            <Check className="h-3 w-3" />
+            Current Plan
+          </span>
+        </div>
+      )}
+
+      <div className="relative p-6 sm:p-7 flex flex-col flex-1">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className={cn(
+            "w-10 h-10 rounded-xl flex items-center justify-center",
+            isHighlighted ? "bg-primary/20" : "bg-primary/10"
+          )}>
+            <Icon className={cn(
+              "h-5 w-5",
+              isHighlighted ? "text-primary" : "text-primary"
+            )} />
+          </div>
+          <div>
+            <h3 className={cn(
+              "text-lg font-display font-bold",
+              isHighlighted ? "text-tertiary-foreground" : "text-foreground"
+            )}>
+              {config.name}
+            </h3>
+            <p className={cn(
+              "text-xs",
+              isHighlighted ? "text-tertiary-foreground/60" : "text-muted-foreground"
+            )}>
+              {config.description}
+            </p>
+          </div>
+        </div>
+
+        {/* Price */}
+        <div className="mb-6">
+          <div className="flex items-baseline gap-1">
+            <span className={cn(
+              "text-4xl sm:text-5xl font-display font-bold tracking-tight",
+              isHighlighted ? "text-tertiary-foreground" : "text-foreground"
+            )}>
+              {isFree ? "Free" : `$${price}`}
+            </span>
+            {!isFree && (
+              <span className={cn(
+                "text-sm font-medium",
+                isHighlighted ? "text-tertiary-foreground/50" : "text-muted-foreground"
+              )}>
+                {period}
+              </span>
+            )}
+          </div>
+          {isAnnual && !isFree && savings > 0 && (
+            <p className={cn(
+              "text-xs mt-1 font-medium",
+              isHighlighted ? "text-primary" : "text-primary"
+            )}>
+              Save ${savings}/year (2 months free)
+            </p>
+          )}
+        </div>
+
+        {/* Features */}
+        <ul className="space-y-2.5 flex-1 mb-6">
+          {config.features.map((feature, index) => (
+            <li
+              key={index}
+              className={cn(
+                "flex items-start gap-2.5 text-sm",
+                isHighlighted ? "text-tertiary-foreground/80" : "text-foreground"
+              )}
+            >
+              <Check className={cn(
+                "h-4 w-4 flex-shrink-0 mt-0.5",
+                isHighlighted ? "text-primary" : "text-primary"
+              )} />
+              <span className="leading-snug">{feature}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* CTA Button */}
+        <Button
+          variant={isHighlighted ? "cta" : isCurrentPlan ? "outline" : "default"}
+          className="w-full"
+          disabled={isCurrentPlan || isLoading}
+          onClick={() => onSelect(tierKey)}
+        >
+          {isCurrentPlan ? "Current Plan" : isFree ? "Get Started Free" : "Subscribe"}
+        </Button>
       </div>
-      
-      <div className="mb-5">
-        <span className="font-display text-3xl sm:text-4xl font-bold text-foreground">{price}</span>
-        <span className="text-muted-foreground text-sm">{period}</span>
-      </div>
-      
-      <ul className="space-y-2.5 flex-1">
-        {features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5">
-            <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-            <span className="text-sm text-foreground">{feature}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 });
@@ -231,6 +279,10 @@ const FAQItem = memo(function FAQItem({ faq, index }: { faq: typeof faqs[0]; ind
 
 export default function Pricing() {
   const prefersReducedMotion = useReducedMotion();
+  const [isAnnual, setIsAnnual] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user, subscription } = useAuth();
+  const navigate = useNavigate();
   
   const fadeIn = useMemo(() => prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
@@ -240,12 +292,48 @@ export default function Pricing() {
         transition: { duration: 0.5, ease: easeOutExpo }
       }, [prefersReducedMotion]);
 
+  const handleSelectTier = async (tier: SubscriptionTier) => {
+    if (tier === "free") {
+      navigate("/get-started");
+      return;
+    }
+
+    if (!user) {
+      toast.info("Please sign in to subscribe");
+      navigate("/login");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { 
+          tier, 
+          billingPeriod: isAnnual ? "annual" : "monthly" 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const tiers: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
+
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
       <EccentricNavbar />
 
       {/* Hero */}
-      <section className="pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 bg-background relative">
+      <section className="pt-24 sm:pt-28 lg:pt-32 pb-8 sm:pb-12 bg-background relative">
         <HeroBackground />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <motion.div
@@ -253,105 +341,111 @@ export default function Pricing() {
             className="max-w-2xl mx-auto"
           >
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tightest text-foreground mb-4 sm:mb-6">
-              Choose your path.
+              Simple, transparent pricing.
             </h1>
-            <p className="text-base sm:text-lg text-muted-foreground px-2 sm:px-0">
-              Start with business, brand, or both. Each track is designed to get you where you need to go.
+            <p className="text-base sm:text-lg text-muted-foreground px-2 sm:px-0 mb-8">
+              Choose the plan that fits your journey. Upgrade or downgrade anytime.
             </p>
+
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-3">
+              <Label 
+                htmlFor="billing-toggle" 
+                className={cn(
+                  "text-sm font-medium cursor-pointer transition-colors",
+                  !isAnnual ? "text-foreground" : "text-muted-foreground"
+                )}
+              >
+                Monthly
+              </Label>
+              <Switch
+                id="billing-toggle"
+                checked={isAnnual}
+                onCheckedChange={setIsAnnual}
+              />
+              <Label 
+                htmlFor="billing-toggle" 
+                className={cn(
+                  "text-sm font-medium cursor-pointer transition-colors flex items-center gap-2",
+                  isAnnual ? "text-foreground" : "text-muted-foreground"
+                )}
+              >
+                Annual
+                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-primary text-primary-foreground">
+                  Save 17%
+                </span>
+              </Label>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Business Enablement Track */}
+      {/* Pricing Cards */}
       <section className="py-8 sm:py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="flex items-center gap-3 mb-6 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
-                <Building2 className="h-5 w-5" />
-              </div>
-              <div className="text-center">
-                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Business Enablement</h2>
-                <p className="text-sm text-muted-foreground">Setup, legitimacy, and credit building</p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
-            {businessPackages.map((pkg) => (
-              <motion.div key={pkg.name} variants={staggerItem} className="flex">
-                <PackageCard {...pkg} />
+          <AnimatedStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 max-w-7xl mx-auto">
+            {tiers.map((tier) => (
+              <motion.div key={tier} variants={staggerItem} className="flex">
+                <TierCardComponent
+                  tierKey={tier}
+                  isAnnual={isAnnual}
+                  isCurrentPlan={subscription.tier === tier}
+                  onSelect={handleSelectTier}
+                  isLoading={isLoading}
+                />
               </motion.div>
             ))}
           </AnimatedStagger>
         </div>
       </section>
 
-      {/* Personal Branding Track */}
+      {/* Add-ons Section */}
       <section className="py-8 sm:py-12 lg:py-16 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="flex items-center gap-3 mb-6 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
-                <User className="h-5 w-5" />
-              </div>
-              <div className="text-center">
-                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Personal Branding</h2>
-                <p className="text-sm text-muted-foreground">Your professional identity and presence</p>
-              </div>
-            </div>
+            <SectionHeading
+              label="Add-ons"
+              title="Enhance your plan."
+              description="Powerful add-ons available on any paid plan."
+              centered
+              className="mb-8 sm:mb-12"
+            />
           </AnimatedSection>
 
-          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-2xl mx-auto">
-            {brandingPackages.map((pkg) => (
-              <motion.div key={pkg.name} variants={staggerItem} className="flex">
-                <PackageCard {...pkg} />
-              </motion.div>
-            ))}
+          <AnimatedStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-w-4xl mx-auto">
+            <motion.div variants={staggerItem}>
+              <div className="p-5 rounded-xl border border-border bg-card">
+                <h3 className="font-display font-bold text-foreground mb-1">Advanced Reports</h3>
+                <p className="text-xs text-muted-foreground mb-3">Deep analytics & insights</p>
+                <p className="text-lg font-bold text-foreground">$29<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+              </div>
+            </motion.div>
+            <motion.div variants={staggerItem}>
+              <div className="p-5 rounded-xl border border-border bg-card">
+                <h3 className="font-display font-bold text-foreground mb-1">Credit Monitoring Setup</h3>
+                <p className="text-xs text-muted-foreground mb-3">One-time expert setup</p>
+                <p className="text-lg font-bold text-foreground">$149<span className="text-sm font-normal text-muted-foreground"> one-time</span></p>
+              </div>
+            </motion.div>
+            <motion.div variants={staggerItem}>
+              <div className="p-5 rounded-xl border border-border bg-card">
+                <h3 className="font-display font-bold text-foreground mb-1">Priority Support</h3>
+                <p className="text-xs text-muted-foreground mb-3">24/7 dedicated assistance</p>
+                <p className="text-lg font-bold text-foreground">$19<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+              </div>
+            </motion.div>
           </AnimatedStagger>
-        </div>
-      </section>
 
-      {/* Combined Package */}
-      <section className="py-8 sm:py-12 lg:py-16 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="flex items-center gap-3 mb-6 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <div className="text-center">
-                <h2 className="font-display font-bold text-xl sm:text-2xl text-foreground">Both Tracks Together</h2>
-                <p className="text-sm text-muted-foreground">For founders building business and personal brand</p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <div className="max-w-md mx-auto">
-              <PackageCard {...combinedPackage} />
-            </div>
-          </AnimatedSection>
-
-          {/* Single CTA */}
           <AnimatedSection delay={0.2}>
-            <div className="text-center mt-10 sm:mt-12">
-              <Link to="/contact">
-                <Button variant="cta" size="lg" className="group w-full sm:w-auto">
-                  Say Hello
-                  <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-3">
-                Tell us about your goals and we'll help you choose the right path
-              </p>
-            </div>
+            <p className="text-center text-sm text-muted-foreground mt-6">
+              Add-ons can be purchased from your dashboard after subscribing to a paid plan.
+            </p>
           </AnimatedSection>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-12 sm:py-16 lg:py-28 bg-muted/30">
+      <section className="py-12 sm:py-16 lg:py-28 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
@@ -380,17 +474,17 @@ export default function Pricing() {
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
             <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-              Ready?
+              Ready to start?
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
-              Let's get you set up.
+              Build your business foundation today.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
-              Whether it's your business, your brand, or both — we're here to help.
+              Join thousands of entrepreneurs building legitimate businesses.
             </p>
-            <Link to="/contact" className="inline-block w-full sm:w-auto">
+            <Link to="/get-started" className="inline-block w-full sm:w-auto">
               <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Say Hello
+                Get Started Free
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
