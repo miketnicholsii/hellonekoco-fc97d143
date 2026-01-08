@@ -153,11 +153,16 @@ export function getServicesByCategory(category: AddOnService["category"]): AddOn
 
 // Get services available for a tier
 export function getServicesForTier(
-  tier: SubscriptionTier,
+  tier: SubscriptionTier | string,
   services: AddOnService[] = ALL_SERVICES
 ): { available: AddOnService[]; locked: AddOnService[] } {
+  // Import the normalizer inline to avoid circular deps
   const tierOrder: SubscriptionTier[] = ["free", "starter", "pro", "elite"];
-  const tierIndex = tierOrder.indexOf(tier);
+  
+  // Normalize the tier (handles legacy names like "start" -> "starter")
+  const { normalizeTier } = require("./subscription-tiers");
+  const normalizedTier = normalizeTier(tier);
+  const tierIndex = tierOrder.indexOf(normalizedTier);
 
   const available: AddOnService[] = [];
   const locked: AddOnService[] = [];
