@@ -169,11 +169,20 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Improve scroll performance */
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     text-rendering: optimizeLegibility;
+    /* Prevent layout shift */
+    min-height: 100vh;
+  }
+
+  /* Optimize images globally */
+  img, video {
+    content-visibility: auto;
   }
 
   h1, h2, h3, h4, h5, h6 {
