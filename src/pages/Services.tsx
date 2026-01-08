@@ -1,6 +1,5 @@
-import { memo, useMemo } from "react";
-import { motion, useReducedMotion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { memo, useMemo, useRef } from "react";
+import { motion, useReducedMotion, useInView, useScroll, useTransform } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -93,25 +92,48 @@ const legitimacySteps = [
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const smoothSpring = { type: "spring", stiffness: 100, damping: 20 };
 
-const HeroBackground = memo(function HeroBackground() {
+// Parallax hook for scroll-based transforms
+function useParallax(offset: number = 0.5) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [offset * -100, offset * 100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0.3]);
+  return { ref, y, opacity };
+}
+
+const HeroBackground = memo(function HeroBackground({ 
+  scrollY, 
+  scrollYMedium, 
+  scrollYSlow 
+}: { 
+  scrollY: ReturnType<typeof useTransform>; 
+  scrollYMedium: ReturnType<typeof useTransform>;
+  scrollYSlow: ReturnType<typeof useTransform>;
+}) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 0.5, scale: 1 }}
         transition={{ duration: 1.2, ease: easeOutExpo }}
+        style={{ y: scrollY }}
         className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl gpu-accelerated motion-safe:animate-float" 
       />
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 0.5, scale: 1 }}
         transition={{ duration: 1.2, delay: 0.2, ease: easeOutExpo }}
+        style={{ y: scrollYMedium }}
         className="absolute bottom-1/3 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl gpu-accelerated motion-safe:animate-float-delayed" 
       />
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, delay: 0.3, ease: easeOutExpo }}
+        style={{ y: scrollYSlow }}
         className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
       />
     </div>
@@ -196,8 +218,90 @@ const SectionDivider = memo(function SectionDivider() {
   );
 });
 
+// CTA Section with parallax
+const CTASection = memo(function CTASection() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const glowScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.2, 0.8]);
+  
+  return (
+    <section ref={ref} className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
+      <motion.div 
+        style={{ y: backgroundY }}
+        className="absolute inset-0 bg-gradient-dark pointer-events-none" 
+        aria-hidden="true" 
+      />
+      
+      {/* Animated background elements with parallax */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 0.3 }}
+        viewport={{ once: true }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <motion.div
+          style={{ scale: glowScale }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl"
+        />
+      </motion.div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+        <AnimatedSection direction="none">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4"
+          >
+            Hello, NÈKO.
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto"
+          >
+            Ready to start? All you have to do is say hello.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Link to="/contact">
+              <Button variant="hero" size="xl" className="group">
+                Say Hello
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+          </motion.div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+});
+
 export default function Services() {
   const prefersReducedMotion = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  
+  // Hero parallax scroll
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  const heroBackgroundY = useTransform(heroScrollProgress, [0, 1], [0, 150]);
+  const heroBackgroundYMedium = useTransform(heroScrollProgress, [0, 1], [0, 90]);
+  const heroBackgroundYSlow = useTransform(heroScrollProgress, [0, 1], [0, 45]);
+  const heroContentY = useTransform(heroScrollProgress, [0, 1], [0, 50]);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
   
   const fadeIn = useMemo(() => prefersReducedMotion 
     ? { initial: {}, animate: {}, transition: {} }
@@ -233,11 +337,22 @@ export default function Services() {
       <EccentricNavbar />
 
       {/* Hero */}
-      <section className="relative min-h-[70svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16">
-        <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
-        <HeroBackground />
+      <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-20 pb-16">
+        <motion.div 
+          style={{ y: heroBackgroundY }}
+          className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" 
+          aria-hidden="true" 
+        />
+        <HeroBackground 
+          scrollY={heroBackgroundY} 
+          scrollYMedium={heroBackgroundYMedium} 
+          scrollYSlow={heroBackgroundYSlow} 
+        />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <motion.div 
+          style={{ y: heroContentY, opacity: prefersReducedMotion ? 1 : heroOpacity }}
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
+        >
           <motion.div 
             className="max-w-4xl mx-auto"
             variants={heroVariants}
@@ -279,7 +394,7 @@ export default function Services() {
               </motion.div>
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Dashboard Preview - What You Get */}
@@ -579,62 +694,7 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
-        
-        {/* Animated background elements */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.3 }}
-          viewport={{ once: true }}
-          className="absolute inset-0 pointer-events-none"
-        >
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.1, 0.2, 0.1]
-            }}
-            transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl"
-          />
-        </motion.div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <AnimatedSection direction="none">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4"
-            >
-              Hello, NÈKO.
-            </motion.h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto"
-            >
-              Ready to start? All you have to do is say hello.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Link to="/contact">
-                <Button variant="hero" size="xl" className="group">
-                  Say Hello
-                  <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </Button>
-              </Link>
-            </motion.div>
-          </AnimatedSection>
-        </div>
-      </section>
+      <CTASection />
 
       <Footer />
     </main>
