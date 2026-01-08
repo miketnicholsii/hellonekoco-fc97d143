@@ -11,7 +11,6 @@ import { AnimatedSection, AnimatedStagger, staggerItem } from "@/components/Anim
 import { BusinessStarterPreview } from "@/components/previews/BusinessStarterPreview";
 import { BusinessCreditPreview } from "@/components/previews/BusinessCreditPreview";
 import { PersonalBrandPreview } from "@/components/previews/PersonalBrandPreview";
-import { DashboardPreview } from "@/components/previews/DashboardPreview";
 import { 
   ArrowRight, 
   Building2, 
@@ -20,11 +19,12 @@ import {
   Phone, 
   Mail,
   CheckCircle2,
-  ExternalLink,
   AlertCircle,
   User,
   TrendingUp,
-  CreditCard
+  CreditCard,
+  Globe,
+  Sparkles
 } from "lucide-react";
 
 const creditTiers = [
@@ -83,11 +83,19 @@ const creditTiers = [
 ];
 
 const legitimacySteps = [
-  { icon: Building2, title: "Registered Business", description: "LLC or Corporation properly filed" },
-  { icon: FileText, title: "EIN Number", description: "Free from IRS.gov" },
-  { icon: Landmark, title: "Business Bank Account", description: "Separate from personal" },
-  { icon: Phone, title: "Business Phone", description: "Dedicated line for your business" },
+  { icon: Building2, title: "Registered Business", description: "LLC or Corporation properly filed with your state" },
+  { icon: FileText, title: "EIN Number", description: "Free federal tax ID from IRS.gov" },
+  { icon: Landmark, title: "Business Bank Account", description: "Separate finances from personal accounts" },
+  { icon: Phone, title: "Business Phone", description: "Dedicated line for your business operations" },
   { icon: Mail, title: "Professional Email", description: "yourname@yourbusiness.com" },
+];
+
+const personalBrandBenefits = [
+  "Custom public profile page with your unique URL",
+  "Skills and experience showcase",
+  "Link aggregation — all your work in one place",
+  "SEO optimization for discoverability",
+  "Professional credibility that opens doors"
 ];
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -102,7 +110,6 @@ const HeroBackground = memo(function HeroBackground() {
   );
 });
 
-// Simple list item with CSS animation
 const ListItem = memo(function ListItem({ 
   step, 
   index 
@@ -126,7 +133,6 @@ const ListItem = memo(function ListItem({
   );
 });
 
-// Simple check item
 const CheckItem = memo(function CheckItem({ item }: { item: string }) {
   return (
     <li className="flex items-center gap-3 text-foreground">
@@ -136,25 +142,34 @@ const CheckItem = memo(function CheckItem({ item }: { item: string }) {
   );
 });
 
-// CTA Section simplified
 const CTASection = memo(function CTASection() {
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-tertiary relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
         <AnimatedSection direction="none">
+          <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
+            Ready?
+          </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
-            Hello, NÈKO.
+            Let's get you set up.
           </h2>
           <p className="text-lg text-primary-foreground/60 mb-10 max-w-md mx-auto">
-            Ready to start? All you have to do is say hello.
+            Whether it's your business, your credit, or your brand — we're here to help.
           </p>
-          <Link to="/contact">
-            <Button variant="hero" size="xl" className="group">
-              Say Hello
-              <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link to="/contact">
+              <Button variant="hero" size="xl" className="group">
+                Get Started
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+            <Link to="/pricing">
+              <Button variant="hero-outline" size="xl">
+                View Plans
+              </Button>
+            </Link>
+          </div>
         </AnimatedSection>
       </div>
     </section>
@@ -188,60 +203,79 @@ export default function Services() {
               {...fadeIn}
               className="text-sm font-medium tracking-widest uppercase text-primary-foreground/50 mb-4"
             >
-              Services
+              How We Help
             </motion.p>
             <motion.h1 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.1 }}
               className="font-display font-bold tracking-tighter text-primary-foreground mb-6 text-[clamp(2rem,6vw,4rem)] leading-[1.1]"
             >
-              The path forward.
+              Two tracks. One goal.
             </motion.h1>
             <motion.p 
               {...fadeIn}
               transition={{ ...fadeIn.transition, delay: 0.2 }}
               className="text-lg sm:text-xl text-primary-foreground/70 max-w-2xl mx-auto leading-relaxed"
             >
-              From formation to credit to brand. Each step structured, trackable, and designed for sustainable progress.
+              Business enablement and personal branding — each structured with guidance, progress tracking, and clarity at every step.
             </motion.p>
           </div>
         </div>
       </section>
 
-      {/* Dashboard Preview */}
-      <section id="dashboard" className="py-16 sm:py-20 lg:py-28 bg-background scroll-mt-20">
+      {/* Track Overview */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection direction="none">
-            <div className="text-center mb-10">
-              <SectionHeading
-                label="Your Dashboard"
-                title="Everything in one place."
-                description="A personalized command center for your business journey. Track progress, manage tasks, and stay focused."
-                centered
-              />
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.15} direction="up">
-            <div className="max-w-4xl mx-auto">
-              <DashboardPreview />
-            </div>
-          </AnimatedSection>
+          <AnimatedStagger className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <motion.div variants={staggerItem}>
+              <Link to="#formation" className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                    <Building2 className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display font-bold text-lg">Business Enablement</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  Get set up correctly and credibly — business formation, banking, and credit building that separates from your personal score.
+                </p>
+                <span className="text-sm font-medium text-primary flex items-center gap-2">
+                  Learn more <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            </motion.div>
+            
+            <motion.div variants={staggerItem}>
+              <Link to="#brand" className="block p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+                    <User className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display font-bold text-lg">Personal Branding</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  Build a digital presence that represents you — your story, skills, and professional credibility in one shareable page.
+                </p>
+                <span className="text-sm font-medium text-primary flex items-center gap-2">
+                  Learn more <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
+            </motion.div>
+          </AnimatedStagger>
         </div>
       </section>
 
-      {/* Business Starter Flow */}
+      {/* Business Formation Section */}
       <section id="formation" className="py-16 sm:py-20 lg:py-28 bg-muted/30 scroll-mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <AnimatedSection direction="left">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4">
                 <Building2 className="h-3.5 w-3.5" />
-                Start
+                Business Foundations
               </div>
               <SectionHeading
-                title="Business Formation"
-                description="The foundation. A guided path to properly form your business and establish legitimacy from day one."
+                title="Get set up correctly from the start."
+                description="The legitimacy essentials every business needs — LLC formation, EIN, business banking, and the infrastructure that vendors, banks, and credit bureaus look for."
               />
 
               <div className="mt-8 space-y-3">
@@ -256,7 +290,7 @@ export default function Services() {
                   <div>
                     <p className="text-sm font-medium text-foreground">Why this matters</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Every vendor, bank, and credit bureau checks these fundamentals. Get them right from the start.
+                      These aren't optional extras — they're the foundation. Every vendor, bank, and credit bureau checks these fundamentals before extending credit.
                     </p>
                   </div>
                 </div>
@@ -277,11 +311,11 @@ export default function Services() {
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4">
                 <TrendingUp className="h-3.5 w-3.5" />
-                Build
+                Business Credit Building
               </div>
               <SectionHeading
-                title="Business Credit"
-                description="A structured, tier-based approach to building business credit that separates from your personal score."
+                title="Build credit that's separate from your personal score."
+                description="A structured, tier-based approach — from vendor accounts to revolving credit. Access funding that doesn't depend on your personal credit history."
                 centered
               />
             </div>
@@ -337,35 +371,42 @@ export default function Services() {
             <AnimatedSection direction="left" className="lg:order-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4">
                 <User className="h-3.5 w-3.5" />
-                Brand
+                Personal Branding
               </div>
               <SectionHeading
-                title="Personal Brand"
-                description="Your Digital CV. A professional page that tells your story, showcases your work, and builds credibility."
+                title="Your Digital CV."
+                description="A professional page that tells your story, showcases your work, and builds the credibility that opens doors — whether you're building a business or establishing yourself as a professional."
               />
 
-              <div className="mt-8 space-y-4">
-                <div className="p-4 rounded-xl bg-card border border-border">
-                  <h4 className="font-medium text-foreground mb-2">What You Get</h4>
-                  <ul className="space-y-2">
-                    {[
-                      "Custom public profile page",
-                      "Skills and experience showcase",
-                      "Link aggregation",
-                      "SEO optimization",
-                      "Shareable URL"
-                    ].map((item) => (
-                      <CheckItem key={item} item={item} />
-                    ))}
-                  </ul>
-                </div>
+              <div className="mt-8 p-5 rounded-xl bg-card border border-border">
+                <h4 className="font-medium text-foreground mb-4">What You Get</h4>
+                <ul className="space-y-3">
+                  {personalBrandBenefits.map((item) => (
+                    <CheckItem key={item} item={item} />
+                  ))}
+                </ul>
+              </div>
 
+              {/* Connection to business */}
+              <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/20">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Standalone or supporting</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Personal branding can work independently, or it can complement and amplify your business brand — establishing you as credible alongside your company.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6">
                 <Link 
                   to="/personal-brand" 
                   className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
                 >
                   Learn more about Digital CV
-                  <ExternalLink className="h-3.5 w-3.5" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </AnimatedSection>
