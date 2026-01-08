@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
@@ -17,11 +17,12 @@ import {
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
+// Memoized hero background with contain for layout performance
 const HeroBackground = memo(function HeroBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none contain-paint" aria-hidden="true">
-      <div className="absolute top-1/3 left-[20%] w-48 sm:w-64 h-48 sm:h-64 bg-primary/5 rounded-full blur-3xl opacity-50 gpu-accelerated" />
-      <div className="absolute bottom-1/4 right-[15%] w-40 sm:w-56 h-40 sm:h-56 bg-primary/5 rounded-full blur-3xl opacity-50 gpu-accelerated" />
+      <div className="absolute top-1/3 left-[20%] w-48 sm:w-64 h-48 sm:h-64 bg-primary/5 rounded-full blur-3xl opacity-50" />
+      <div className="absolute bottom-1/4 right-[15%] w-40 sm:w-56 h-40 sm:h-56 bg-primary/5 rounded-full blur-3xl opacity-50" />
     </div>
   );
 });
@@ -119,6 +120,51 @@ const comparisonFeatures = [
   { feature: "Priority support", free: false, start: false, build: true, scale: true },
 ];
 
+// Memoized table cell component for performance
+const TableCell = memo(function TableCell({ value, highlight = false }: { value: boolean | string; highlight?: boolean }) {
+  if (typeof value === "boolean") {
+    return value ? (
+      <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
+    ) : (
+      <span className="text-muted-foreground/40">—</span>
+    );
+  }
+  return <span className="text-[10px] sm:text-xs text-muted-foreground">{value}</span>;
+});
+
+// Memoized comparison row for better performance
+const ComparisonRow = memo(function ComparisonRow({ row, isLast }: { row: typeof comparisonFeatures[0]; isLast: boolean }) {
+  return (
+    <tr className={!isLast ? "border-b border-border" : ""}>
+      <td className="p-3 sm:p-4 text-xs sm:text-sm text-foreground">{row.feature}</td>
+      <td className="text-center p-2 sm:p-4"><TableCell value={row.free} /></td>
+      <td className="text-center p-2 sm:p-4"><TableCell value={row.start} /></td>
+      <td className="text-center p-2 sm:p-4 bg-primary/5"><TableCell value={row.build} highlight /></td>
+      <td className="text-center p-2 sm:p-4"><TableCell value={row.scale} /></td>
+    </tr>
+  );
+});
+
+// Memoized FAQ item for performance
+const FAQItem = memo(function FAQItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
+  return (
+    <AccordionItem 
+      value={`faq-${index}`}
+      className="bg-card border border-border rounded-lg px-4 sm:px-5 data-[state=open]:shadow-sm transition-shadow"
+    >
+      <AccordionTrigger className="text-left font-medium hover:no-underline py-3 sm:py-4 text-sm">
+        <div className="flex items-start sm:items-center gap-2 sm:gap-3">
+          <HelpCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5 sm:mt-0" />
+          <span className="pr-2">{faq.question}</span>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="text-muted-foreground pb-3 sm:pb-4 pl-6 sm:pl-7 text-xs sm:text-sm leading-relaxed">
+        {faq.answer}
+      </AccordionContent>
+    </AccordionItem>
+  );
+});
+
 export default function Pricing() {
   const prefersReducedMotion = useReducedMotion();
   
@@ -214,53 +260,7 @@ export default function Pricing() {
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((row, index) => (
-                    <tr key={row.feature} className={index < comparisonFeatures.length - 1 ? "border-b border-border" : ""}>
-                      <td className="p-3 sm:p-4 text-xs sm:text-sm text-foreground">{row.feature}</td>
-                      <td className="text-center p-2 sm:p-4">
-                        {typeof row.free === "boolean" ? (
-                          row.free ? (
-                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground/40">—</span>
-                          )
-                        ) : (
-                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.free}</span>
-                        )}
-                      </td>
-                      <td className="text-center p-2 sm:p-4">
-                        {typeof row.start === "boolean" ? (
-                          row.start ? (
-                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground/40">—</span>
-                          )
-                        ) : (
-                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.start}</span>
-                        )}
-                      </td>
-                      <td className="text-center p-2 sm:p-4 bg-primary/5">
-                        {typeof row.build === "boolean" ? (
-                          row.build ? (
-                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground/40">—</span>
-                          )
-                        ) : (
-                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.build}</span>
-                        )}
-                      </td>
-                      <td className="text-center p-2 sm:p-4">
-                        {typeof row.scale === "boolean" ? (
-                          row.scale ? (
-                            <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground/40">—</span>
-                          )
-                        ) : (
-                          <span className="text-[10px] sm:text-xs text-muted-foreground">{row.scale}</span>
-                        )}
-                      </td>
-                    </tr>
+                    <ComparisonRow key={row.feature} row={row} isLast={index === comparisonFeatures.length - 1} />
                   ))}
                 </tbody>
               </table>
@@ -285,21 +285,7 @@ export default function Pricing() {
             <div className="max-w-2xl mx-auto">
               <Accordion type="single" collapsible className="space-y-2 sm:space-y-3">
                 {faqs.map((faq, index) => (
-                  <AccordionItem 
-                    key={index} 
-                    value={`faq-${index}`}
-                    className="bg-card border border-border rounded-lg px-4 sm:px-5 data-[state=open]:shadow-sm transition-shadow"
-                  >
-                    <AccordionTrigger className="text-left font-medium hover:no-underline py-3 sm:py-4 text-sm">
-                      <div className="flex items-start sm:items-center gap-2 sm:gap-3">
-                        <HelpCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5 sm:mt-0" />
-                        <span className="pr-2">{faq.question}</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground pb-3 sm:pb-4 pl-6 sm:pl-7 text-xs sm:text-sm leading-relaxed">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
+                  <FAQItem key={index} faq={faq} index={index} />
                 ))}
               </Accordion>
             </div>

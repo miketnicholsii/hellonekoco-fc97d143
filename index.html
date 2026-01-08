@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a3a36" />
+    <meta name="color-scheme" content="light dark" />
     <title>NÈKO — Business. Tech. Strategy.</title>
     <meta name="description" content="Your guided operating system for building businesses and personal brands — from idea to scale.">
     <meta name="author" content="NÈKO" />
@@ -15,7 +17,7 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="dns-prefetch" href="https://jlbkacmbrjqejkdasbsj.supabase.co" />
 
-    <!-- Non-render-blocking font loading -->
+    <!-- Non-render-blocking font loading with font-display swap -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" /></noscript>
 
@@ -36,6 +38,14 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://storage.googleapis.com/gpt-engineer-file-uploads/4t0dmyIxVxeRiqEbjCwCSmDo0dq1/uploads/1767660939741-NÈKO.png">
     <link rel="apple-touch-icon" href="https://storage.googleapis.com/gpt-engineer-file-uploads/4t0dmyIxVxeRiqEbjCwCSmDo0dq1/uploads/1767660939741-NÈKO.png">
+
+    <!-- Critical inline styles for faster first paint -->
+    <style>
+      /* Prevent FOUT with system font fallback */
+      body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      /* Loading state to prevent layout shift */
+      #root { min-height: 100vh; }
+    </style>
   </head>
 
   <body>
