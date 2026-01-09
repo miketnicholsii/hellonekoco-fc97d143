@@ -13,6 +13,7 @@ const About = lazyWithRetry(() => import("@/pages/About"));
 const Services = lazyWithRetry(() => import("@/pages/Services"));
 const PersonalBrand = lazyWithRetry(() => import("@/pages/PersonalBrand"));
 const Pricing = lazyWithRetry(() => import("@/pages/Pricing"));
+const Brand = lazyWithRetry(() => import("@/pages/Brand"));
 const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
@@ -98,6 +99,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           <Route path="/services" element={<AnimatedPage><Services /></AnimatedPage>} />
           <Route path="/personal-brand" element={<AnimatedPage><PersonalBrand /></AnimatedPage>} />
           <Route path="/pricing" element={<AnimatedPage><Pricing /></AnimatedPage>} />
+          <Route path="/brand" element={<AnimatedPage><Brand /></AnimatedPage>} />
           <Route path="/get-started" element={<AnimatedPage><GetStarted /></AnimatedPage>} />
           <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
           
