@@ -117,15 +117,20 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             </div>
 
             {/* Right side - CTAs (fixed width to balance left side) */}
-            <div className="hidden lg:flex items-center justify-end gap-4 min-w-fit flex-shrink-0 relative z-10">
+            <div className="hidden lg:flex items-center justify-end gap-3 min-w-fit flex-shrink-0 relative z-10">
               {user ? (
-                <Link to="/app">
-                  <Button variant="cta" size="default" className="shadow-md">
-                    <span className="flex items-center gap-1.5">
-                      Dashboard <ArrowRight className="h-4 w-4" />
-                    </span>
-                  </Button>
-                </Link>
+                <>
+                  <span className={`text-xs font-medium ${showDarkText ? "text-muted-foreground" : "text-white/60"}`}>
+                    Signed in as <span className={`font-semibold ${showDarkText ? "text-foreground" : "text-white/90"}`}>{user.email?.split('@')[0]}</span>
+                  </span>
+                  <Link to="/app">
+                    <Button variant="cta" size="default" className="shadow-md">
+                      <span className="flex items-center gap-1.5">
+                        Dashboard <ArrowRight className="h-4 w-4" />
+                      </span>
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link 
@@ -165,9 +170,14 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
                   {user ? (
-                    <Link to="/app" onClick={closeMenu}>
-                      <Button variant="cta" size="lg" className="w-full">Dashboard</Button>
-                    </Link>
+                    <>
+                      <p className="text-xs text-muted-foreground text-center pb-1">
+                        Signed in as <span className="font-semibold text-foreground">{user.email?.split('@')[0]}</span>
+                      </p>
+                      <Link to="/app" onClick={closeMenu}>
+                        <Button variant="cta" size="lg" className="w-full">Dashboard</Button>
+                      </Link>
+                    </>
                   ) : (
                     <>
                       <Link to="/contact" onClick={closeMenu}>
