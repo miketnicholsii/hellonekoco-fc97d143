@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
 import { AnimatedSection, AnimatedStagger, staggerItem, staggerCardItem } from "@/components/AnimatedSection";
+import { HomePricing } from "@/components/HomePricing";
 import { 
   ArrowRight, 
   Building2, 
@@ -216,16 +217,22 @@ export default function Index() {
               Business formation. Credit building. Personal branding. We help you take the next right step.
             </motion.p>
 
-            {/* Single exploration-focused CTA */}
+            {/* Single exploration-focused CTA - scroll to services */}
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col items-center gap-4 px-4 sm:px-0">
-              <Link to="/services">
+              <a 
+                href="#services"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 <Button variant="hero-outline" size="lg" className="group">
                   <span className="flex items-center gap-2">
-                    Explore What We Do
+                    See What We Offer
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
-              </Link>
+              </a>
               <p className="text-xs sm:text-sm text-primary-foreground/40">
                 Business formation · Credit building · Personal branding
               </p>
@@ -340,13 +347,13 @@ export default function Index() {
         </div>
       </section>
 
-      {/* TWO TRACKS Section */}
-      <section id="two-tracks" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
+      {/* TWO TRACKS Section - now with id="services" for nav anchor */}
+      <section id="services" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-10 sm:mb-12">
               <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3">
-                How We Help
+                What We Offer
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
                 Two tracks. One goal.
@@ -539,17 +546,17 @@ export default function Index() {
             </div>
           </AnimatedSection>
 
-          {/* CTA */}
+          {/* CTA to services detail page */}
           <AnimatedSection delay={0.2} className="text-center mt-10">
-            <Link to="/pricing">
-              <Button variant="hero" size="lg" className="group">
-                Compare Plans
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-              </Button>
+            <Link to="/services" className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors inline-flex items-center gap-1">
+              See detailed breakdown <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </AnimatedSection>
         </div>
       </section>
+
+      {/* PRICING Section - Integrated for seamless flow */}
+      <HomePricing />
 
       {/* WHAT WORKING WITH NÈKO LOOKS LIKE Section */}
       <section id="experience" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
@@ -602,14 +609,14 @@ export default function Index() {
               Whether you're starting a business, building credit, or establishing your personal brand — we're here to help.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
-              <Link to="/contact" className="w-full sm:w-auto">
+              <Link to="/get-started" className="w-full sm:w-auto">
                 <Button variant="hero" size="lg" className="w-full sm:w-auto group">
-                  Say Hello
+                  Get Started
                   <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
-              <Link to="/pricing" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">View Plans</Button>
+              <Link to="/contact" className="w-full sm:w-auto">
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">Say Hello</Button>
               </Link>
             </div>
           </AnimatedSection>

@@ -1,20 +1,68 @@
 import { useState, useEffect, useCallback, memo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
+// Anchor-based navigation for homepage flow
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/services", label: "How It Works" },
-  { href: "/personal-brand", label: "Brand" },
-  { href: "/pricing", label: "Plans" },
+  { href: "#services", label: "What We Do", isAnchor: true },
+  { href: "#pricing", label: "Plans", isAnchor: true },
+  { href: "#paths", label: "How It Works", isAnchor: true },
+  { href: "/about", label: "About", isAnchor: false },
 ] as const;
 
-// Simplified nav pill without layoutId animation for better performance
-const NavPill = memo(function NavPill({ href, label, isActive, showDarkText }: { href: string; label: string; isActive: boolean; showDarkText: boolean }) {
+// Smooth scroll to anchor
+function scrollToAnchor(id: string) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+// Simplified nav pill with anchor support
+const NavPill = memo(function NavPill({ 
+  href, 
+  label, 
+  isActive, 
+  showDarkText,
+  isAnchor,
+  onAnchorClick,
+}: { 
+  href: string; 
+  label: string; 
+  isActive: boolean; 
+  showDarkText: boolean;
+  isAnchor: boolean;
+  onAnchorClick?: (id: string) => void;
+}) {
+  const handleClick = (e: React.MouseEvent) => {
+    if (isAnchor && onAnchorClick) {
+      e.preventDefault();
+      const id = href.replace("#", "");
+      onAnchorClick(id);
+    }
+  };
+
+  if (isAnchor) {
+    return (
+      <a 
+        href={href} 
+        onClick={handleClick}
+        className="relative group cursor-pointer"
+      >
+        <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
+          {label}
+        </span>
+        {isActive && (
+          <div className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`} />
+        )}
+        {!isActive && <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${showDarkText ? "bg-muted/50" : "bg-white/10"}`} />}
+      </a>
+    );
+  }
+
   return (
     <Link to={href} className="relative group">
       <span className={`relative z-10 block px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
@@ -32,7 +80,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let ticking = false;
@@ -40,6 +90,25 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       if (!ticking) {
         requestAnimationFrame(() => {
           setIsScrolled(window.scrollY > 20);
+          
+          // Track active section on homepage
+          if (location.pathname === "/") {
+            const sections = ["services", "pricing", "paths"];
+            let currentSection: string | null = null;
+            
+            for (const id of sections) {
+              const el = document.getElementById(id);
+              if (el) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom > 150) {
+                  currentSection = id;
+                  break;
+                }
+              }
+            }
+            setActiveSection(currentSection);
+          }
+          
           ticking = false;
         });
         ticking = true;
@@ -48,10 +117,21 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const toggleMenu = useCallback(() => setIsOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsOpen(false), []);
+
+  const handleAnchorClick = useCallback((id: string) => {
+    if (location.pathname !== "/") {
+      // Navigate to homepage first, then scroll
+      navigate("/");
+      setTimeout(() => scrollToAnchor(id), 100);
+    } else {
+      scrollToAnchor(id);
+    }
+    closeMenu();
+  }, [location.pathname, navigate, closeMenu]);
 
   const isHeroPage = location.pathname === "/" || location.pathname === "/about";
   const showDarkText = !isHeroPage || isScrolled;
@@ -62,14 +142,14 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-11 lg:h-12">
-            {/* Left side - Logo (fixed width to balance right side) */}
+            {/* Left side - Logo */}
             <div className="hidden lg:flex items-center w-56 flex-shrink-0">
               <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
                 <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
               </Link>
             </div>
             
-            {/* Mobile logo - simplified without tooltip */}
+            {/* Mobile logo */}
             <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0" title="NÈKO - pronounced 'ē-ko'">
               <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
             </Link>
@@ -78,12 +158,20 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             <div className="hidden lg:flex items-center justify-center">
               <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-full" style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}>
                 {navLinks.map((link) => (
-                  <NavPill key={link.href} href={link.href} label={link.label} isActive={location.pathname === link.href} showDarkText={showDarkText} />
+                  <NavPill 
+                    key={link.href} 
+                    href={link.href} 
+                    label={link.label} 
+                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : location.pathname === link.href} 
+                    showDarkText={showDarkText}
+                    isAnchor={link.isAnchor}
+                    onAnchorClick={handleAnchorClick}
+                  />
                 ))}
               </div>
             </div>
 
-            {/* Right side - CTAs (fixed width to balance left side) */}
+            {/* Right side - CTAs */}
             <div className="hidden lg:flex items-center justify-end gap-3 min-w-fit flex-shrink-0 relative z-10">
               {user ? (
                 <>
@@ -106,9 +194,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   >
                     Member Login
                   </Link>
-                  <Link to="/contact">
+                  <Link to="/get-started">
                     <Button variant="cta" size="default" className="shadow-md whitespace-nowrap">
-                      Say Hello
+                      Get Started
                     </Button>
                   </Link>
                 </>
@@ -130,10 +218,44 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
               <div className="flex flex-col h-full pt-16 pb-6 px-5">
                 <nav className="flex-1 space-y-1">
                   {navLinks.map((link) => (
-                    <Link key={link.href} to={link.href} onClick={closeMenu} className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${location.pathname === link.href ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}>
-                      {link.label}
-                    </Link>
+                    link.isAnchor ? (
+                      <a 
+                        key={link.href} 
+                        href={link.href} 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleAnchorClick(link.href.replace("#", ""));
+                        }} 
+                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${activeSection === link.href.replace("#", "") ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link 
+                        key={link.href} 
+                        to={link.href} 
+                        onClick={closeMenu} 
+                        className={`block px-3 py-3 rounded-lg text-base font-medium transition-colors ${location.pathname === link.href ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                      >
+                        {link.label}
+                      </Link>
+                    )
                   ))}
+                  {/* Add explicit link to full services page for more detail */}
+                  <Link 
+                    to="/services" 
+                    onClick={closeMenu} 
+                    className="block px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:bg-muted"
+                  >
+                    Full Services →
+                  </Link>
+                  <Link 
+                    to="/pricing" 
+                    onClick={closeMenu} 
+                    className="block px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:bg-muted"
+                  >
+                    Full Pricing →
+                  </Link>
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
                   {user ? (
@@ -147,8 +269,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                     </>
                   ) : (
                     <>
-                      <Link to="/contact" onClick={closeMenu}>
-                        <Button variant="cta" size="lg" className="w-full">Say Hello</Button>
+                      <Link to="/get-started" onClick={closeMenu}>
+                        <Button variant="cta" size="lg" className="w-full">Get Started</Button>
                       </Link>
                       <Link 
                         to="/login" 

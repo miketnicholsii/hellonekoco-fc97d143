@@ -11,8 +11,9 @@ const sections: Section[] = [
   { id: "hero", label: "Welcome" },
   { id: "starting-points", label: "Sound Familiar?" },
   { id: "how-we-help", label: "How We Help" },
-  { id: "two-tracks", label: "Services" },
+  { id: "services", label: "What We Offer" },
   { id: "paths", label: "Choose Your Path" },
+  { id: "pricing", label: "Plans" },
   { id: "experience", label: "The Experience" },
   { id: "cta", label: "Get Started" },
 ];
