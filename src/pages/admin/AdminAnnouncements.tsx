@@ -87,7 +87,15 @@ export default function AdminAnnouncements() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setAnnouncements(data || []);
+      
+      // Map database response to typed Announcement interface
+      const typedAnnouncements: Announcement[] = (data || []).map((item) => ({
+        ...item,
+        type: item.type as Announcement["type"],
+        target: item.target as Announcement["target"],
+      }));
+      
+      setAnnouncements(typedAnnouncements);
     } catch (error) {
       console.error("Error loading announcements:", error);
       toast.error("We couldn't load announcements right now. Please try again.");
