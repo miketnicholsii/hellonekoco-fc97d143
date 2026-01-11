@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
 import { DigitalCV, Project } from "@/pages/app/PersonalBrandBuilder";
 import { Plus, Pencil, Trash2, Upload, Briefcase, ExternalLink } from "lucide-react";

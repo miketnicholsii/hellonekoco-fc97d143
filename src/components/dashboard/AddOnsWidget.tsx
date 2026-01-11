@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
 import {
   ALL_SERVICES,
@@ -266,9 +266,10 @@ export default function AddOnsWidget() {
         window.open(data.url, "_blank");
         toast.success("Redirecting to checkout...");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Purchase error:", error);
-      toast.error(error.message || "Failed to start purchase");
+      const message = error instanceof Error ? error.message : "Failed to start purchase";
+      toast.error(message);
     } finally {
       setIsPurchasing(false);
       setPurchasingId(null);
@@ -292,9 +293,10 @@ export default function AddOnsWidget() {
         window.open(data.url, "_blank");
         toast.success("Opening subscription management...");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Portal error:", error);
-      toast.error(error.message || "Failed to open subscription portal");
+      const message = error instanceof Error ? error.message : "Failed to open subscription portal";
+      toast.error(message);
     } finally {
       setIsManaging(false);
     }

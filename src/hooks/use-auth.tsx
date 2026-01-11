@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, logAuthEventOnce } from "@/integrations/supabase";
 import { SubscriptionTier } from "@/lib/subscription-tiers";
 
 interface Profile {
@@ -60,6 +60,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Prevent concurrent subscription checks
   const isCheckingSubscription = useRef(false);
   const lastCheckTime = useRef(0);
+  const lastUserId = useRef<string | null>(null);
+  const hasInitialized = useRef(false);
+
+  const updateAuthState = useCallback((nextSession: Session | null) => {
+    setSession((prev) =>
+      prev?.access_token === nextSession?.access_token ? prev : nextSession
+    );
+    setUser((prev) =>
+      prev?.id === nextSession?.user?.id ? prev : nextSession?.user ?? null
+    );
+  }, []);
+
+  const finishLoading = useCallback(() => {
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      setIsLoading(false);
+    } else {
+      setIsLoading((prev) => (prev ? false : prev));
+    }
+  }, []);
 
   const checkAdminRole = useCallback(async (userId: string) => {
     try {
@@ -173,6 +193,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     subscriptionCache = { data: null, timestamp: 0, userId: null };
     
     await supabase.auth.signOut();
+    lastUserId.current = null;
     setUser(null);
     setSession(null);
     setProfile(null);
@@ -189,18 +210,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        setIsLoading(false);
+        logAuthEventOnce(event);
+        updateAuthState(newSession);
+        finishLoading();
+
+        const nextUserId = newSession?.user?.id ?? null;
+        const userChanged = nextUserId !== lastUserId.current;
+        lastUserId.current = nextUserId;
 
         // Defer Supabase calls with setTimeout
         if (newSession?.user) {
           setTimeout(() => {
-            checkAdminRole(newSession.user.id);
+            if (userChanged) {
+              checkAdminRole(newSession.user.id);
+            }
             // Only force refresh on sign in events
-            refreshSubscription(event === 'SIGNED_IN');
+            refreshSubscription(event === "SIGNED_IN");
           }, 0);
-        } else {
+        } else if (userChanged) {
           setIsAdmin(false);
           setProfile(null);
           subscriptionCache = { data: null, timestamp: 0, userId: null };
@@ -216,18 +243,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session: existingSession } }) => {
-      setSession(existingSession);
-      setUser(existingSession?.user ?? null);
-      setIsLoading(false);
+      updateAuthState(existingSession);
+      finishLoading();
 
       if (existingSession?.user) {
+        lastUserId.current = existingSession.user.id;
         checkAdminRole(existingSession.user.id);
         refreshSubscription();
       }
     });
 
     return () => authSubscription.unsubscribe();
-  }, [checkAdminRole, refreshSubscription]);
+  }, [checkAdminRole, finishLoading, refreshSubscription, updateAuthState]);
 
   // Fetch profile when session changes
   useEffect(() => {

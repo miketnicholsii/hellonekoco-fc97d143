@@ -10,7 +10,7 @@ import { Check, HelpCircle, ArrowRight, Zap, Crown, Rocket, Sparkles } from "luc
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
 import {
   Accordion,

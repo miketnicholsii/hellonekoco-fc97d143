@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { useAuth } from "./use-auth";
 import { useToast } from "./use-toast";
 import { differenceInDays, parseISO, format, isToday, isYesterday } from "date-fns";

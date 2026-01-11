@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { tierMeetsRequirement, normalizeTier, SubscriptionTier } from "@/lib/subscription-tiers";
 import { PageLoader } from "@/components/LoadingStates";

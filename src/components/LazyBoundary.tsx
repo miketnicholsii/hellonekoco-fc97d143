@@ -105,7 +105,7 @@ export class LazyBoundary extends Component<LazyBoundaryProps, LazyBoundaryState
  * Creates a lazy component with built-in retry logic for chunk load failures.
  * If the initial load fails, it will retry with exponential backoff.
  */
-export function lazyWithRetry<T extends ComponentType<any>>(
+export function lazyWithRetry<T extends ComponentType<unknown>>(
   importFn: () => Promise<{ default: T }>,
   retries = 2,
   delay = 500
