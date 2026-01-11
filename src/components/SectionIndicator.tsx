@@ -160,12 +160,14 @@ export const SectionIndicator = memo(function SectionIndicator() {
 });
 
 /**
- * Mobile: Horizontal progress bar at the bottom with section indicators
+ * Mobile: Horizontal progress bar at the bottom with section indicators and swipe gestures
  */
 export const MobileProgressBar = memo(function MobileProgressBar() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [sectionProgress, setSectionProgress] = useState(0);
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [isSwipeNavigating, setIsSwipeNavigating] = useState(false);
   const { scrollYProgress } = useScroll();
   const prefersReducedMotion = useReducedMotion();
   
@@ -258,6 +260,45 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     }
   }, [prefersReducedMotion, triggerHaptic]);
 
+  // Swipe gesture handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ x: touch.clientX, y: touch.clientY });
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStart || isSwipeNavigating) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+    
+    // Minimum swipe distance threshold (50px)
+    const minSwipeDistance = 50;
+    
+    // Check if horizontal swipe is dominant (ratio > 1.5)
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY) * 1.5;
+    
+    if (isHorizontalSwipe && Math.abs(deltaX) > minSwipeDistance) {
+      setIsSwipeNavigating(true);
+      
+      if (deltaX > 0 && activeSection > 0) {
+        // Swipe right = go to previous section
+        triggerHaptic([10, 30, 10]); // Short-long-short pattern for swipe
+        scrollToSection(activeSection - 1);
+      } else if (deltaX < 0 && activeSection < sections.length - 1) {
+        // Swipe left = go to next section
+        triggerHaptic([10, 30, 10]);
+        scrollToSection(activeSection + 1);
+      }
+      
+      // Reset navigation lock after animation
+      setTimeout(() => setIsSwipeNavigating(false), 500);
+    }
+    
+    setTouchStart(null);
+  }, [touchStart, activeSection, isSwipeNavigating, triggerHaptic, scrollToSection]);
+
   if (!isVisible) return null;
 
   return (
@@ -265,7 +306,9 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
       initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
       animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-lg border-t border-border safe-area-bottom"
+      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-lg border-t border-border safe-area-bottom touch-pan-y"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Section dot indicators */}
       <div className="flex items-center justify-center gap-1.5 pt-2.5 pb-1">
