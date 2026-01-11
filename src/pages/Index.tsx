@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
@@ -84,15 +84,50 @@ const NekoLogo = memo(function NekoLogo() {
   );
 });
 
-// Simplified hero background
+// Parallax hero background with subtle scroll effects
 const HeroBackground = memo(function HeroBackground() {
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  
+  // Parallax transforms - subtle movement relative to scroll
+  // Each element moves at a different rate for depth effect
+  const y1 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 80]);
+  const y2 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : -60]);
+  const y3 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 40]);
+  const opacity = useTransform(scrollY, [0, 400], [1, prefersReducedMotion ? 1 : 0.3]);
+  const scale = useTransform(scrollY, [0, 500], [1, prefersReducedMotion ? 1 : 1.1]);
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" />
-      <div className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" />
-      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" />
-      <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full" />
+      {/* Top-left glow orb - moves down slowly */}
+      <motion.div 
+        style={{ y: y1, opacity }}
+        className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
+      />
+      
+      {/* Bottom-right glow orb - moves up */}
+      <motion.div 
+        style={{ y: y2, opacity }}
+        className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
+      />
+      
+      {/* Outer ring - scales slightly */}
+      <motion.div 
+        style={{ scale, opacity }}
+        className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
+      />
+      
+      {/* Inner ring - moves down slowly */}
+      <motion.div 
+        style={{ y: y3, opacity }}
+        className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" 
+      />
+      
+      {/* Center glow - fades out */}
+      <motion.div 
+        style={{ opacity }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full" 
+      />
     </div>
   );
 });
