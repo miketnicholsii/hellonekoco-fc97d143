@@ -1,6 +1,6 @@
 import { memo, useState, ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, X, Sparkles } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Maximize2, X, Sparkles, Play } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
@@ -8,14 +8,8 @@ interface PreviewWrapperProps {
   children: ReactNode;
   expandedContent?: ReactNode;
   title: string;
-  accentColor?: "primary" | "secondary";
+  accentColor?: "primary" | "secondary" | "accent";
 }
-
-const shimmer = {
-  initial: { x: "-100%" },
-  animate: { x: "100%" },
-  transition: { repeat: Infinity, duration: 2, ease: "linear" as const }
-};
 
 export const PreviewWrapper = memo(function PreviewWrapper({ 
   children, 
@@ -25,31 +19,53 @@ export const PreviewWrapper = memo(function PreviewWrapper({
 }: PreviewWrapperProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
-  const accentClasses = accentColor === "primary" 
-    ? "from-primary/20 via-primary/10 to-secondary/20"
-    : "from-secondary/20 via-secondary/10 to-primary/20";
+  const accentGradients = {
+    primary: "from-primary/30 via-primary/15 to-primary/5",
+    secondary: "from-secondary/30 via-secondary/15 to-secondary/5",
+    accent: "from-accent-gold/30 via-accent-gold/15 to-accent-gold/5"
+  };
+
+  const accentBorders = {
+    primary: "border-primary/40",
+    secondary: "border-secondary/40",
+    accent: "border-accent-gold/40"
+  };
 
   return (
     <>
       <motion.div
         className="relative cursor-pointer group"
-        onHoverStart={() => setIsHovered(true)}
+        onHoverStart={() => !prefersReducedMotion && setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        whileHover={{ scale: 1.015, y: -6 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -8 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         onClick={() => setIsModalOpen(true)}
       >
-        {/* Animated border glow */}
+        {/* Animated border glow - NEKO branded */}
         <motion.div
-          className={`absolute -inset-[2px] bg-gradient-to-r ${accentClasses} rounded-[18px] blur-md opacity-0 -z-10`}
-          animate={{ opacity: isHovered ? 0.8 : 0 }}
+          className={`absolute -inset-[3px] bg-gradient-to-br ${accentGradients[accentColor]} rounded-[20px] blur-lg -z-10`}
+          animate={{ 
+            opacity: isHovered ? 0.9 : 0,
+            scale: isHovered ? 1.02 : 1
+          }}
           transition={{ duration: 0.4 }}
+        />
+        
+        {/* Outer glow ring */}
+        <motion.div
+          className={`absolute -inset-[1px] rounded-[18px] border-2 ${accentBorders[accentColor]} -z-10`}
+          animate={{ 
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{ duration: 0.3 }}
         />
         
         {/* Subtle shimmer effect on hover */}
         <AnimatePresence>
-          {isHovered && (
+          {isHovered && !prefersReducedMotion && (
             <motion.div
               className="absolute inset-0 overflow-hidden rounded-2xl z-10 pointer-events-none"
               initial={{ opacity: 0 }}
@@ -57,8 +73,9 @@ export const PreviewWrapper = memo(function PreviewWrapper({
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12"
-                {...shimmer}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent skew-x-12"
+                animate={{ x: ["-100%", "100%"] }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
               />
             </motion.div>
           )}
@@ -74,22 +91,31 @@ export const PreviewWrapper = memo(function PreviewWrapper({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent rounded-2xl flex items-end justify-center pb-8 z-20"
+              className="absolute inset-0 bg-gradient-to-t from-background/98 via-background/60 to-transparent rounded-2xl flex items-end justify-center pb-10 z-20"
             >
               <motion.div
-                initial={{ y: 12, opacity: 0, scale: 0.95 }}
+                initial={{ y: 16, opacity: 0, scale: 0.9 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: 8, opacity: 0, scale: 0.95 }}
-                transition={{ delay: 0.08, type: "spring", stiffness: 400, damping: 25 }}
-                className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/20"
+                exit={{ y: 10, opacity: 0, scale: 0.95 }}
+                transition={{ delay: 0.05, type: "spring", stiffness: 400, damping: 20 }}
+                className="flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/25"
               >
-                <Sparkles className="h-4 w-4" />
+                <Play className="h-4 w-4 fill-current" />
                 See Full Demo
                 <Maximize2 className="h-3.5 w-3.5 ml-1" />
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
+        
+        {/* Always visible play indicator */}
+        <motion.div
+          className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 text-xs font-medium text-muted-foreground"
+          animate={{ opacity: isHovered ? 0 : 1 }}
+        >
+          <Play className="h-3 w-3 fill-current" />
+          Demo
+        </motion.div>
       </motion.div>
 
       {/* Full Demo Modal */}
@@ -103,12 +129,12 @@ export const PreviewWrapper = memo(function PreviewWrapper({
           <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
             <div className="flex items-center gap-3">
               <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                className={`w-10 h-10 rounded-xl bg-${accentColor}/10 flex items-center justify-center`}
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center"
               >
-                <Sparkles className={`h-5 w-5 text-${accentColor}`} />
+                <Sparkles className="h-5 w-5 text-primary" />
               </motion.div>
               <div>
                 <h2 className="font-display text-lg font-bold text-foreground">{title}</h2>

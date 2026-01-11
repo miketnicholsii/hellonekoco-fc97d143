@@ -598,47 +598,79 @@ export default function Index() {
       </section>
 
       {/* PRODUCT DEMOS Section - Interactive previews */}
-      <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+      <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20 overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-1/4 left-[5%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-[5%] w-80 h-80 bg-secondary/5 rounded-full blur-3xl" />
+        </div>
+        
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
             <SectionHeading
               label="See It In Action"
               title="Explore what you'll get."
-              description="Click on any preview to see the full demo. These are real examples of what your dashboard experience looks like."
+              description="Click on any preview to see the full interactive demo. These are real examples of what your dashboard experience looks like."
               centered
-              className="mb-10 sm:mb-12"
+              className="mb-10 sm:mb-14"
             />
           </AnimatedSection>
 
-          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
             <AnimatedSection direction="left" delay={0}>
               <DashboardPreview />
-              <p className="text-center mt-4 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Your Dashboard</span> — Track progress, manage tasks, and see your journey at a glance.
-              </p>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-center mt-5"
+              >
+                <p className="font-display font-bold text-foreground">Your Dashboard</p>
+                <p className="text-sm text-muted-foreground mt-1">Track progress, manage tasks, and see your journey at a glance.</p>
+              </motion.div>
             </AnimatedSection>
             
             <AnimatedSection direction="none" delay={0.1}>
               <BusinessCreditPreview />
-              <p className="text-center mt-4 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Credit Builder</span> — Build business credit through vendor accounts and tradelines.
-              </p>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-center mt-5"
+              >
+                <p className="font-display font-bold text-foreground">Credit Builder</p>
+                <p className="text-sm text-muted-foreground mt-1">Build business credit through vendor accounts and tradelines.</p>
+              </motion.div>
             </AnimatedSection>
             
             <AnimatedSection direction="right" delay={0.2}>
               <PersonalBrandPreview />
-              <p className="text-center mt-4 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Personal Brand</span> — Create your professional Digital CV and online presence.
-              </p>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="text-center mt-5"
+              >
+                <p className="font-display font-bold text-foreground">Personal Brand</p>
+                <p className="text-sm text-muted-foreground mt-1">Create your professional Digital CV and online presence.</p>
+              </motion.div>
             </AnimatedSection>
           </div>
 
-          <AnimatedSection delay={0.3} className="text-center mt-10">
-            <p className="text-sm text-muted-foreground mb-4">
+          <AnimatedSection delay={0.3} className="text-center mt-12 sm:mt-14">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-sm text-muted-foreground mb-5"
+            >
               Click any preview above to see the full interactive demo
-            </p>
+            </motion.p>
             <Link to="/get-started">
-              <Button variant="default" size="lg" className="group">
+              <Button variant="default" size="lg" className="group shadow-lg shadow-primary/20">
                 Start Building Today
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
