@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
 import { PageLoader } from "@/components/LoadingStates";
 import CreditBuildingSteps from "@/components/business-credit/CreditBuildingSteps";

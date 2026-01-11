@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getAuthStorageMode, setRememberMePreference } from "@/integrations/supabase";
 import { useAuth } from "@/hooks/use-auth";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react";
@@ -55,7 +55,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(() => getAuthStorageMode() === "local");
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -95,13 +95,14 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (isLoading || !validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
+      setRememberMePreference(rememberMe);
       const { error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -115,14 +116,6 @@ export default function Login() {
           variant: "destructive",
         });
         return;
-      }
-
-      // Store remember me preference
-      if (rememberMe) {
-        localStorage.setItem("neko_remember_me", "true");
-      } else {
-        localStorage.removeItem("neko_remember_me");
-        sessionStorage.setItem("neko_session_only", "true");
       }
 
       toast({
@@ -300,7 +293,11 @@ export default function Login() {
               <Checkbox
                 id={rememberId}
                 checked={rememberMe}
-                onCheckedChange={(checked) => setRememberMe(checked === true)}
+                onCheckedChange={(checked) => {
+                  const nextValue = checked === true;
+                  setRememberMe(nextValue);
+                  setRememberMePreference(nextValue);
+                }}
                 aria-describedby={`${rememberId}-description`}
                 className="mt-0.5"
               />

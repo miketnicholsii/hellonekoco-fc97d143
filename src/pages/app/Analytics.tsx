@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { useTasks } from "@/hooks/use-tasks";
 import { FeatureGate, useFeatureGate } from "@/components/FeatureGate";
 import { PageLoader } from "@/components/LoadingStates";

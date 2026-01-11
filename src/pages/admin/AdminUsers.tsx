@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import {
@@ -110,7 +110,7 @@ export default function AdminUsers() {
     setIsLoading(true);
     try {
       // Get profiles with count
-      let query = supabase
+      const query = supabase
         .from("profiles")
         .select("*", { count: "exact" })
         .order("created_at", { ascending: false })

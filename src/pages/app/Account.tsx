@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
@@ -139,8 +139,9 @@ export default function Account() {
       if (data?.url) {
         window.open(data.url, "_blank");
       }
-    } catch (error: any) {
-      toast.error(error.message || "Failed to open billing portal");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to open billing portal";
+      toast.error(message);
     } finally {
       setIsOpeningPortal(false);
     }
@@ -181,9 +182,10 @@ export default function Account() {
       await refreshProfile();
       setIsEditing(false);
       toast.success("Profile updated successfully");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error(error.message || "Failed to update profile");
+      const message = error instanceof Error ? error.message : "Failed to update profile";
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }
