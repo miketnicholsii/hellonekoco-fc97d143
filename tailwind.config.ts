@@ -15,9 +15,19 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "sans-serif"],
-        display: ["Instrument Sans", "system-ui", "sans-serif"],
-        logo: ["DM Sans", "system-ui", "sans-serif"],
+        // Plus Jakarta Sans is a premium geometric sans-serif, more refined than Roboto
+        sans: ["Plus Jakarta Sans", "DM Sans", "system-ui", "sans-serif"],
+        display: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        logo: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        // Premium type scale with tighter line heights for headings
+        "display-2xl": ["4.5rem", { lineHeight: "1", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "display-xl": ["3.75rem", { lineHeight: "1.05", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "display-lg": ["3rem", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "display-md": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "display-sm": ["1.875rem", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "display-xs": ["1.5rem", { lineHeight: "1.25", letterSpacing: "-0.01em", fontWeight: "600" }],
       },
       colors: {
         border: "hsl(var(--border))",
