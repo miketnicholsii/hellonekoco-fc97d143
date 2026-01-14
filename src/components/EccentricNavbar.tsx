@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
-// Anchor-based navigation for homepage flow
+// Anchor-based navigation for homepage flow - ORDER MATCHES SECTION ORDER ON PAGE
 const navLinks = [
   { href: "/", label: "Home", isAnchor: false },
-  { href: "#services", label: "What We Do", isAnchor: true },
-  { href: "#pricing", label: "Plans", isAnchor: true },
+  { href: "#services", label: "Solutions", isAnchor: true },
   { href: "#paths", label: "How It Works", isAnchor: true },
+  { href: "#pricing", label: "Pricing", isAnchor: true },
+  { href: "#faq", label: "FAQ", isAnchor: true },
   { href: "/about", label: "About", isAnchor: false },
 ] as const;
 
@@ -94,9 +95,9 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
         requestAnimationFrame(() => {
           setIsScrolled(window.scrollY > 20);
           
-          // Track active section on homepage
+          // Track active section on homepage - matches navLinks anchor order
           if (location.pathname === "/") {
-            const sections = ["services", "pricing", "paths"];
+            const sections = ["services", "paths", "pricing", "faq"];
             let currentSection: string | null = null;
             
             for (const id of sections) {

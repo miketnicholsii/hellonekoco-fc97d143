@@ -7,15 +7,17 @@ interface Section {
   label: string;
 }
 
+// Section order matches actual page layout - ORDER IS CRITICAL
 const sections: Section[] = [
   { id: "hero", label: "Welcome" },
   { id: "starting-points", label: "Sound Familiar?" },
   { id: "how-we-help", label: "How We Help" },
-  { id: "services", label: "What We Offer" },
-  { id: "paths", label: "Choose Your Path" },
-  { id: "pricing", label: "Plans" },
+  { id: "services", label: "Solutions" },
+  { id: "paths", label: "How It Works" },
+  { id: "pricing", label: "Pricing" },
   { id: "experience", label: "The Experience" },
   { id: "demos", label: "See It In Action" },
+  { id: "faq", label: "FAQ" },
   { id: "cta", label: "Get Started" },
 ];
 

@@ -11,6 +11,12 @@ import { HomePricing } from "@/components/HomePricing";
 import { DashboardPreview } from "@/components/previews/DashboardPreview";
 import { BusinessCreditPreview } from "@/components/previews/BusinessCreditPreview";
 import { PersonalBrandPreview } from "@/components/previews/PersonalBrandPreview";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { 
   ArrowRight, 
   Building2, 
@@ -21,59 +27,103 @@ import {
   Sparkles,
   TrendingUp,
   Shield,
-  Landmark
+  Landmark,
+  FileCheck,
+  BarChart3,
+  Wallet,
+  Users
 } from "lucide-react";
 
-// Service packages - clearly defined
+// Service packages with real business credit terminology
 const businessServices = [
   { 
     icon: Building2, 
-    title: "Business Foundations", 
-    description: "Get set up correctly from the start — LLC formation, EIN, business banking, and the legitimacy essentials every business needs.",
-    outcome: "A properly formed, credible business entity"
+    title: "Business Formation & Compliance", 
+    description: "Establish your LLC with proper articles of organization, obtain your EIN, and set up a dedicated business bank account. Create the legal separation required for business credit eligibility.",
+    outcome: "A fundable business entity with proper documentation"
   },
   { 
     icon: CreditCard, 
-    title: "Business Credit Building", 
-    description: "Establish and grow business credit that's separate from your personal score — through vendor accounts, tradelines, and strategic credit building.",
-    outcome: "Access to funding that doesn't depend on personal credit"
+    title: "Business Credit Profile Building", 
+    description: "Build tradelines with net-30 vendor accounts that report to Dun & Bradstreet, Experian Business, and Equifax Business. Establish payment history and utilization patterns that signal creditworthiness.",
+    outcome: "Measurable business credit scores independent of personal credit"
+  },
+  { 
+    icon: FileCheck, 
+    title: "Fundability Readiness", 
+    description: "Prepare your business for underwriting review. We help you build the 'fundability signals' lenders look for: consistent revenue documentation, proper business filings, and compliance history.",
+    outcome: "Documentation ready for working capital and term loan applications"
+  },
+  { 
+    icon: BarChart3, 
+    title: "Credit Monitoring & Strategy", 
+    description: "Track your Paydex score, D&B rating, and business credit utilization. Get strategic recommendations for credit limit increases and new tradeline opportunities.",
+    outcome: "Ongoing visibility into your business credit health"
   },
 ];
 
 const brandingServices = [
   { 
     icon: User, 
-    title: "Personal Brand Identity", 
-    description: "Build a digital presence that represents you — your story, skills, and professional credibility in one shareable page.",
-    outcome: "A professional online presence that opens doors"
+    title: "Professional Digital Identity", 
+    description: "Build a Digital CV that showcases your expertise, accomplishments, and professional story. Create a credible online presence that works whether you're pitching clients or seeking partnerships.",
+    outcome: "A professional landing page that opens doors"
   },
   { 
     icon: Globe, 
-    title: "Digital Presence", 
-    description: "Whether standalone or supporting your business, establish the online visibility and credibility that modern professionals need.",
-    outcome: "Visibility and credibility in your space"
+    title: "Online Presence & Visibility", 
+    description: "Consolidate your professional links, portfolio, and social proof in one shareable page. Optimize for discoverability and make a strong first impression.",
+    outcome: "Unified online presence with SEO optimization"
   },
 ];
 
-// Who we help
+// Who we help with specific use cases
 const audiences = [
-  { label: "Freelancers & Consultants", description: "Building credibility and presence while running your practice" },
-  { label: "First-Time Founders", description: "Starting a business the right way, from zero" },
-  { label: "Side-Hustlers", description: "Turning your side project into a legitimate business" },
-  { label: "Creators & Professionals", description: "Establishing a personal brand that stands on its own" },
+  { label: "First-Time Founders", description: "Form your LLC correctly and build business credit from day one" },
+  { label: "Side-Hustlers Going Full-Time", description: "Transition from hobby to legitimate business entity" },
+  { label: "Service Professionals", description: "Freelancers, consultants, and contractors building credibility" },
+  { label: "Credit Rebuilders", description: "Separate business finances from personal credit challenges" },
 ];
 
-// Common starting points - framed positively
+// Common starting points - reframed with business credit language
 const startingPoints = [
-  "You have a business idea and want to do it right from the start",
-  "You're ready to build business credit on your own terms",
-  "You want a professional presence that truly represents you",
-  "You're ready to separate personal and business finances properly",
+  "You're ready to form an LLC but want to do it right for future funding",
+  "You want business credit that's separate from your personal score",
+  "You're preparing for working capital or term loan applications",
+  "You need a professional online presence that builds trust",
+];
+
+// FAQ data with real business credit/fintech content
+const faqItems = [
+  {
+    question: "What's the difference between personal and business credit?",
+    answer: "Personal credit (your FICO score) is tied to your SSN and reflects your individual borrowing history. Business credit is tied to your EIN and reflects your company's payment history with vendors and lenders. Building business credit allows you to access funding, vendor terms, and credit lines without personally guaranteeing every transaction or impacting your personal credit utilization."
+  },
+  {
+    question: "How long does it take to build business credit?",
+    answer: "With consistent effort, you can establish initial tradelines and a Paydex score within 60-90 days. Building a strong business credit profile that qualifies for significant credit lines typically takes 6-12 months of positive payment history. We guide you through each step with realistic timelines."
+  },
+  {
+    question: "Do I need an existing business to start?",
+    answer: "No. Many of our members start from zero. Our Business Starter flow guides you through LLC formation, EIN registration, and business banking setup—the foundational elements required before you can begin building business credit."
+  },
+  {
+    question: "What are 'net-30 vendor accounts' and why do they matter?",
+    answer: "Net-30 vendors extend 30-day payment terms on purchases and report your payment history to business credit bureaus (D&B, Experian Business, Equifax Business). These tradelines are the building blocks of your business credit profile. We recommend vendors known to approve new businesses and report consistently."
+  },
+  {
+    question: "Will this affect my personal credit score?",
+    answer: "Business credit building, when done correctly, operates independently of your personal credit. We focus on vendor accounts and business credit cards that report only to business bureaus. The goal is to create a credit profile for your business entity, not add to your personal debt load."
+  },
+  {
+    question: "What do I actually get when I sign up?",
+    answer: "You get structured, step-by-step guidance through business formation, credit building, and/or personal branding. This includes checklists, vendor recommendations, progress tracking, and a dashboard to monitor your journey. Higher tiers include expanded features like tradeline tracking, credit score monitoring, and the Digital CV builder."
+  },
 ];
 
 const easeOutExpo: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-// Simplified NEKO logo - no complex per-letter animations or tooltips
+// Premium NEKO logo component
 const NekoLogo = memo(function NekoLogo() {
   return (
     <motion.span
@@ -81,20 +131,18 @@ const NekoLogo = memo(function NekoLogo() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2, ease: easeOutExpo }}
       className="inline-block cursor-default select-none"
-      title="NÈKO - pronounced 'ē-ko'"
+      title="NÈKO - pronounced 'neh-ko'"
     >
       NÈKO
     </motion.span>
   );
 });
 
-// Parallax hero background with subtle scroll effects
+// Parallax hero background
 const HeroBackground = memo(function HeroBackground() {
   const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
   
-  // Parallax transforms - subtle movement relative to scroll
-  // Each element moves at a different rate for depth effect
   const y1 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 80]);
   const y2 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : -60]);
   const y3 = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 40]);
@@ -103,31 +151,22 @@ const HeroBackground = memo(function HeroBackground() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {/* Top-left glow orb - moves down slowly */}
       <motion.div 
         style={{ y: y1, opacity }}
         className="absolute top-1/4 left-[10%] w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
       />
-      
-      {/* Bottom-right glow orb - moves up */}
       <motion.div 
         style={{ y: y2, opacity }}
         className="absolute bottom-1/4 right-[10%] w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 bg-primary-foreground/5 rounded-full blur-3xl opacity-40 sm:opacity-50" 
       />
-      
-      {/* Outer ring - scales slightly */}
       <motion.div 
         style={{ scale, opacity }}
         className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] border border-primary-foreground/10 rounded-full" 
       />
-      
-      {/* Inner ring - moves down slowly */}
       <motion.div 
         style={{ y: y3, opacity }}
         className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-primary-foreground/5 rounded-full" 
       />
-      
-      {/* Center glow - fades out */}
       <motion.div 
         style={{ opacity }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-[300px] sm:w-[500px] h-[150px] sm:h-[200px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full" 
@@ -156,12 +195,12 @@ const ServiceCard = memo(function ServiceCard({
         <div className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:scale-110' : ''}`}>
           <Icon className="h-5 w-5" />
         </div>
-        <div className="flex-1">
-          <h3 className="font-display font-bold text-base sm:text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display font-semibold text-base sm:text-lg text-foreground mb-2 transition-colors duration-200 group-hover:text-primary">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">{description}</p>
           <div className="flex items-center gap-2 text-xs sm:text-sm text-primary font-medium">
             <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
-            {outcome}
+            <span className="truncate">{outcome}</span>
           </div>
         </div>
       </div>
@@ -186,14 +225,13 @@ export default function Index() {
       <SectionIndicator />
       <MobileProgressBar />
       
-      {/* Hero Section - Clear Positioning */}
+      {/* Hero Section */}
       <section id="hero" className="relative min-h-[100svh] flex items-center justify-center bg-gradient-hero overflow-hidden pt-16 pb-12 sm:pt-20 sm:pb-16">
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground />
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* Pre-headline */}
             <motion.p 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -203,7 +241,6 @@ export default function Index() {
               Hello
             </motion.p>
             
-            {/* NEKO Logo */}
             <motion.h1 
               className="font-logo font-medium tracking-tight text-primary-foreground mb-4 sm:mb-6 text-[clamp(3rem,11vw,8rem)] leading-[0.9] neko-title"
             >
@@ -211,16 +248,14 @@ export default function Index() {
               <span className="neko-dot">.</span>
             </motion.h1>
 
-            {/* ONE-SENTENCE POSITIONING STATEMENT */}
             <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.5 }} className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-3 sm:mb-4 leading-relaxed px-2 sm:px-0 font-medium">
-              A calm, guided way to start and grow your business — with clarity at every step.
+              Build business credit. Establish your professional identity. Start with confidence.
             </motion.p>
 
             <motion.p {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.6 }} className="text-sm sm:text-base text-primary-foreground/50 max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2 sm:px-0">
-              Business formation. Credit building. Personal branding. We help you take the next right step.
+              Structured guidance for LLC formation, credit building, and personal branding — without the guesswork.
             </motion.p>
 
-            {/* Single exploration-focused CTA - scroll to services */}
             <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.7 }} className="flex flex-col items-center gap-4 px-4 sm:px-0">
               <a 
                 href="#services"
@@ -229,9 +264,9 @@ export default function Index() {
                   document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                <Button variant="hero-outline" size="lg" className="group">
+                <Button variant="hero-outline" size="lg" className="group min-h-[48px]">
                   <span className="flex items-center gap-2">
-                    See What We Offer
+                    Explore Solutions
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </Button>
@@ -255,7 +290,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* WHERE YOU ARE Section - Positive framing */}
+      {/* Sound Familiar Section */}
       <section id="starting-points" className="py-12 sm:py-16 lg:py-24 bg-muted/30 relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
@@ -264,10 +299,10 @@ export default function Index() {
                 Sound Familiar?
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                You're ready. You just need the path.
+                You're ready. You just need the roadmap.
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                Starting a business doesn't have to feel overwhelming. When you know the next right step, everything gets clearer.
+                Building a fundable business with strong credit doesn't have to be overwhelming. When you know the steps, everything becomes clearer.
               </p>
             </div>
           </AnimatedSection>
@@ -277,7 +312,7 @@ export default function Index() {
               <motion.div 
                 key={index} 
                 variants={staggerItem}
-                className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border"
+                className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border min-h-[72px]"
               >
                 <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
@@ -289,7 +324,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* WHY NÈKO EXISTS Section */}
+      {/* How We Help Section */}
       <section id="how-we-help" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -298,25 +333,24 @@ export default function Index() {
                 How We Help
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Your guide from idea to credibility.
+                From formation to fundability.
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Think of NÈKO as a thoughtful guide sitting beside you — helping you understand where you are, what comes next, and how to move forward with confidence.
+                  NÈKO guides you through the foundational steps of building a legitimate, credit-ready business. We focus on what lenders and underwriters actually look for: proper entity structure, tradeline history, payment patterns, and documentation readiness.
                 </p>
                 <p>
-                  We work across two tracks: business infrastructure (formation, banking, credit building) and personal presence (your professional identity online). Use one or both — we meet you where you are.
+                  We work across two complementary tracks: <strong className="text-foreground">business infrastructure</strong> (formation, banking, credit building) and <strong className="text-foreground">professional presence</strong> (your Digital CV and online identity). Use one or both.
                 </p>
               </div>
               
-              {/* The transition - outcome focused */}
               <div className="mt-6 p-4 sm:p-5 rounded-xl bg-primary/5 border border-primary/20">
                 <div className="flex items-start gap-3">
                   <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">What you'll walk away with</p>
+                    <p className="text-sm font-medium text-foreground">What you'll build</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      A properly formed business. Credit that grows on its own. A professional presence that opens doors. Peace of mind.
+                      A properly structured business entity. Tradelines that report to business bureaus. A Paydex score. Documentation ready for underwriting review. A professional online presence.
                     </p>
                   </div>
                 </div>
@@ -327,7 +361,7 @@ export default function Index() {
               <div className="p-5 sm:p-6 rounded-2xl bg-card border border-border shadow-md">
                 <h3 className="font-display font-bold text-base sm:text-lg mb-5 flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-4 w-4 text-primary" />
+                    <Users className="h-4 w-4 text-primary" />
                   </div>
                   Who We Help
                 </h3>
@@ -337,7 +371,7 @@ export default function Index() {
                       <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors duration-300 ${index === 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"}`}>
                         {String(index + 1).padStart(2, '0')}
                       </div>
-                      <div className="pt-0.5">
+                      <div className="pt-0.5 min-w-0">
                         <h4 className="font-semibold text-foreground text-xs sm:text-sm transition-colors duration-200 group-hover:text-primary">{audience.label}</h4>
                         <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">{audience.description}</p>
                       </div>
@@ -350,19 +384,19 @@ export default function Index() {
         </div>
       </section>
 
-      {/* TWO TRACKS Section - now with id="services" for nav anchor */}
+      {/* Solutions Section */}
       <section id="services" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-10 sm:mb-12">
               <p className="text-xs sm:text-sm font-medium tracking-widest uppercase text-primary mb-3">
-                What We Offer
+                Solutions
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Two tracks. One goal.
+                Everything you need to build fundability.
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                We operate across two related but independent tracks — business enablement and personal branding. Each can stand alone, or they can work together to amplify your growth.
+                From entity formation to tradeline building to professional branding. Each track can stand alone, or work together to amplify your credibility.
               </p>
             </div>
           </AnimatedSection>
@@ -375,8 +409,8 @@ export default function Index() {
                   <Building2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-lg sm:text-xl text-foreground">Business Enablement</h3>
-                  <p className="text-sm text-muted-foreground">Setup, legitimacy, and financial foundation</p>
+                  <h3 className="font-display font-bold text-lg sm:text-xl text-foreground">Business Credit & Formation</h3>
+                  <p className="text-sm text-muted-foreground">Entity structure, tradelines, and fundability readiness</p>
                 </div>
               </div>
             </AnimatedSection>
@@ -412,11 +446,10 @@ export default function Index() {
               ))}
             </AnimatedStagger>
           </div>
-
         </div>
       </section>
 
-      {/* HOW THE TRACKS WORK TOGETHER - Visual Diagram */}
+      {/* How It Works / Paths Section */}
       <section id="paths" className="py-12 sm:py-16 lg:py-24 bg-tertiary relative overflow-hidden scroll-mt-20">
         <div className="absolute inset-0 bg-gradient-dark pointer-events-none" aria-hidden="true" />
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative">
@@ -426,20 +459,18 @@ export default function Index() {
                 How It Works
               </p>
               <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-4">
-                Two paths. Your choice.
+                Choose your path. Or combine them.
               </h2>
               <p className="text-base sm:text-lg text-primary-foreground/60 max-w-xl mx-auto">
-                Choose one track, or combine them for a complete foundation.
+                Each track is designed to work independently or together for maximum impact.
               </p>
             </div>
           </AnimatedSection>
 
-          {/* Visual Diagram */}
           <AnimatedSection delay={0.1}>
             <div className="max-w-4xl mx-auto">
-              {/* Three Columns: Business | Combined | Personal */}
               <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-                {/* Business Enablement Path */}
+                {/* Business Only Path */}
                 <div className="relative">
                   <div className="p-5 sm:p-6 rounded-2xl bg-primary-foreground/5 border border-primary-foreground/10 backdrop-blur-sm h-full">
                     <div className="w-11 h-11 rounded-xl bg-primary-foreground/10 text-primary-foreground flex items-center justify-center mb-4">
@@ -449,19 +480,19 @@ export default function Index() {
                       Business Only
                     </h3>
                     <p className="text-sm text-primary-foreground/60 mb-4">
-                      Focus purely on infrastructure and credit building.
+                      Focus on entity formation and credit building.
                     </p>
                     <ul className="space-y-2">
-                      {["LLC Formation", "Business Banking", "Credit Building", "Vendor Accounts"].map((item) => (
+                      {["LLC Formation Guide", "EIN Registration", "Business Banking Setup", "Net-30 Vendor Accounts", "Tradeline Tracking"].map((item) => (
                         <li key={item} className="flex items-center gap-2 text-sm text-primary-foreground/70">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground/50" />
-                          {item}
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground/50 flex-shrink-0" />
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="mt-5 pt-4 border-t border-primary-foreground/10">
                       <p className="text-xs text-primary-foreground/40 uppercase tracking-wide">Best for</p>
-                      <p className="text-sm text-primary-foreground/70 mt-1">Businesses that already have a public face</p>
+                      <p className="text-sm text-primary-foreground/70 mt-1">Businesses that need credit infrastructure</p>
                     </div>
                   </div>
                 </div>
@@ -485,13 +516,13 @@ export default function Index() {
                       Both Tracks
                     </h3>
                     <p className="text-sm text-primary-foreground/60 mb-4 text-center">
-                      Complete business and personal presence together.
+                      Complete business infrastructure plus personal branding.
                     </p>
                     <ul className="space-y-2">
-                      {["Everything in Business", "Digital CV & Profile", "Unified Brand Story", "Cross-Track Visibility"].map((item) => (
+                      {["Everything in Business", "Digital CV Builder", "Professional Landing Page", "SEO Optimization", "Unified Brand Story"].map((item) => (
                         <li key={item} className="flex items-center gap-2 text-sm text-primary-foreground/70">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                          {item}
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -512,25 +543,25 @@ export default function Index() {
                       Personal Only
                     </h3>
                     <p className="text-sm text-primary-foreground/60 mb-4">
-                      Establish your individual digital presence.
+                      Establish your professional digital identity.
                     </p>
                     <ul className="space-y-2">
-                      {["Digital CV", "Public Profile Page", "Link Aggregation", "SEO Optimization"].map((item) => (
+                      {["Digital CV Builder", "Public Profile Page", "Link Aggregation", "Portfolio Showcase", "SEO Optimization"].map((item) => (
                         <li key={item} className="flex items-center gap-2 text-sm text-primary-foreground/70">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground/50" />
-                          {item}
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary-foreground/50 flex-shrink-0" />
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="mt-5 pt-4 border-t border-primary-foreground/10">
                       <p className="text-xs text-primary-foreground/40 uppercase tracking-wide">Best for</p>
-                      <p className="text-sm text-primary-foreground/70 mt-1">Creators, freelancers, and professionals</p>
+                      <p className="text-sm text-primary-foreground/70 mt-1">Freelancers, consultants, and professionals</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Connection Lines Visual - Desktop only */}
+              {/* Connection visual */}
               <div className="hidden md:flex justify-center mt-8">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 text-primary-foreground/40">
@@ -549,7 +580,6 @@ export default function Index() {
             </div>
           </AnimatedSection>
 
-          {/* CTA to services detail page */}
           <AnimatedSection delay={0.2} className="text-center mt-10">
             <Link to="/services" className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors inline-flex items-center gap-1">
               See detailed breakdown <ArrowRight className="h-3.5 w-3.5" />
@@ -558,17 +588,17 @@ export default function Index() {
         </div>
       </section>
 
-      {/* PRICING Section - Integrated for seamless flow */}
+      {/* Pricing Section */}
       <HomePricing />
 
-      {/* WHAT WORKING WITH NÈKO LOOKS LIKE Section */}
+      {/* The Experience Section */}
       <section id="experience" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <AnimatedSection>
             <SectionHeading
               label="The Experience"
               title="What working with NÈKO looks like."
-              description="Structure, guidance, and progress tracking at every step. No guesswork."
+              description="Structured guidance, progress tracking, and clarity at every step. No guesswork."
               centered
               className="mb-10 sm:mb-12"
             />
@@ -576,30 +606,29 @@ export default function Index() {
 
           <AnimatedStagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 max-w-5xl mx-auto" staggerDelay={0.1}>
             {[
-              { icon: Shield, title: "Guided Setup", description: "Step-by-step guidance through business formation, banking, and legitimacy essentials." },
-              { icon: CreditCard, title: "Structured Credit Path", description: "A clear roadmap through vendor accounts, tradelines, and credit building." },
-              { icon: User, title: "Brand Building", description: "Your Digital CV — a professional presence that tells your story." },
-              { icon: Landmark, title: "Growth Foundation", description: "The infrastructure to scale when you're ready — not before." },
+              { icon: Shield, title: "Guided Formation", description: "Step-by-step walkthroughs for LLC setup, EIN registration, and business banking." },
+              { icon: Wallet, title: "Credit Building Roadmap", description: "Clear path through net-30 vendors, tradelines, and business credit bureaus." },
+              { icon: User, title: "Digital CV Builder", description: "Create a professional online presence that tells your story." },
+              { icon: TrendingUp, title: "Progress Tracking", description: "Dashboard visibility into your journey from formation to fundability." },
             ].map((item) => (
               <motion.div 
                 key={item.title} 
                 variants={staggerCardItem}
-                className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 text-center"
+                className="group p-5 sm:p-6 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 text-center min-h-[180px] flex flex-col"
               >
-                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 text-primary mb-4 transition-transform duration-300 group-hover:scale-110">
+                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 text-primary mb-4 mx-auto transition-transform duration-300 group-hover:scale-110">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display font-bold text-base mb-2 text-foreground transition-colors duration-200 group-hover:text-primary">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">{item.description}</p>
               </motion.div>
             ))}
           </AnimatedStagger>
         </div>
       </section>
 
-      {/* PRODUCT DEMOS Section - Interactive previews */}
+      {/* Product Demos Section */}
       <section id="demos" className="py-12 sm:py-16 lg:py-28 bg-muted/30 relative scroll-mt-20 overflow-hidden">
-        {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute top-1/4 left-[5%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-[5%] w-80 h-80 bg-secondary/5 rounded-full blur-3xl" />
@@ -610,7 +639,7 @@ export default function Index() {
             <SectionHeading
               label="See It In Action"
               title="Explore what you'll get."
-              description="Click on any preview to see the full interactive demo. These are real examples of what your dashboard experience looks like."
+              description="Interactive previews of your dashboard experience. Click any to see the full demo."
               centered
               className="mb-10 sm:mb-14"
             />
@@ -641,7 +670,7 @@ export default function Index() {
                 className="text-center mt-5"
               >
                 <p className="font-display font-bold text-foreground">Credit Builder</p>
-                <p className="text-sm text-muted-foreground mt-1">Build business credit through vendor accounts and tradelines.</p>
+                <p className="text-sm text-muted-foreground mt-1">Build tradelines with vendors that report to business bureaus.</p>
               </motion.div>
             </AnimatedSection>
             
@@ -655,24 +684,63 @@ export default function Index() {
                 className="text-center mt-5"
               >
                 <p className="font-display font-bold text-foreground">Personal Brand</p>
-                <p className="text-sm text-muted-foreground mt-1">Create your professional Digital CV and online presence.</p>
+                <p className="text-sm text-muted-foreground mt-1">Create your Digital CV and professional landing page.</p>
               </motion.div>
             </AnimatedSection>
           </div>
 
           <AnimatedSection delay={0.3} className="text-center mt-12 sm:mt-14">
-            <motion.p 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-sm text-muted-foreground mb-5"
-            >
-              Click any preview above to see the full interactive demo
-            </motion.p>
             <Link to="/get-started">
-              <Button variant="default" size="lg" className="group shadow-lg shadow-primary/20">
+              <Button variant="default" size="lg" className="group shadow-lg shadow-primary/20 min-h-[48px]">
                 Start Building Today
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Button>
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-12 sm:py-16 lg:py-28 bg-background relative scroll-mt-20">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <SectionHeading
+              label="FAQ"
+              title="Common questions, clear answers."
+              description="Everything you need to know about building business credit and working with NÈKO."
+              centered
+              className="mb-10 sm:mb-12"
+            />
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
+            <div className="max-w-3xl mx-auto">
+              <Accordion type="single" collapsible className="w-full space-y-3">
+                {faqItems.map((item, index) => (
+                  <AccordionItem 
+                    key={index} 
+                    value={`item-${index}`}
+                    className="bg-card border border-border rounded-xl px-5 sm:px-6 data-[state=open]:border-primary/30 transition-colors"
+                  >
+                    <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-4 sm:py-5 hover:no-underline hover:text-primary min-h-[56px]">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2} className="text-center mt-10">
+            <p className="text-sm text-muted-foreground mb-4">
+              Still have questions?
+            </p>
+            <Link to="/contact">
+              <Button variant="outline" size="default" className="min-h-[44px]">
+                Contact Us
               </Button>
             </Link>
           </AnimatedSection>
@@ -685,23 +753,23 @@ export default function Index() {
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative">
           <AnimatedSection>
             <p className="text-sm font-medium tracking-widest uppercase text-primary-foreground/40 mb-4">
-              Ready?
+              Ready to Start?
             </p>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary-foreground mb-3 sm:mb-4">
-              Let's get you set up.
+              Build your business credit today.
             </h2>
             <p className="text-base sm:text-lg text-primary-foreground/60 mb-8 sm:mb-10 max-w-md mx-auto px-2">
-              Whether you're starting a business, building credit, or establishing your personal brand — we're here to help.
+              Whether you're forming an LLC, building tradelines, or establishing your professional identity — we're here to guide you.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-4 sm:px-0">
               <Link to="/get-started" className="w-full sm:w-auto">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto group">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto group min-h-[48px]">
                   Get Started
                   <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               </Link>
               <Link to="/pricing" className="w-full sm:w-auto">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">View Plans</Button>
+                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto min-h-[48px]">View Pricing</Button>
               </Link>
             </div>
           </AnimatedSection>
