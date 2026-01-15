@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
+import { getMissingPublicEnv, hasSupabaseConfig } from "@/lib/env";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -75,7 +76,14 @@ const resolveStorageMode = () => {
   return nextMode;
 };
 
+const assertSupabaseConfig = () => {
+  if (hasSupabaseConfig()) return;
+  const missing = getMissingPublicEnv();
+  throw new Error(`Missing Supabase configuration: ${missing.join(", ")}`);
+};
+
 const createSupabaseClient = () => {
+  assertSupabaseConfig();
   const storageMode = resolveStorageMode();
   const storage = storageMode === "local" ? localStorage : sessionStorage;
 
