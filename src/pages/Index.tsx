@@ -457,6 +457,49 @@ const ServiceCard = memo(function ServiceCard({
   );
 });
 
+// Hero content wrapper with 3D tilt effect
+const HeroContent = memo(function HeroContent({ 
+  children, 
+  reduceMotion 
+}: { 
+  children: React.ReactNode;
+  reduceMotion: boolean;
+}) {
+  const prefersReducedMotion = useReducedMotion();
+  const shouldReduceMotion = prefersReducedMotion || reduceMotion;
+  const { scrollY } = useScroll();
+  
+  // 3D tilt transforms based on scroll
+  const rotateX = useTransform(scrollY, [0, 400], [0, shouldReduceMotion ? 0 : -8]);
+  const perspective = useTransform(scrollY, [0, 400], [1000, shouldReduceMotion ? 1000 : 800]);
+  const translateZ = useTransform(scrollY, [0, 400], [0, shouldReduceMotion ? 0 : -50]);
+  const scale = useTransform(scrollY, [0, 500], [1, shouldReduceMotion ? 1 : 0.95]);
+  const opacity = useTransform(scrollY, [0, 400], [1, shouldReduceMotion ? 1 : 0.7]);
+
+  return (
+    <motion.div 
+      id="main-content" 
+      className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8"
+      style={{
+        perspective,
+        transformStyle: "preserve-3d",
+      }}
+    >
+      <motion.div
+        style={{
+          rotateX,
+          translateZ,
+          scale,
+          opacity,
+          transformOrigin: "center top",
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+});
+
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
   const performanceMode = usePerformanceMode();
@@ -482,7 +525,7 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-hero-radial pointer-events-none" aria-hidden="true" />
         <HeroBackground reduceMotion={performanceMode.reduceMotion} />
 
-        <div id="main-content" className="relative z-10 text-center w-full px-4 sm:px-6 lg:px-8">
+        <HeroContent reduceMotion={performanceMode.reduceMotion}>
           <div className="w-full max-w-4xl mx-auto">
             {/* Hello, NÈKO. - brand signature with NÈKO truly centered on viewport */}
             <motion.div
@@ -559,7 +602,7 @@ export default function Index() {
               </p>
             </motion.div>
           </div>
-        </div>
+        </HeroContent>
 
         {/* Enhanced scroll indicator */}
         <motion.div 
