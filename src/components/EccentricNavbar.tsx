@@ -75,7 +75,11 @@ const NavPill = memo(function NavPill({
   );
 });
 
-export const EccentricNavbar = memo(function EccentricNavbar() {
+export const EccentricNavbar = memo(function EccentricNavbar({
+  position = "fixed",
+}: {
+  position?: "fixed" | "static";
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
@@ -140,13 +144,13 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-area-top ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
+        className={`${position === "fixed" ? "fixed top-0 left-0 right-0" : "relative"} z-50 transition-all duration-300 safe-area-top ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
         aria-label="Main navigation"
         role="navigation"
       >
         <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} aria-hidden="true" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center justify-between h-11 lg:h-12 min-w-0">
+          <div className="flex items-center h-11 lg:h-12 min-w-0 w-full gap-3">
             {/* Left side - Logo */}
             <div className="hidden lg:flex items-center w-48 xl:w-56 flex-shrink-0">
               <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
@@ -207,7 +211,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
 
             <button
               ref={menuButtonRef}
-              className={`lg:hidden p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${showDarkText ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"}`}
+              className={`lg:hidden ml-auto p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${showDarkText ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"}`}
               onClick={toggleMenu}
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isOpen}

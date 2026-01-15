@@ -16,6 +16,9 @@ const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
 const ResourcesPreview = lazyWithRetry(() => import("@/pages/ResourcesPreview"));
+const NavPreview = import.meta.env.DEV
+  ? lazyWithRetry(() => import("@/pages/dev/NavPreview"))
+  : null;
 
 // Auth pages - lazy load with retry
 const Login = lazyWithRetry(() => import("@/pages/Login"));
@@ -120,6 +123,10 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           
           {/* Public profile route */}
           <Route path="/p/:slug" element={<PublicProfile />} />
+
+          {NavPreview && (
+            <Route path="/dev/nav-preview" element={<NavPreview />} />
+          )}
           
           {/* Fallback */}
           <Route path="*" element={<NotFound />} />
