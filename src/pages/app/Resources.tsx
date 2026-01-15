@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { useBookmarks } from "@/hooks/use-bookmarks";
 import { PageLoader } from "@/components/LoadingStates";
 import {
   Search,
@@ -27,6 +28,8 @@ import {
   Sparkles,
   Star,
   Compass,
+  Bookmark,
+  BookmarkCheck,
 } from "lucide-react";
 
 interface Resource {
@@ -44,6 +47,7 @@ interface Resource {
 // Category definitions
 const CATEGORIES = [
   { id: "all", label: "All Resources", icon: BookOpen },
+  { id: "bookmarks", label: "My Bookmarks", icon: BookmarkCheck },
   { id: "credit-building", label: "Credit Building", icon: CreditCard },
   { id: "business-setup", label: "Business Setup", icon: FileText },
   { id: "strategy", label: "Give Away Strategy", icon: Gift },
@@ -74,6 +78,7 @@ const START_HERE_TITLES = [
 export default function Resources() {
   const { subscription } = useAuth();
   const { tier: effectiveTier, isPreviewMode } = useSubscriptionTier();
+  const { bookmarkedResourceIds, isBookmarked, toggleBookmark, loading: bookmarksLoading } = useBookmarks();
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -116,7 +121,7 @@ export default function Resources() {
       .filter((r): r is Resource => r !== undefined);
   }, [resources]);
 
-  // Filter resources based on search and category
+  // Filter resources based on search, category, and bookmarks
   const filteredResources = useMemo(() => {
     return resources.filter((resource) => {
       const matchesSearch =
@@ -124,15 +129,24 @@ export default function Resources() {
         resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         resource.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
+      // Handle bookmarks category
+      if (selectedCategory === "bookmarks") {
+        return matchesSearch && bookmarkedResourceIds.includes(resource.id);
+      }
+
       const matchesCategory =
         selectedCategory === "all" || resource.category === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
-  }, [resources, searchQuery, selectedCategory]);
+  }, [resources, searchQuery, selectedCategory, bookmarkedResourceIds]);
 
   // Group resources by category for display
   const groupedResources = useMemo(() => {
+    if (selectedCategory === "bookmarks") {
+      return { bookmarks: filteredResources };
+    }
+    
     if (selectedCategory !== "all") {
       return { [selectedCategory]: filteredResources };
     }
@@ -323,6 +337,8 @@ export default function Resources() {
                 const count =
                   category.id === "all"
                     ? resources.length
+                    : category.id === "bookmarks"
+                    ? bookmarkedResourceIds.length
                     : resources.filter((r) => r.category === category.id).length;
 
                 return (
@@ -456,6 +472,8 @@ export default function Resources() {
                           resource={resource}
                           hasAccess={hasResourceAccess(resource.tier_required)}
                           isPreviewMode={isPreviewMode}
+                          isBookmarked={isBookmarked(resource.id)}
+                          onToggleBookmark={() => toggleBookmark(resource.id)}
                         />
                       ))}
                     </div>
@@ -475,11 +493,19 @@ interface ResourceCardProps {
   resource: Resource;
   hasAccess: boolean;
   isPreviewMode: boolean;
+  isBookmarked: boolean;
+  onToggleBookmark: () => void;
 }
 
-function ResourceCard({ resource, hasAccess, isPreviewMode }: ResourceCardProps) {
+function ResourceCard({ resource, hasAccess, isPreviewMode, isBookmarked, onToggleBookmark }: ResourceCardProps) {
   const tierBadge = TIER_BADGES[resource.tier_required];
   const isLocked = !hasAccess;
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleBookmark();
+  };
 
   const cardContent = (
     <>
@@ -517,7 +543,24 @@ function ResourceCard({ resource, hasAccess, isPreviewMode }: ResourceCardProps)
             </div>
           )}
         </div>
-        <div className="flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {hasAccess && (
+            <button
+              onClick={handleBookmarkClick}
+              className={`p-1.5 rounded-lg transition-colors ${
+                isBookmarked 
+                  ? "bg-primary/10 text-primary" 
+                  : "hover:bg-muted text-muted-foreground hover:text-foreground"
+              }`}
+              aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+            >
+              {isBookmarked ? (
+                <BookmarkCheck className="h-4 w-4" />
+              ) : (
+                <Bookmark className="h-4 w-4" />
+              )}
+            </button>
+          )}
           {hasAccess ? (
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           ) : (

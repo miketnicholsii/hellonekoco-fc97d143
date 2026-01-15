@@ -12,6 +12,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { useBookmarks } from "@/hooks/use-bookmarks";
 import { supabase } from "@/integrations/supabase";
 import { PageLoader } from "@/components/LoadingStates";
 import {
@@ -23,6 +24,7 @@ import {
   Lock,
   Share2,
   Bookmark,
+  BookmarkCheck,
   CheckCircle2,
   CreditCard,
   FileText,
@@ -127,6 +129,7 @@ export default function ResourceDetail() {
   const navigate = useNavigate();
   const { subscription } = useAuth();
   const { tier: effectiveTier, isPreviewMode } = useSubscriptionTier();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
   
   const [resource, setResource] = useState<Resource | null>(null);
   const [relatedResources, setRelatedResources] = useState<Resource[]>([]);
@@ -135,6 +138,7 @@ export default function ResourceDetail() {
   const [isMobile, setIsMobile] = useState(false);
 
   const userTier = normalizeTier(subscription?.tier);
+  const resourceBookmarked = resource ? isBookmarked(resource.id) : false;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -368,6 +372,24 @@ export default function ResourceDetail() {
 
             {/* Action Buttons */}
             <div className="flex items-center gap-3 mt-6">
+              <Button 
+                variant={resourceBookmarked ? "default" : "outline"} 
+                size="sm" 
+                onClick={() => resource && toggleBookmark(resource.id)}
+                className={resourceBookmarked ? "bg-primary hover:bg-primary/90" : ""}
+              >
+                {resourceBookmarked ? (
+                  <>
+                    <BookmarkCheck className="h-4 w-4 mr-2" />
+                    Saved
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="h-4 w-4 mr-2" />
+                    Save
+                  </>
+                )}
+              </Button>
               <Button variant="outline" size="sm" onClick={handleShare}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
