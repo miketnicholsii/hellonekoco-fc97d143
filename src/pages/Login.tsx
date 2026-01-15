@@ -347,12 +347,12 @@ export default function Login() {
 
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground mt-8">
-            Not a member yet?{" "}
+            New here?{" "}
             <Link 
-              to="/get-started" 
+              to="/signup" 
               className="text-primary font-medium hover:text-primary/80 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-sm"
             >
-              Get Started
+              Create a free account
             </Link>
           </p>
         </div>
