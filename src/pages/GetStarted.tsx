@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail } from "lucide-react";
 
 // Floating orb component for subtle background animation
 function FloatingOrbs() {
@@ -116,7 +116,6 @@ export default function GetStarted() {
               >
                 <Mail className="h-5 w-5 transition-transform group-hover:-rotate-6" />
                 neko@helloneko.co
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </a>
             </motion.div>
 
