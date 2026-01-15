@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
-import { Mail, Sparkles } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export default function GetStarted() {
   const prefersReducedMotion = useReducedMotion();
@@ -34,10 +34,10 @@ export default function GetStarted() {
             {/* Invite Only Badge */}
             <motion.div 
               {...fadeIn}
-              className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 border border-primary/20 mb-8 sm:mb-10"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-300/50 bg-orange-50 dark:bg-orange-950/30 dark:border-orange-800/50 mb-8 sm:mb-10"
             >
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium tracking-wide text-foreground">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+              <span className="text-xs font-medium tracking-widest uppercase text-orange-700 dark:text-orange-400">
                 Invite Only
               </span>
             </motion.div>
