@@ -15,6 +15,7 @@ import Pricing from "@/pages/Pricing";
 const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
+const ResourcesPreview = lazyWithRetry(() => import("@/pages/ResourcesPreview"));
 
 // Auth pages - lazy load with retry
 const Login = lazyWithRetry(() => import("@/pages/Login"));
@@ -77,6 +78,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/resources" element={<ResourcesPreview />} />
           
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />
