@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Confetti from "@/components/ui/confetti";
+import { StrategyTour, useStrategyTour } from "@/components/StrategyTour";
 import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
 import { tierMeetsRequirement } from "@/lib/subscription-tiers";
@@ -50,6 +51,7 @@ const STEP_ICONS = [
 
 export default function Strategy() {
   const { tier: effectiveTier } = useSubscriptionTier();
+  const { showTour, completeTour } = useStrategyTour();
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
@@ -152,6 +154,9 @@ export default function Strategy() {
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Onboarding Tour */}
+      {showTour && <StrategyTour onComplete={completeTour} />}
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
