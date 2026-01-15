@@ -25,7 +25,7 @@ export const PreviewWrapper = memo(function PreviewWrapper({
   const shouldReduceMotion = prefersReducedMotion || performanceMode.reduceMotion;
   const hoverTransition = shouldReduceMotion
     ? { duration: 0.15 }
-    : { type: "spring", stiffness: 400, damping: 25 };
+    : { type: "spring" as const, stiffness: 400, damping: 25 };
 
   const accentGradients = {
     primary: "from-primary/30 via-primary/15 to-primary/5",

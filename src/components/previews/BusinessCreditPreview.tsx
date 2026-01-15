@@ -103,19 +103,19 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           </motion.div>
         </motion.div>
 
-        {/* Tier Cards */}
+        {/* Tier Cards - Responsive grid */}
         <motion.div 
           variants={prefersReducedMotion ? {} : staggerContainer}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-4 gap-2 mb-5"
+          className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-5"
         >
           {tiers.map((tier) => (
             <motion.div
               key={tier.tier}
               variants={prefersReducedMotion ? {} : staggerItem}
               whileHover={prefersReducedMotion ? {} : { scale: 1.03, y: -2 }}
-              className={`relative p-3 rounded-xl text-center transition-all ${
+              className={`relative p-2 sm:p-3 rounded-lg sm:rounded-xl text-center transition-all ${
                 tier.status === "complete" 
                   ? "bg-primary/10 border-2 border-primary/40" 
                   : tier.status === "active"
@@ -123,20 +123,20 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                     : "bg-muted/30 border border-border opacity-50"
               }`}
             >
-              <div className={`text-lg font-bold mb-0.5 ${
+              <div className={`text-sm sm:text-lg font-bold mb-0.5 ${
                 tier.status === "complete" || tier.status === "active" 
                   ? "text-primary" 
                   : "text-muted-foreground"
               }`}>
                 {tier.status === "locked" ? (
-                  <Lock className="h-4 w-4 mx-auto" />
+                  <Lock className="h-3 w-3 sm:h-4 sm:w-4 mx-auto" />
                 ) : (
                   `T${tier.tier}`
                 )}
               </div>
-              <p className="text-[10px] text-muted-foreground truncate">{tier.name}</p>
+              <p className="text-[8px] sm:text-[10px] text-muted-foreground truncate leading-tight">{tier.name}</p>
               {tier.status === "active" && (
-                <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-muted rounded-full overflow-hidden">
                   <motion.div 
                     initial={prefersReducedMotion ? { width: `${tier.progress}%` } : { width: 0 }}
                     animate={{ width: `${tier.progress}%` }}
@@ -151,7 +151,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
                 >
-                  <CheckCircle2 className="absolute top-2 right-2 h-3.5 w-3.5 text-primary" />
+                  <CheckCircle2 className="absolute top-1 right-1 sm:top-2 sm:right-2 h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-primary" />
                 </motion.div>
               )}
             </motion.div>

@@ -111,41 +111,41 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           </motion.div>
         </motion.div>
 
-        {/* Stats Grid */}
+        {/* Stats Grid - Responsive for mobile */}
         <motion.div 
           variants={prefersReducedMotion ? {} : staggerContainer}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-3 gap-3 mb-5"
+          className="grid grid-cols-3 gap-2 sm:gap-3 mb-5"
         >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               variants={prefersReducedMotion ? {} : staggerItem}
               whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-              className="p-3.5 rounded-xl bg-card border border-border shadow-sm relative overflow-hidden group"
+              className="p-2.5 sm:p-3.5 rounded-xl bg-card border border-border shadow-sm relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative">
-                <p className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1.5">
-                  <stat.icon className="h-3 w-3 text-primary/70" />
-                  {stat.label}
+                <p className="text-[9px] sm:text-[10px] text-muted-foreground mb-1 flex items-center gap-1 sm:gap-1.5 truncate">
+                  <stat.icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primary/70 flex-shrink-0" />
+                  <span className="truncate">{stat.label}</span>
                 </p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-foreground">{stat.value}</span>
+                <div className="flex items-baseline gap-0.5 sm:gap-1">
+                  <span className="text-lg sm:text-xl font-bold text-foreground">{stat.value}</span>
                   {stat.suffix && (
-                    <span className="text-xs text-muted-foreground">{stat.suffix}</span>
+                    <span className="text-[9px] sm:text-xs text-muted-foreground">{stat.suffix}</span>
                   )}
                 </div>
                 {stat.change && (
-                  <p className="text-[10px] text-primary mt-1 font-medium">{stat.change}</p>
+                  <p className="text-[9px] sm:text-[10px] text-primary mt-0.5 sm:mt-1 font-medium truncate">{stat.change}</p>
                 )}
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {/* Quick Actions */}
           <motion.div 
             initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}

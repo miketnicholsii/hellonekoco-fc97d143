@@ -92,7 +92,7 @@ function PreviewContent({ showOverlay = true }: { showOverlay?: boolean }) {
           </motion.div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {/* Profile Card */}
           <motion.div 
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
