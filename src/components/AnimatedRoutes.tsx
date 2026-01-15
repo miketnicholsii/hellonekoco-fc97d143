@@ -18,6 +18,7 @@ const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
 
 // Auth pages - lazy load with retry
 const Login = lazyWithRetry(() => import("@/pages/Login"));
+const Signup = lazyWithRetry(() => import("@/pages/Signup"));
 const ForgotPassword = lazyWithRetry(() => import("@/pages/ForgotPassword"));
 const ResetPassword = lazyWithRetry(() => import("@/pages/ResetPassword"));
 
@@ -77,6 +78,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           

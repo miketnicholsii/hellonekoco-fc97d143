@@ -294,12 +294,19 @@ export default function Pricing() {
       }, [prefersReducedMotion]);
 
   const handleSelectTier = async (tier: SubscriptionTier) => {
+    // If user is already logged in, go to account for plan management
+    if (user) {
+      navigate("/app/account");
+      return;
+    }
+    
     if (tier === "free") {
-      navigate("/get-started");
+      // Free tier goes to self-serve signup
+      navigate("/signup");
       return;
     }
 
-    // For paid tiers, redirect to onboarding
+    // For paid tiers, redirect to contact/onboarding
     navigate("/get-started");
   };
 
