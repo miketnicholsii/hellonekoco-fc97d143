@@ -184,21 +184,22 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               </motion.div>
             </div>
 
-            {/* Right side - CTAs (fixed width for symmetry) */}
-            <div className="hidden lg:flex items-center justify-end w-40 flex-shrink-0 relative z-10">
+            {/* Right side - CTAs */}
+            <div className="hidden lg:flex items-center justify-end gap-3 flex-shrink-0 relative z-10">
               {user ? (
-                <>
-                  <span className={`text-xs font-medium ${showDarkText ? "text-muted-foreground" : "text-white/60"}`}>
-                    Signed in as <span className={`font-semibold ${showDarkText ? "text-foreground" : "text-white/90"}`}>{user.email?.split('@')[0]}</span>
+                <Link to="/app" className="flex items-center gap-2.5">
+                  <span className={`text-xs whitespace-nowrap ${showDarkText ? "text-muted-foreground" : "text-white/70"}`}>
+                    {user.email?.split('@')[0]}
                   </span>
-                  <Link to="/app">
-                    <Button variant="cta" size="default" className="shadow-md">
-                      <span className="flex items-center gap-1.5">
-                        Dashboard <ArrowRight className="h-4 w-4" />
-                      </span>
-                    </Button>
-                  </Link>
-                </>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className={`h-8 px-3 text-xs font-medium rounded-full ${showDarkText ? "bg-muted/60 hover:bg-muted text-foreground" : "bg-white/15 hover:bg-white/25 text-white"}`}
+                  >
+                    Dashboard
+                    <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                  </Button>
+                </Link>
               ) : (
                 <Link 
                   to="/login" 
