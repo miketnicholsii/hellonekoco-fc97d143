@@ -450,16 +450,6 @@ export default function Login() {
             </Button>
           </form>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-muted-foreground mt-8">
-            New here?{" "}
-            <Link 
-              to="/signup" 
-              className="text-primary font-medium hover:text-primary/80 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-sm"
-            >
-              Create a free account
-            </Link>
-          </p>
         </div>
 
         {/* Invite-only hint */}
