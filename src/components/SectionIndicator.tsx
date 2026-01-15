@@ -390,9 +390,10 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
               </span>
               
               {/* Tooltip on tap/hold */}
-              <AnimatePresence>
+              <AnimatePresence mode="sync">
                 {isActive && (
                   <motion.span
+                    key={`tooltip-${section.id}`}
                     initial={{ opacity: 0, y: 8, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 4, scale: 0.95 }}
@@ -412,9 +413,9 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
       
       {/* Current section label */}
       <div className="pb-2 text-center">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.p
-            key={activeSection}
+            key={`section-label-${activeSection}`}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
