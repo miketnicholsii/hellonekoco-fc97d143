@@ -12,6 +12,8 @@ import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { FloatingCTA } from "@/components/FloatingCTA";
 import ScrollManager from "@/components/ScrollManager";
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
+import { MissingConfigScreen } from "@/components/MissingConfigScreen";
+import { hasSupabaseConfig } from "@/lib/env";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,20 +35,24 @@ const App = () => (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <AuthProvider>
-            <AdminPreviewProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <ScrollManager />
-                <UpgradeModalProvider>
-                  <AnimatedRoutes />
-                  <FloatingCTA />
-                  <AdminPreviewIndicator />
-                </UpgradeModalProvider>
-              </BrowserRouter>
-            </AdminPreviewProvider>
-          </AuthProvider>
+          {hasSupabaseConfig() ? (
+            <AuthProvider>
+              <AdminPreviewProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <ScrollManager />
+                  <UpgradeModalProvider>
+                    <AnimatedRoutes />
+                    <FloatingCTA />
+                    <AdminPreviewIndicator />
+                  </UpgradeModalProvider>
+                </BrowserRouter>
+              </AdminPreviewProvider>
+            </AuthProvider>
+          ) : (
+            <MissingConfigScreen />
+          )}
         </TooltipProvider>
       </QueryClientProvider>
     </HelmetProvider>
