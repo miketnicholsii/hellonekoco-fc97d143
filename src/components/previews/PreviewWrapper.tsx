@@ -1,8 +1,5 @@
-import { memo, useState, ReactNode } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Maximize2, X, Sparkles, Play } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { memo, ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { usePerformanceMode } from "@/hooks/use-performance-mode";
 
 interface PreviewWrapperProps {
@@ -14,12 +11,9 @@ interface PreviewWrapperProps {
 
 export const PreviewWrapper = memo(function PreviewWrapper({ 
   children, 
-  expandedContent,
   title,
   accentColor = "primary"
 }: PreviewWrapperProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const performanceMode = usePerformanceMode();
   const shouldReduceMotion = prefersReducedMotion || performanceMode.reduceMotion;
@@ -40,135 +34,22 @@ export const PreviewWrapper = memo(function PreviewWrapper({
   };
 
   return (
-    <>
+    <motion.div
+      className="relative group"
+      whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -8 }}
+      transition={hoverTransition}
+    >
+      {/* Animated border glow - NEKO branded */}
       <motion.div
-        className="relative cursor-pointer group"
-        onHoverStart={() => !shouldReduceMotion && setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
-        whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -8 }}
-        whileTap={{ scale: 0.98 }}
-        transition={hoverTransition}
-        onClick={() => setIsModalOpen(true)}
-      >
-        {/* Animated border glow - NEKO branded */}
-        <motion.div
-          className={`absolute -inset-[3px] bg-gradient-to-br ${accentGradients[accentColor]} rounded-[20px] blur-lg -z-10`}
-          animate={{ 
-            opacity: isHovered ? 0.9 : 0,
-            scale: isHovered ? 1.02 : 1
-          }}
-          transition={{ duration: shouldReduceMotion ? 0.2 : 0.4 }}
-        />
-        
-        {/* Outer glow ring */}
-        <motion.div
-          className={`absolute -inset-[1px] rounded-[18px] border-2 ${accentBorders[accentColor]} -z-10`}
-          animate={{ 
-            opacity: isHovered ? 1 : 0,
-          }}
-          transition={{ duration: shouldReduceMotion ? 0.2 : 0.3 }}
-        />
-        
-        {/* Subtle shimmer effect on hover */}
-        <AnimatePresence>
-          {isHovered && !shouldReduceMotion && (
-            <motion.div
-              className="absolute inset-0 overflow-hidden rounded-2xl z-10 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent skew-x-12"
-                animate={{ x: ["-100%", "100%"] }}
-                transition={{ duration: shouldReduceMotion ? 0.8 : 1.5, ease: "easeInOut" }}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {children}
-        
-        {/* Hover overlay with CTA */}
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="absolute inset-0 bg-gradient-to-t from-background/98 via-background/60 to-transparent rounded-2xl flex items-end justify-center pb-10 z-20"
-            >
-              <motion.div
-                initial={{ y: 16, opacity: 0, scale: 0.9 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: 10, opacity: 0, scale: 0.95 }}
-                transition={{ delay: 0.05, type: "spring", stiffness: 400, damping: 20 }}
-                className="flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/25"
-              >
-                <Play className="h-4 w-4 fill-current" />
-                See Full Demo
-                <Maximize2 className="h-3.5 w-3.5 ml-1" />
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {/* Always visible play indicator */}
-        <motion.div
-          className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 text-xs font-medium text-muted-foreground"
-          animate={{ opacity: isHovered ? 0 : 1 }}
-        >
-          <Play className="h-3 w-3 fill-current" />
-          Demo
-        </motion.div>
-      </motion.div>
-
-      {/* Full Demo Modal - Fully mobile optimized */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-background border-border/50 shadow-2xl rounded-2xl">
-          <VisuallyHidden>
-            <DialogTitle>{title} Demo</DialogTitle>
-          </VisuallyHidden>
-          
-          {/* Modal Header with gradient */}
-          <div className="sticky top-0 z-10 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-border bg-gradient-to-r from-background via-background to-muted/30 backdrop-blur-xl">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-              <motion.div 
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0"
-              >
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              </motion.div>
-              <div className="min-w-0">
-                <h2 className="font-display text-sm sm:text-lg font-bold text-foreground truncate">{title}</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground hidden xs:block">Full dashboard preview</p>
-              </div>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05, rotate: 90 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              onClick={() => setIsModalOpen(false)}
-              className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl hover:bg-muted transition-colors flex-shrink-0"
-            >
-              <X className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-            </motion.button>
-          </div>
-          
-          {/* Modal Content with animation - mobile responsive padding */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
-            className="p-3 sm:p-6"
-          >
-            {expandedContent}
-          </motion.div>
-        </DialogContent>
-      </Dialog>
-    </>
+        className={`absolute -inset-[3px] bg-gradient-to-br ${accentGradients[accentColor]} rounded-[20px] blur-lg -z-10 opacity-0 group-hover:opacity-90 transition-opacity duration-300`}
+      />
+      
+      {/* Outer glow ring */}
+      <motion.div
+        className={`absolute -inset-[1px] rounded-[18px] border-2 ${accentBorders[accentColor]} -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+      />
+      
+      {children}
+    </motion.div>
   );
 });
