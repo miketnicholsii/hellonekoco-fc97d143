@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase";
 import { useSubscriptionTier } from "@/hooks/use-subscription-tier";
-import { tierMeetsRequirement, normalizeTier } from "@/lib/subscription-tiers";
+import { tierMeetsRequirement, normalizeTier, type SubscriptionTier } from "@/lib/subscription-tiers";
 import { useBookmarks } from "@/hooks/use-bookmarks";
 import { PageLoader } from "@/components/LoadingStates";
 import {

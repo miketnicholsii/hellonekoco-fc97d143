@@ -30,7 +30,6 @@ import { format } from "date-fns";
 import {
   Search,
   User,
-  Mail,
   Calendar,
   CreditCard,
   Shield,
