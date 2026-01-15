@@ -6,19 +6,18 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 // Anchor-based navigation for homepage flow - ORDER MATCHES SECTION ORDER ON PAGE
+// Simplified nav items - only key sections to reduce crowding
 const navLinks = [
   { href: "#hero", label: "Home", isAnchor: true },
-  { href: "#starting-points", label: "Starting Points", isAnchor: true },
-  { href: "#how-we-help", label: "How We Help", isAnchor: true },
-  { href: "#services", label: "Services", isAnchor: true },
+  { href: "#services", label: "Solutions", isAnchor: true },
   { href: "#paths", label: "Paths", isAnchor: true },
   { href: "#pricing", label: "Pricing", isAnchor: true },
-  { href: "#experience", label: "Experience", isAnchor: true },
   { href: "#demos", label: "Demos", isAnchor: true },
   { href: "#faq", label: "FAQ", isAnchor: true },
-  { href: "#cta", label: "Get Started", isAnchor: true },
   { href: "/about", label: "About", isAnchor: false },
 ] as const;
+
+type NavHref = typeof navLinks[number]["href"];
 
 // Smooth scroll to anchor
 function scrollToAnchor(id: string, behavior: ScrollBehavior = "smooth") {
@@ -92,6 +91,12 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  // All section IDs that exist on the homepage - observe all for accurate scrollspy
+  const allSectionIds = useMemo(
+    () => ["hero", "starting-points", "how-we-help", "services", "paths", "pricing", "experience", "demos", "faq", "cta"],
+    []
+  );
+  // Nav-visible sections (for highlighting)
   const anchorSectionIds = useMemo(
     () => navLinks.filter((link) => link.isAnchor).map((link) => link.href.replace("#", "")),
     []
@@ -119,7 +124,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
       return;
     }
 
-    const elements = anchorSectionIds
+    // Observe ALL sections on the page for accurate detection
+    const elements = allSectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => Boolean(el));
 
@@ -141,18 +147,33 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
             a.boundingClientRect.top - b.boundingClientRect.top
         );
 
-        setActiveSection(visible[0]?.target.id ?? null);
+        const detectedSection = visible[0]?.target.id ?? null;
+        
+        // Map detected section to the closest nav item
+        // If detected section is not in nav, find the nearest nav section
+        if (detectedSection && anchorSectionIds.includes(detectedSection)) {
+          setActiveSection(detectedSection);
+        } else if (detectedSection) {
+          // Map non-nav sections to their parent nav category
+          const sectionMapping: Record<string, string> = {
+            "starting-points": "services",
+            "how-we-help": "services", 
+            "experience": "demos",
+            "cta": "faq",
+          };
+          setActiveSection(sectionMapping[detectedSection] || detectedSection);
+        }
       },
       {
-        rootMargin: "-30% 0px -55% 0px",
-        threshold: [0.15, 0.4, 0.6, 0.85],
+        rootMargin: "-25% 0px -50% 0px",
+        threshold: [0.1, 0.25, 0.5, 0.75],
       }
     );
 
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [anchorSectionIds, location.pathname]);
+  }, [allSectionIds, anchorSectionIds, location.pathname]);
 
   useEffect(() => {
     setIsOpen(false);
@@ -229,12 +250,12 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                 className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full max-w-full overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}
               >
-                {navLinks.map((link) => (
+                  {navLinks.map((link) => (
                   <NavPill 
                     key={link.href} 
                     href={link.href} 
                     label={link.label} 
-                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : (link.href === "/" ? isHome && !activeSection : location.pathname === link.href)} 
+                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : (!link.isAnchor && location.pathname === link.href)} 
                     showDarkText={showDarkText}
                     isAnchor={link.isAnchor}
                     onAnchorClick={handleAnchorClick}
@@ -243,8 +264,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
               </div>
             </div>
 
-            {/* Right side - CTAs */}
-            <div className="hidden lg:flex items-center justify-end gap-2 xl:gap-3 min-w-fit flex-shrink-0 relative z-10">
+            {/* Right side - CTAs (simplified - no Get Started button, only login) */}
+            <div className="hidden lg:flex items-center justify-end gap-3 min-w-fit flex-shrink-0 relative z-10">
               {user ? (
                 <>
                   <span className={`text-xs font-medium ${showDarkText ? "text-muted-foreground" : "text-white/60"}`}>
@@ -259,19 +280,12 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                   </Link>
                 </>
               ) : (
-                <>
-                  <Link 
-                    to="/login" 
-                    className={`text-sm font-medium whitespace-nowrap transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
-                  >
-                    Member Login
-                  </Link>
-                  <Link to="/get-started">
-                    <Button variant="cta" size="default" className="shadow-md whitespace-nowrap">
-                      Get Started
-                    </Button>
-                  </Link>
-                </>
+                <Link 
+                  to="/login" 
+                  className={`text-sm font-medium whitespace-nowrap transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
+                >
+                  Member Login
+                </Link>
               )}
             </div>
 
@@ -306,7 +320,7 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                 <nav className="flex-1 space-y-1" aria-label="Primary">
                   {navLinks.map((link) => {
                     const anchorActive = activeSection === link.href.replace("#", "");
-                    const routeActive = link.href === "/" ? isHome && !activeSection : location.pathname === link.href;
+                    const routeActive = !link.isAnchor && location.pathname === link.href;
                     const isActive = link.isAnchor ? anchorActive : routeActive;
 
                     return link.isAnchor ? (
@@ -347,8 +361,8 @@ export const EccentricNavbar = memo(function EccentricNavbar() {
                     </>
                   ) : (
                     <>
-                      <Link to="/get-started" onClick={closeMenu}>
-                        <Button variant="cta" size="lg" className="w-full">Get Started</Button>
+                      <Link to="/contact" onClick={closeMenu}>
+                        <Button variant="cta" size="lg" className="w-full">Say Hello</Button>
                       </Link>
                       <Link 
                         to="/login" 
