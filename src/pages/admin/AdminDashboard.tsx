@@ -35,12 +35,7 @@ interface RecentUser {
   plan: string;
 }
 
-interface RecentActivity {
-  id: string;
-  type: string;
-  description: string;
-  created_at: string;
-}
+// RecentActivity interface removed - not currently used
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({

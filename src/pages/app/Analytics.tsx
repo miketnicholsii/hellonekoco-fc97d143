@@ -7,8 +7,6 @@ import { FeatureGate } from "@/components/FeatureGate";
 import { useFeatureGate } from "@/hooks/use-feature-gate";
 import { PageLoader } from "@/components/LoadingStates";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   PieChart,
@@ -101,8 +99,9 @@ export default function Analytics() {
     fetchProgress();
   }, [user]);
 
-  // Filter data by time range
-  const filteredProgress = useMemo(() => {
+  // Filter data by time range (used for future time-filtered views)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _filteredProgress = useMemo(() => {
     if (timeRange === "all") return progress;
     
     const now = new Date();
