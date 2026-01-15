@@ -2,6 +2,10 @@
 
 This directory contains end-to-end tests for critical user flows using [Playwright](https://playwright.dev/).
 
+## Quick Links
+
+- **Manual Auth Test Script**: [`auth-test-script.md`](./auth-test-script.md) - 15+ step comprehensive auth/onboarding QA checklist
+
 ## Test Modes
 
 ### 1. Mocked Tests (Recommended for CI)
