@@ -29,6 +29,7 @@ import {
   FolderOpen,
   ChevronRight,
   ArrowRight,
+  Gift,
 } from "lucide-react";
 
 interface Resource {
@@ -46,10 +47,11 @@ interface Resource {
 // Category definitions
 const CATEGORIES = [
   { id: "all", label: "All Resources", icon: BookOpen },
-  { id: "business-setup", label: "Business Setup", icon: FileText },
   { id: "credit-building", label: "Credit Building", icon: CreditCard },
-  { id: "personal-brand", label: "Personal Brand", icon: User },
+  { id: "business-setup", label: "Business Setup", icon: FileText },
+  { id: "strategy", label: "Give Away Strategy", icon: Gift },
   { id: "checklists", label: "Checklists", icon: CheckSquare },
+  { id: "personal-brand", label: "Personal Brand", icon: User },
   { id: "templates", label: "Templates", icon: FolderOpen },
 ] as const;
 
