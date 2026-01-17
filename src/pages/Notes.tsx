@@ -75,16 +75,16 @@ export default function Notes() {
 
             <motion.p
               variants={itemVariants}
-              className="text-2xl sm:text-3xl text-primary font-medium mb-8"
+              className="text-lg text-muted-foreground leading-relaxed mb-8"
             >
-              {c.notes.coming}
+              {c.notes.body}
             </motion.p>
 
             <motion.p
               variants={itemVariants}
-              className="text-lg text-muted-foreground leading-relaxed"
+              className="text-2xl sm:text-3xl text-primary font-medium"
             >
-              {c.notes.body}
+              {c.notes.coming}
             </motion.p>
           </motion.div>
         </div>

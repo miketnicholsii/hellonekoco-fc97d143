@@ -5,7 +5,7 @@ import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { nekoCopy } from "@/content/nekoCopy";
-import { ArrowRight, Check, X, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -93,10 +93,17 @@ export default function Invite() {
 
             <motion.h1
               variants={itemVariants}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-8"
+              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-4"
             >
               {c.invite.title}
             </motion.h1>
+
+            <motion.p
+              variants={itemVariants}
+              className="text-lg text-muted-foreground mb-8"
+            >
+              {c.invite.subtitle}
+            </motion.p>
 
             <motion.div variants={itemVariants} className="space-y-5 mb-10">
               {c.invite.intro.map((p, i) => (
@@ -116,10 +123,43 @@ export default function Invite() {
                 className="rounded-full px-10 py-6 bg-primary text-primary-foreground hover:bg-primary/90 font-medium shadow-lg hover:shadow-xl transition-all duration-300 text-base"
               >
                 <Link to="/contact" className="flex items-center gap-3">
-                  {c.ctas.startConversation}
+                  {c.invite.cta.button}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* How I Work */}
+      <section className="py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <motion.div
+            className="max-w-3xl mx-auto"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+          >
+            <motion.div
+              variants={cardVariants}
+              className="p-8 sm:p-10 rounded-2xl bg-card border border-border/60"
+            >
+              <h3 className="font-display text-xl font-semibold text-foreground mb-6">
+                {c.invite.howIWork.title}
+              </h3>
+              <ul className="space-y-4">
+                {c.invite.howIWork.items.map((item, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-muted-foreground"
+                  >
+                    <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           </motion.div>
         </div>
@@ -147,7 +187,11 @@ export default function Invite() {
                 {c.invite.rateSignal.title}
               </span>
 
-              <div className="flex items-baseline gap-2 mb-4">
+              <p className="text-lg text-muted-foreground mb-6">
+                {c.invite.rateSignal.description}
+              </p>
+
+              <div className="flex items-baseline gap-2 mb-6">
                 <span className="font-display text-5xl sm:text-6xl font-bold text-foreground">
                   {c.invite.rateSignal.hourlyRate}
                 </span>
@@ -156,76 +200,16 @@ export default function Invite() {
                 </span>
               </div>
 
-              <p className="text-lg text-muted-foreground mb-8">
-                {c.invite.rateSignal.description}
-              </p>
-
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-muted-foreground leading-relaxed mb-8">
                 {c.invite.rateSignal.context.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
               </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* What Works / Doesn't */}
-      <section className="py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
-          <motion.div
-            className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6 lg:gap-8"
-            variants={prefersReducedMotion ? undefined : containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-          >
-            {/* What works */}
-            <motion.div
-              variants={cardVariants}
-              className="p-8 sm:p-10 rounded-2xl bg-card border border-border/60"
-            >
-              <h3 className="font-display text-xl font-semibold text-foreground mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Check className="w-4 h-4 text-primary" />
-                </span>
-                {c.invite.whatWorks.title}
-              </h3>
-              <ul className="space-y-4">
-                {c.invite.whatWorks.items.map((item, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 text-muted-foreground"
-                  >
-                    <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* What doesn't */}
-            <motion.div
-              variants={cardVariants}
-              className="p-8 sm:p-10 rounded-2xl bg-card border border-border/60"
-            >
-              <h3 className="font-display text-xl font-semibold text-foreground mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-destructive/10 flex items-center justify-center">
-                  <X className="w-4 h-4 text-destructive" />
-                </span>
-                {c.invite.whatDoesnt.title}
-              </h3>
-              <ul className="space-y-4">
-                {c.invite.whatDoesnt.items.map((item, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 text-muted-foreground"
-                  >
-                    <X className="w-4 h-4 text-destructive/60 mt-1 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-2 text-sm text-muted-foreground/70 border-t border-border pt-6">
+                <p>{c.invite.rateSignal.note1}</p>
+                <p>{c.invite.rateSignal.note2}</p>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -241,18 +225,6 @@ export default function Invite() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2
-              variants={itemVariants}
-              className="font-display text-3xl sm:text-4xl font-bold mb-6"
-            >
-              {c.invite.cta.title}
-            </motion.h2>
-            <motion.p
-              variants={itemVariants}
-              className="text-lg text-white/70 mb-10"
-            >
-              {c.invite.cta.body}
-            </motion.p>
             <motion.div variants={itemVariants}>
               <Button
                 asChild
@@ -260,11 +232,17 @@ export default function Invite() {
                 className="rounded-full px-10 py-6 bg-white text-primary hover:bg-white/90 font-medium shadow-lg hover:shadow-xl transition-all duration-300 text-base"
               >
                 <Link to="/contact" className="flex items-center gap-3">
-                  {c.ctas.primary}
+                  {c.invite.cta.button}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
             </motion.div>
+            <motion.p
+              variants={itemVariants}
+              className="text-sm text-white/50 mt-6"
+            >
+              {c.invite.cta.small}
+            </motion.p>
           </motion.div>
         </div>
       </section>

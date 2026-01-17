@@ -145,8 +145,8 @@ export default function Sandbox() {
                   key={i} 
                   variants={prefersReducedMotion ? undefined : paragraphVariants}
                   className={
-                    // First and last lines emphasized
-                    i === 0 || i === c.sandbox.body.length - 1
+                    // Last line emphasized
+                    i === c.sandbox.body.length - 1
                       ? "text-foreground font-medium"
                       : "text-muted-foreground"
                   }

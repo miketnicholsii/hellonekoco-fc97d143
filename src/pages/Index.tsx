@@ -99,12 +99,10 @@ function Section({
 function FieldCard({
   title,
   body,
-  note,
   index,
 }: {
   title: string;
   body: string;
-  note: string;
   index: number;
 }) {
   return (
@@ -122,8 +120,7 @@ function FieldCard({
         <h3 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-4 tracking-tight">
           {title}
         </h3>
-        <p className="text-muted-foreground leading-relaxed mb-4">{body}</p>
-        <p className="text-sm text-muted-foreground/70 italic">{note}</p>
+        <p className="text-muted-foreground leading-relaxed">{body}</p>
       </div>
     </motion.div>
   );
@@ -253,7 +250,7 @@ export default function Index() {
               variants={prefersReducedMotion ? undefined : slowItemVariants}
               className="text-xs font-medium tracking-widest uppercase text-white/40"
             >
-              {c.footer.micro}
+              {c.microcopy.inviteOnly}
             </motion.p>
           </motion.div>
         </div>
@@ -346,7 +343,7 @@ export default function Index() {
           viewport={{ once: true, margin: "-50px" }}
         >
           {c.sections.fields.cards.map((card, i) => (
-            <FieldCard key={card.title} {...card} index={i} />
+            <FieldCard key={card.title} title={card.title} body={card.body} index={i} />
           ))}
         </motion.div>
 
