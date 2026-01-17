@@ -16,6 +16,7 @@ import { z } from "zod";
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   building: z.string().trim().min(1, "Please tell me what you're building").max(2000),
+  success: z.string().trim().max(1000).optional(),
   timeline: z.string().trim().max(200).optional(),
   budget: z.string().trim().max(200).optional(),
   links: z.string().trim().max(500).optional(),
@@ -56,6 +57,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     building: "",
+    success: "",
     timeline: "",
     budget: "",
     links: "",
@@ -95,7 +97,7 @@ export default function Contact() {
         body: {
           name: formData.name,
           email: "via-form@helloneko.co",
-          message: `What are you building: ${formData.building}\n\nTimeline: ${formData.timeline || "Not specified"}\n\nBudget: ${formData.budget || "Not specified"}\n\nLinks: ${formData.links || "None provided"}`,
+          message: `What are you building: ${formData.building}\n\nWhat does success look like: ${formData.success || "Not specified"}\n\nTimeline: ${formData.timeline || "Not specified"}\n\nBudget: ${formData.budget || "Not specified"}\n\nLinks: ${formData.links || "None provided"}`,
           goal: "alignment-inquiry",
           stage: "contact-form",
         },
@@ -172,7 +174,7 @@ export default function Contact() {
                   </span>
                   <span className="text-left">
                     <span className="block text-xs text-muted-foreground mb-0.5">
-                      Or email directly
+                      Email
                     </span>
                     <span className="block text-lg font-display font-semibold text-foreground group-hover:text-primary transition-colors">
                       {c.contact.email}
@@ -180,13 +182,6 @@ export default function Contact() {
                   </span>
                 </a>
               </motion.div>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-sm text-muted-foreground/60"
-              >
-                {c.contact.footnote}
-              </motion.p>
             </motion.div>
 
             {/* Right: Form */}
@@ -242,12 +237,26 @@ export default function Contact() {
                       value={formData.building}
                       onChange={handleChange}
                       placeholder={c.contact.form.fields.building.placeholder}
-                      rows={4}
+                      rows={3}
                       className={errors.building ? "border-destructive" : ""}
                     />
                     {errors.building && (
                       <p className="text-xs text-destructive">{errors.building}</p>
                     )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="success">
+                      {c.contact.form.fields.success.label}
+                    </Label>
+                    <Textarea
+                      id="success"
+                      name="success"
+                      value={formData.success}
+                      onChange={handleChange}
+                      placeholder={c.contact.form.fields.success.placeholder}
+                      rows={2}
+                    />
                   </div>
 
                   <div className="space-y-2">

@@ -128,9 +128,7 @@ export default function Fields() {
               variants={prefersReducedMotion ? undefined : heroItemVariants}
               className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-12"
             >
-              These aren't packages. They're the kinds of work that show up in the sandbox.
-              <br className="hidden sm:block" />
-              Sometimes they become collaborations. Sometimes they remain private. Either way, they're real.
+              {c.sections.fields.intro}
             </motion.p>
 
             <motion.div
@@ -152,7 +150,7 @@ export default function Fields() {
               variants={prefersReducedMotion ? undefined : heroItemVariants}
               className="text-sm text-muted-foreground/50 mt-4"
             >
-              No checkout. No pitch. Just alignment.
+              {c.microcopy.noCheckout}
             </motion.p>
           </motion.div>
         </div>
@@ -184,11 +182,8 @@ export default function Fields() {
                   <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-4 tracking-tight">
                     {field.title}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
+                  <p className="text-muted-foreground leading-relaxed">
                     {field.body}
-                  </p>
-                  <p className="text-sm text-muted-foreground/60 italic">
-                    {field.note}
                   </p>
                 </div>
               </motion.div>
@@ -202,7 +197,7 @@ export default function Fields() {
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
           >
-            {c.sections.fields.footerNote}
+            {c.sections.fields.endNote}
           </motion.p>
         </div>
       </section>
