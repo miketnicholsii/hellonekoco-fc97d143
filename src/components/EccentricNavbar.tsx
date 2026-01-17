@@ -42,13 +42,14 @@ const NavPill = memo(function NavPill({
         aria-current={isActive ? "location" : undefined}
         className="relative group cursor-pointer transition-transform duration-200 hover:scale-105"
       >
-        <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
+        <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-white" : "text-primary") : showDarkText ? "text-foreground hover:text-secondary" : "text-white/90 hover:text-white"}`}>
           {label}
         </span>
         {isActive && (
           <motion.div 
             layoutId="nav-active-pill"
-            className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`}
+            className="absolute inset-0 rounded-full transition-colors duration-200"
+            style={{ background: showDarkText ? "hsl(135 25% 18%)" : "hsl(16 100% 42%)" }}
             transition={{ type: "spring", stiffness: 500, damping: 35 }}
           />
         )}
@@ -59,13 +60,14 @@ const NavPill = memo(function NavPill({
 
   return (
     <Link to={href} className="relative group transition-transform duration-200 hover:scale-105" aria-current={isActive ? "page" : undefined}>
-      <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-primary-foreground" : "text-tertiary") : showDarkText ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"}`}>
+      <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-white" : "text-primary") : showDarkText ? "text-foreground hover:text-secondary" : "text-white/90 hover:text-white"}`}>
         {label}
       </span>
       {isActive && (
         <motion.div 
           layoutId="nav-active-pill"
-          className={`absolute inset-0 rounded-full transition-colors duration-200 ${showDarkText ? "bg-primary" : "bg-white"}`}
+          className="absolute inset-0 rounded-full transition-colors duration-200"
+          style={{ background: showDarkText ? "hsl(135 25% 18%)" : "hsl(16 100% 42%)" }}
           transition={{ type: "spring", stiffness: 500, damping: 35 }}
         />
       )}
@@ -152,13 +154,13 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             {/* Left side - Logo (fixed width for symmetry) */}
             <div className="hidden lg:flex items-center justify-start w-40 flex-shrink-0">
               <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
-                <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+                <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-primary" : "text-white"}`}>NÈKO<span className="text-secondary">.</span></span>
               </Link>
             </div>
             
             {/* Mobile logo */}
             <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0" title="NÈKO - pronounced 'ē-ko'">
-              <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-foreground" : "text-white"}`}>NÈKO<span className="text-primary">.</span></span>
+              <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-primary" : "text-white"}`}>NÈKO<span className="text-secondary">.</span></span>
             </Link>
 
             {/* Centered navigation - absolutely positioned for true center */}
@@ -230,7 +232,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                           handleAnchorClick(link.href.replace("#", ""));
                         }}
                         aria-current={isActive ? "location" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-secondary bg-secondary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </a>
@@ -240,7 +242,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-primary bg-primary/10" : "text-foreground hover:bg-muted"}`}
+                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-secondary bg-secondary/10" : "text-foreground hover:bg-muted"}`}
                       >
                         {link.label}
                       </Link>
