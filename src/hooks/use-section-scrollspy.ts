@@ -28,9 +28,9 @@ export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home", isAnchor: false },
-  { href: "/about", label: "About", isAnchor: false },
-  { href: "/fields", label: "Fields", isAnchor: false },
   { href: "/sandbox", label: "Sandbox", isAnchor: false },
+  { href: "/fields", label: "Fields", isAnchor: false },
+  { href: "/invite", label: "Work With Me", isAnchor: false },
   { href: "/contact", label: "Say Hello", isAnchor: false },
 ] as const;
 

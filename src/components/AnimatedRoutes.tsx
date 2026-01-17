@@ -1,60 +1,25 @@
 import { Suspense, memo } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LazyBoundary, lazyWithRetry } from "@/components/LazyBoundary";
 
-// Critical path - load immediately (main nav pages)
+// Critical path - load immediately
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 
-// Lazy load secondary routes with retry logic
+// Lazy load public routes
 const Sandbox = lazyWithRetry(() => import("@/pages/Sandbox"));
 const Fields = lazyWithRetry(() => import("@/pages/Fields"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const About = lazyWithRetry(() => import("@/pages/About"));
-const GetStarted = lazyWithRetry(() => import("@/pages/GetStarted"));
-const PublicProfile = lazyWithRetry(() => import("@/pages/PublicProfile"));
-const ResourcesPreview = lazyWithRetry(() => import("@/pages/ResourcesPreview"));
-const NavPreview = import.meta.env.DEV
-  ? lazyWithRetry(() => import("@/pages/dev/NavPreview"))
-  : null;
+const Invite = lazyWithRetry(() => import("@/pages/Invite"));
+const Notes = lazyWithRetry(() => import("@/pages/Notes"));
 
-// Auth pages - lazy load with retry
-const Login = lazyWithRetry(() => import("@/pages/Login"));
-const Signup = lazyWithRetry(() => import("@/pages/Signup"));
-const ForgotPassword = lazyWithRetry(() => import("@/pages/ForgotPassword"));
-const ResetPassword = lazyWithRetry(() => import("@/pages/ResetPassword"));
-
-// Legal pages - lazy load with retry
+// Legal pages
 const Privacy = lazyWithRetry(() => import("@/pages/legal/Privacy"));
 const Terms = lazyWithRetry(() => import("@/pages/legal/Terms"));
 
-// App (authenticated) pages - lazy load with retry
-const AppLayout = lazyWithRetry(() => import("@/pages/app/AppLayout"));
-const Dashboard = lazyWithRetry(() => import("@/pages/app/Dashboard"));
-const Onboarding = lazyWithRetry(() => import("@/pages/app/Onboarding"));
-const BusinessStarter = lazyWithRetry(() => import("@/pages/app/BusinessStarter"));
-const BusinessCredit = lazyWithRetry(() => import("@/pages/app/BusinessCredit"));
-const PersonalBrandBuilder = lazyWithRetry(() => import("@/pages/app/PersonalBrandBuilder"));
-const Resources = lazyWithRetry(() => import("@/pages/app/Resources"));
-const ResourceDetail = lazyWithRetry(() => import("@/pages/app/ResourceDetail"));
-const Strategy = lazyWithRetry(() => import("@/pages/app/Strategy"));
-const Account = lazyWithRetry(() => import("@/pages/app/Account"));
-const Support = lazyWithRetry(() => import("@/pages/app/Support"));
-const Analytics = lazyWithRetry(() => import("@/pages/app/Analytics"));
-const Achievements = lazyWithRetry(() => import("@/pages/app/Achievements"));
-const CheckoutSuccess = lazyWithRetry(() => import("@/pages/app/CheckoutSuccess"));
-
-// Admin pages - lazy load with retry
-const AdminLayout = lazyWithRetry(() => import("@/pages/admin/AdminLayout"));
-const AdminDashboard = lazyWithRetry(() => import("@/pages/admin/AdminDashboard"));
-const AdminUsers = lazyWithRetry(() => import("@/pages/admin/AdminUsers"));
-const AdminContent = lazyWithRetry(() => import("@/pages/admin/AdminContent"));
-const AdminPlans = lazyWithRetry(() => import("@/pages/admin/AdminPlans"));
-const AdminAnnouncements = lazyWithRetry(() => import("@/pages/admin/AdminAnnouncements"));
-const AdminDiagnostics = lazyWithRetry(() => import("@/pages/admin/Diagnostics"));
-
-// Loading fallback component - simplified for faster render
+// Loading fallback
 const PageLoader = memo(function PageLoader() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -67,64 +32,33 @@ const PageLoader = memo(function PageLoader() {
   );
 });
 
-// Removed AnimatePresence for performance - causing page load issues
 export const AnimatedRoutes = memo(function AnimatedRoutes() {
   return (
     <LazyBoundary>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Public routes */}
+          {/* Core pages */}
           <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/get-started" element={<GetStarted />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/sandbox" element={<Sandbox />} />
           <Route path="/fields" element={<Fields />} />
-          <Route path="/resources" element={<ResourcesPreview />} />
+          <Route path="/invite" element={<Invite />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
           
-          {/* Auth routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          
-          {/* Legal routes */}
+          {/* Legal */}
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/terms" element={<Terms />} />
           
-          {/* Authenticated app routes */}
-          <Route path="/app" element={<AppLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="onboarding" element={<Onboarding />} />
-            <Route path="business-starter" element={<BusinessStarter />} />
-            <Route path="business-credit" element={<BusinessCredit />} />
-            <Route path="personal-brand" element={<PersonalBrandBuilder />} />
-            <Route path="resources" element={<Resources />} />
-            <Route path="resources/:id" element={<ResourceDetail />} />
-            <Route path="strategy" element={<Strategy />} />
-            <Route path="account" element={<Account />} />
-            <Route path="support" element={<Support />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="achievements" element={<Achievements />} />
-            <Route path="checkout-success" element={<CheckoutSuccess />} />
-          </Route>
-          
-          {/* Admin routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="content" element={<AdminContent />} />
-            <Route path="plans" element={<AdminPlans />} />
-            <Route path="announcements" element={<AdminAnnouncements />} />
-            <Route path="diagnostics" element={<AdminDiagnostics />} />
-          </Route>
-          
-          {/* Public profile route */}
-          <Route path="/p/:slug" element={<PublicProfile />} />
-
-          {NavPreview && (
-            <Route path="/dev/nav-preview" element={<NavPreview />} />
-          )}
+          {/* Legacy redirects */}
+          <Route path="/services" element={<Navigate to="/fields" replace />} />
+          <Route path="/pricing" element={<Navigate to="/invite" replace />} />
+          <Route path="/get-started" element={<Navigate to="/contact" replace />} />
+          <Route path="/personal-brand" element={<Navigate to="/sandbox" replace />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/signup" element={<Navigate to="/contact" replace />} />
+          <Route path="/app/*" element={<Navigate to="/" replace />} />
+          <Route path="/admin/*" element={<Navigate to="/" replace />} />
           
           {/* Fallback */}
           <Route path="*" element={<NotFound />} />
