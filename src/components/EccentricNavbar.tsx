@@ -10,71 +10,10 @@ import {
   scrollToSection 
 } from "@/hooks/use-section-scrollspy";
 
-// Simplified nav pill with anchor support
-const NavPill = memo(function NavPill({ 
-  href, 
-  label, 
-  isActive, 
-  showDarkText,
-  isAnchor,
-  onAnchorClick,
-}: { 
-  href: string; 
-  label: string; 
-  isActive: boolean; 
-  showDarkText: boolean;
-  isAnchor: boolean;
-  onAnchorClick?: (id: string) => void;
-}) {
-  const handleClick = (e: React.MouseEvent) => {
-    if (isAnchor && onAnchorClick) {
-      e.preventDefault();
-      const id = href.replace("#", "");
-      onAnchorClick(id);
-    }
-  };
-
-  if (isAnchor) {
-    return (
-      <a 
-        href={href} 
-        onClick={handleClick}
-        aria-current={isActive ? "location" : undefined}
-        className="relative group cursor-pointer transition-transform duration-200 hover:scale-105"
-      >
-        <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-white" : "text-primary") : showDarkText ? "text-foreground hover:text-secondary" : "text-white/90 hover:text-white"}`}>
-          {label}
-        </span>
-        {isActive && (
-          <motion.div 
-            layoutId="nav-active-pill"
-            className="absolute inset-0 rounded-full transition-colors duration-200"
-            style={{ background: showDarkText ? "hsl(135 25% 18%)" : "hsl(16 100% 42%)" }}
-            transition={{ type: "spring", stiffness: 500, damping: 35 }}
-          />
-        )}
-        {!isActive && <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${showDarkText ? "bg-muted/50" : "bg-white/10"}`} />}
-      </a>
-    );
-  }
-
-  return (
-    <Link to={href} className="relative group transition-transform duration-200 hover:scale-105" aria-current={isActive ? "page" : undefined}>
-      <span className={`relative z-10 block px-2.5 xl:px-3.5 py-1.5 text-xs xl:text-sm 2xl:text-base font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? (showDarkText ? "text-white" : "text-primary") : showDarkText ? "text-foreground hover:text-secondary" : "text-white/90 hover:text-white"}`}>
-        {label}
-      </span>
-      {isActive && (
-        <motion.div 
-          layoutId="nav-active-pill"
-          className="absolute inset-0 rounded-full transition-colors duration-200"
-          style={{ background: showDarkText ? "hsl(135 25% 18%)" : "hsl(16 100% 42%)" }}
-          transition={{ type: "spring", stiffness: 500, damping: 35 }}
-        />
-      )}
-      {!isActive && <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${showDarkText ? "bg-muted/50" : "bg-white/10"}`} />}
-    </Link>
-  );
-});
+// Simplified nav links for the new design (excluding Home and Say Hello which are shown differently)
+const NAV_ITEMS = NAV_LINKS.filter(link => 
+  link.href !== "/" && link.href !== "/contact"
+);
 
 export const EccentricNavbar = memo(function EccentricNavbar({
   position = "fixed",
@@ -86,7 +25,6 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   
-  // Use unified scrollspy hook
   const isHome = location.pathname === "/";
   const activeSection = useSectionScrollspy({ enabled: isHome });
   const isScrolled = useScrollPosition(20);
@@ -138,75 +76,175 @@ export const EccentricNavbar = memo(function EccentricNavbar({
     closeMenu();
   }, [closeMenu, location.hash, location.pathname, navigate]);
 
+  // Determine if we should show light or dark text based on page and scroll
   const isHeroPage = location.pathname === "/";
   const showDarkText = !isHeroPage || isScrolled;
+
+  // Nav height changes on scroll
+  const navHeight = isScrolled ? "h-14" : "h-16 sm:h-18";
 
   return (
     <>
       <nav
-        className={`${position === "fixed" ? "fixed top-0 left-0 right-0" : "relative"} z-50 transition-all duration-300 safe-area-top ${isScrolled ? "py-2" : "py-3 sm:py-4"}`}
+        className={`${position === "fixed" ? "fixed top-0 left-0 right-0" : "relative"} z-50 transition-all duration-300 safe-area-top`}
         aria-label="Main navigation"
         role="navigation"
       >
-        <div className={`absolute inset-0 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" : isHeroPage ? "bg-transparent" : "bg-background/90 backdrop-blur-lg border-b border-border/50"}`} aria-hidden="true" />
+        {/* Nav background - subtle on scroll */}
+        <div 
+          className={`absolute inset-0 transition-all duration-300 ${
+            isScrolled 
+              ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" 
+              : isHeroPage 
+                ? "bg-transparent" 
+                : "bg-background/90 backdrop-blur-lg border-b border-border/50"
+          }`} 
+          aria-hidden="true" 
+        />
+        
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="flex items-center justify-between h-11 lg:h-12 w-full">
-            {/* Left side - Logo (fixed width for symmetry) */}
-            <div className="hidden lg:flex items-center justify-start w-40 flex-shrink-0">
-              <Link to="/" className="flex items-center relative z-10" title="NÈKO - pronounced 'ē-ko'">
-                <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-primary" : "text-white"}`}>NÈKO<span className="text-secondary">.</span></span>
-              </Link>
-            </div>
+          <div className={`flex items-center justify-between ${navHeight} transition-all duration-300`}>
             
-            {/* Mobile logo */}
-            <Link to="/" className="flex lg:hidden items-center relative z-10 flex-shrink-0" title="NÈKO - pronounced 'ē-ko'">
-              <span className={`font-display text-xl font-bold tracking-tight transition-colors duration-200 ${showDarkText ? "text-primary" : "text-white"}`}>NÈKO<span className="text-secondary">.</span></span>
+            {/* Left: Logo */}
+            <Link 
+              to="/" 
+              className="flex items-center relative z-10 group" 
+              title="NÈKO - pronounced 'nay-ko'"
+            >
+              <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${
+                showDarkText ? "text-primary" : "text-white"
+              }`}>
+                NÈKO<span className="text-secondary group-hover:animate-pulse">.</span>
+              </span>
             </Link>
 
-            {/* Centered navigation - absolutely positioned for true center */}
+            {/* Center: Pill-shaped nav capsule (Desktop only) */}
             <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2">
               <motion.div
                 layout
-                className="flex items-center flex-nowrap gap-0.5 lg:gap-1 xl:gap-1.5 px-1.5 py-1 rounded-full"
-                style={{ background: showDarkText ? "hsl(var(--muted) / 0.5)" : "hsl(0 0% 100% / 0.1)", backdropFilter: "blur(8px)" }}
+                className="flex items-center gap-1 px-2 py-1.5 rounded-full transition-all duration-300"
+                style={{ 
+                  background: showDarkText 
+                    ? "rgba(51, 67, 54, 0.08)" 
+                    : "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(12px)",
+                  border: showDarkText 
+                    ? "1px solid rgba(51, 67, 54, 0.1)" 
+                    : "1px solid rgba(255, 255, 255, 0.1)",
+                }}
               >
-                {NAV_LINKS.map((link) => (
-                  <NavPill 
-                    key={link.href} 
-                    href={link.href} 
-                    label={link.label} 
-                    isActive={link.isAnchor ? activeSection === link.href.replace("#", "") : (!link.isAnchor && location.pathname === link.href)} 
-                    showDarkText={showDarkText}
-                    isAnchor={link.isAnchor}
-                    onAnchorClick={handleAnchorClick}
-                  />
-                ))}
+                {/* Home link */}
+                <Link
+                  to="/"
+                  className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-full ${
+                    location.pathname === "/" 
+                      ? showDarkText 
+                        ? "text-white bg-primary" 
+                        : "text-primary bg-white"
+                      : showDarkText 
+                        ? "text-primary/70 hover:text-primary hover:bg-primary/5" 
+                        : "text-white/70 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  Home
+                </Link>
+
+                {/* Separator */}
+                <div className={`w-px h-4 ${showDarkText ? "bg-primary/10" : "bg-white/20"}`} />
+
+                {/* Other nav links */}
+                {NAV_ITEMS.map((link) => {
+                  const isActive = location.pathname === link.href;
+                  
+                  return (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-full whitespace-nowrap ${
+                        isActive
+                          ? showDarkText 
+                            ? "text-white bg-primary" 
+                            : "text-primary bg-white"
+                          : showDarkText 
+                            ? "text-primary/70 hover:text-primary hover:bg-primary/5" 
+                            : "text-white/70 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </motion.div>
             </div>
 
-            {/* Right side - empty for symmetry, could add nonprofit badge */}
-            <div className="hidden lg:flex items-center justify-end gap-3 flex-shrink-0 relative z-10 w-40">
-              {/* Intentionally minimal - no login/dashboard buttons */}
+            {/* Right: SAY HELLO CTA (Desktop) */}
+            <div className="hidden lg:flex items-center gap-3 relative z-10">
+              <Button
+                asChild
+                size="sm"
+                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 border-0"
+                style={{ 
+                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                  boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35), inset 0 1px 0 rgba(255,255,255,0.15)"
+                }}
+              >
+                <Link to="/contact" className="flex items-center gap-2 text-white">
+                  SAY HELLO
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </Button>
             </div>
 
-            <button
-              ref={menuButtonRef}
-              className={`lg:hidden ml-auto p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${showDarkText ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"}`}
-              onClick={toggleMenu}
-              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isOpen}
-              aria-controls="mobile-menu"
-            >
-              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
-            </button>
+            {/* Mobile: Menu button + SAY HELLO */}
+            <div className="flex lg:hidden items-center gap-2">
+              <Button
+                asChild
+                size="sm"
+                className="rounded-full px-4 py-2 font-semibold text-xs shadow-lg border-0"
+                style={{ 
+                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                  boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
+                }}
+              >
+                <Link to="/contact" className="flex items-center gap-1.5 text-white">
+                  SAY HELLO
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </Button>
+              
+              <button
+                ref={menuButtonRef}
+                className={`p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  showDarkText 
+                    ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" 
+                    : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
+                }`}
+                onClick={toggleMenu}
+                aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+              >
+                {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
+      {/* Mobile menu overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-40 lg:hidden">
-            <div className="absolute inset-0 bg-background/95 backdrop-blur-lg" onClick={closeMenu} />
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            transition={{ duration: 0.2 }} 
+            className="fixed inset-0 z-40 lg:hidden"
+          >
+            <div 
+              className="absolute inset-0 bg-background/95 backdrop-blur-lg" 
+              onClick={closeMenu} 
+            />
             <motion.div
               id="mobile-menu"
               initial={{ x: "100%" }}
@@ -216,47 +254,46 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               className="absolute right-0 top-0 h-full w-full max-w-xs bg-card border-l border-border shadow-xl"
               aria-label="Mobile navigation"
             >
-              <div className="flex flex-col h-full pt-16 pb-6 px-5">
+              <div className="flex flex-col h-full pt-20 pb-6 px-5">
                 <nav className="flex-1 space-y-1" aria-label="Primary">
                   {NAV_LINKS.map((link) => {
-                    const anchorActive = activeSection === link.href.replace("#", "");
-                    const routeActive = !link.isAnchor && location.pathname === link.href;
-                    const isActive = link.isAnchor ? anchorActive : routeActive;
+                    const isActive = location.pathname === link.href;
 
-                    return link.isAnchor ? (
-                      <a 
-                        key={link.href} 
-                        href={link.href} 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleAnchorClick(link.href.replace("#", ""));
-                        }}
-                        aria-current={isActive ? "location" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-secondary bg-secondary/10" : "text-foreground hover:bg-muted"}`}
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
+                    return (
                       <Link 
                         key={link.href} 
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block px-3 py-3 rounded-lg text-base font-medium whitespace-nowrap transition-colors ${isActive ? "text-secondary bg-secondary/10" : "text-foreground hover:bg-muted"}`}
+                        className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-200 ${
+                          isActive 
+                            ? "text-secondary bg-secondary/10 border border-secondary/20" 
+                            : "text-foreground hover:bg-muted hover:pl-5"
+                        }`}
                       >
                         {link.label}
                       </Link>
                     );
                   })}
                 </nav>
-                <div className="space-y-2.5 pt-4 border-t border-border">
+                
+                <div className="space-y-3 pt-6 border-t border-border">
                   <Link to="/contact" onClick={closeMenu}>
-                    <Button variant="cta" size="lg" className="w-full">
-                      Say Hello
-                      <ArrowRight className="w-4 h-4 ml-2" />
+                    <Button 
+                      size="lg" 
+                      className="w-full rounded-full font-semibold border-0"
+                      style={{ 
+                        background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                        boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
+                      }}
+                    >
+                      <span className="text-white flex items-center gap-2">
+                        SAY HELLO
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
                     </Button>
                   </Link>
-                  <p className="text-center text-[10px] text-muted-foreground pt-2">
+                  <p className="text-center text-[10px] text-muted-foreground pt-1">
                     Invite-only. By alignment.
                   </p>
                 </div>

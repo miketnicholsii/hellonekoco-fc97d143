@@ -1,12 +1,11 @@
 // src/pages/Index.tsx
 import { Link } from "react-router-dom";
-import { nekoCopy } from "@/content/nekoCopy";
 import { nekoConfig } from "@/lib/neko-config";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { motion, useReducedMotion, Variants } from "framer-motion";
-import { ArrowRight, Sparkles, Layers, Target, FileText, MessageCircle } from "lucide-react";
+import { ArrowRight, Layers, Target, FileText } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -23,22 +22,13 @@ const cardVariants: Variants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
-const floatVariants: Variants = {
-  animate: {
-    y: [-8, 8, -8],
-    rotate: [-2, 2, -2],
-    transition: { duration: 7, repeat: Infinity, ease: "easeInOut" },
-  },
-};
-
 const fields = [
   { icon: Layers, title: "Digital Structures", body: "Websites, identities, and systems designed to work — not just look good." },
-  { icon: Target, title: "Strategic Exploration", body: "Positioning, business models, and brand strategy tested through real use." },
+  { icon: Target, title: "Strategic Exploration", body: "Positioning, business models, and brand strategy tested in practice." },
   { icon: FileText, title: "Public Artifacts", body: "Pages, tools, and ideas shared when they're ready — not before." },
 ];
 
 export default function Index() {
-  const c = nekoCopy;
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -53,28 +43,19 @@ export default function Index() {
         className="relative min-h-screen flex items-center justify-center overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #2a3a2d 50%, #1f2a21 100%)" }}
       >
-        {/* Subtle radial glow - orange accent */}
+        {/* Subtle radial glow */}
         <div 
           className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(229, 83, 10, 0.08) 0%, transparent 60%)" }}
+          style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(229, 83, 10, 0.06) 0%, transparent 60%)" }}
         />
         
         {/* Animated orb */}
         <motion.div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-15 pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(200, 191, 181, 0.15) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.08, 1], opacity: [0.12, 0.2, 0.12] }}
+          style={{ background: "radial-gradient(circle, rgba(200, 191, 181, 0.12) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.08, 1], opacity: [0.1, 0.18, 0.1] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
-
-        {/* Floating decorative elements */}
-        <motion.div
-          className="absolute top-32 left-[15%] opacity-20"
-          variants={prefersReducedMotion ? undefined : floatVariants}
-          animate="animate"
-        >
-          <Sparkles className="w-10 h-10 text-[#E5530A]" />
-        </motion.div>
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10 pt-28 pb-32">
           <motion.div
@@ -89,54 +70,58 @@ export default function Index() {
             </motion.h1>
 
             {/* Descriptor */}
-            <motion.p variants={itemVariants} className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-10 tracking-tight">
-              {c.brand.descriptor}
+            <motion.p variants={itemVariants} className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-12 tracking-tight">
+              An independent creative sandbox.
             </motion.p>
 
             {/* Body copy */}
-            <motion.div variants={itemVariants} className="max-w-xl mx-auto space-y-4 text-lg sm:text-xl text-white/60 leading-relaxed mb-8">
-              <p>I build real websites, real strategies, and real digital systems — sometimes collaboratively, sometimes quietly.</p>
+            <motion.div variants={itemVariants} className="max-w-xl mx-auto space-y-5 text-lg sm:text-xl text-white/65 leading-relaxed mb-8">
+              <p>I build real websites, real strategies, and real digital systems.<br />
+              Sometimes collaboratively. Sometimes quietly.</p>
               <p className="text-white/45">Sometimes I share what I'm learning. Sometimes I don't.</p>
             </motion.div>
 
-            {/* Boundary statement */}
+            {/* Statement */}
             <motion.div variants={itemVariants} className="max-w-md mx-auto mb-12">
-              <p className="text-base text-white/40 leading-relaxed">
-                NÈKO isn't a marketplace. It's a place.
+              <p className="text-lg text-white/50 leading-relaxed">
+                NÈKO isn't a marketplace.<br />
+                It's a place.
               </p>
+            </motion.div>
+
+            {/* Primary CTA */}
+            <motion.div variants={itemVariants} className="flex flex-col items-center gap-6 mb-10">
+              <Button 
+                asChild 
+                size="lg" 
+                className="group rounded-full px-10 py-7 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:-translate-y-1 border-0"
+                style={{ 
+                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                  boxShadow: "0 8px 30px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                }}
+              >
+                <Link to="/contact" className="flex items-center gap-3 text-white">
+                  SAY HELLO
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              
+              <Link 
+                to="/sandbox" 
+                className="text-sm text-white/40 hover:text-white/70 transition-colors underline underline-offset-4"
+              >
+                Read the sandbox note
+              </Link>
             </motion.div>
 
             {/* Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-12"
-              style={{ background: "rgba(229, 83, 10, 0.15)", border: "1px solid rgba(229, 83, 10, 0.3)" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+              style={{ background: "rgba(229, 83, 10, 0.12)", border: "1px solid rgba(229, 83, 10, 0.25)" }}
             >
-              <span className="w-2 h-2 rounded-full bg-[#E5530A]" />
-              <span className="text-sm font-medium tracking-wide text-[#E5530A]">{c.brand.tagline}</span>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button 
-                asChild 
-                size="lg" 
-                className="group rounded-full px-8 py-6 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
-                style={{ background: "#E5530A", color: "white" }}
-              >
-                <Link to="/contact" className="flex items-center gap-2">
-                  {c.ctas.primary}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                size="lg" 
-                className="rounded-full px-8 py-6 text-base border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all"
-              >
-                <Link to="/sandbox">{c.ctas.secondary}</Link>
-              </Button>
+              <span className="w-2 h-2 rounded-full bg-[#E5530A] animate-pulse" />
+              <span className="text-sm font-medium tracking-wide text-[#E5530A]">Invite-only. By alignment.</span>
             </motion.div>
           </motion.div>
         </div>
@@ -170,9 +155,7 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <div 
-              className="p-8 rounded-2xl bg-white border border-[#C8BFB5]/30 shadow-lg text-center"
-            >
+            <div className="p-8 rounded-2xl bg-white border border-[#C8BFB5]/30 shadow-xl text-center">
               <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#334336]/50 mb-4 block">Rate Signal</span>
               <div className="font-display text-5xl sm:text-6xl font-bold tracking-tight mb-2" style={{ color: "#E5530A" }}>
                 {nekoConfig.rate.formatted}
@@ -197,15 +180,17 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
-              {c.sections.whatLivesHere.label}
+              What lives here
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" style={{ color: "#334336" }}>
-              {c.sections.whatLivesHere.title}
+              Work, in motion.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
-              {c.sections.whatLivesHere.body.map((p, i) => (
-                <p key={i} className={i > 0 ? "opacity-60" : ""}>{p}</p>
-              ))}
+              <p>NÈKO is where ideas get tested by building them for real.</p>
+              <p className="opacity-70">Some experiments become public artifacts.<br />
+              Some become paid collaborations.<br />
+              Some stay in the sandbox.</p>
+              <p className="opacity-50">What matters is that the work is real — designed, shipped, and used beyond this page.</p>
             </motion.div>
           </motion.div>
         </div>
@@ -224,10 +209,10 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/60 mb-6">
-              {c.sections.fields.label}
+              Fields
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight" style={{ color: "#334336" }}>
-              {c.sections.fields.title}
+              Things that exist here.
             </motion.h2>
           </motion.div>
 
@@ -242,7 +227,7 @@ export default function Index() {
               <motion.div 
                 key={i}
                 variants={cardVariants} 
-                className="group p-8 sm:p-10 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg hover:shadow-xl transition-all duration-500"
+                className="group p-8 sm:p-10 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/50 shadow-lg hover:shadow-xl transition-all duration-500"
                 whileHover={prefersReducedMotion ? {} : { y: -6, scale: 1.02 }}
               >
                 <div 
@@ -265,7 +250,7 @@ export default function Index() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            {c.sections.fields.footerNote}
+            Not everything is available. Everything is intentional.
           </motion.p>
         </div>
       </section>
@@ -286,15 +271,17 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
-              {c.sections.howWorkHappens.label}
+              How work happens
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-10">
-              {c.sections.howWorkHappens.title}
+              There's no checkout.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl text-white/60 leading-relaxed">
-              {c.sections.howWorkHappens.body.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              <p>NÈKO isn't an agency pipeline or a product you purchase.</p>
+              <p>Work happens through conversation, timing, and mutual interest.</p>
+              <p className="text-white/45">Sometimes that leads to collaboration.<br />
+              Sometimes it doesn't.<br />
+              Both outcomes are fine.</p>
             </motion.div>
           </motion.div>
         </div>
@@ -313,25 +300,37 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50 mb-6">
-              {c.sections.legitimacy.label}
+              Reality check
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" style={{ color: "#334336" }}>
-              {c.sections.legitimacy.title}
+              Yes, this is real.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
-              {c.sections.legitimacy.body.map((p, i) => (
-                <p key={i} className={i > 0 ? "opacity-60" : ""}>{p}</p>
-              ))}
+              <p>I do professional-level work.<br />
+              I accept payment when it aligns.</p>
+              <p className="opacity-70">But NÈKO isn't "for hire" on demand — it's invite-only by design.</p>
+              <p className="opacity-50">If it fits, we'll find a shape that works.</p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          FINAL CTA — White (#FFFFFF)
+          FINAL CTA — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 bg-white">
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+      <section 
+        className="py-24 sm:py-32 relative overflow-hidden noise-texture"
+        style={{ background: "linear-gradient(180deg, #334336 0%, #1f2a21 100%)" }}
+      >
+        {/* Ambient glow */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.08) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             className="max-w-2xl mx-auto text-center"
             variants={prefersReducedMotion ? undefined : containerVariants}
@@ -339,22 +338,27 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6" style={{ color: "#334336" }}>
-              {c.sections.invitation.title}
+            <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
+              Invitation
+            </motion.span>
+            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-8">
+              If something here resonates…
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-lg sm:text-xl text-[#334336]/60 mb-10">
+            <motion.p variants={itemVariants} className="text-xl text-white/60 mb-12">
               Reach out. Not to buy — but to talk.
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button 
                 asChild 
                 size="lg" 
-                className="group rounded-full px-10 py-7 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-                style={{ background: "#E5530A", color: "white" }}
+                className="group rounded-full px-10 py-7 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:-translate-y-1 border-0"
+                style={{ 
+                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                  boxShadow: "0 8px 30px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                }}
               >
-                <Link to="/contact" className="flex items-center gap-3">
-                  <MessageCircle className="w-5 h-5" />
-                  {c.ctas.primary}
+                <Link to="/contact" className="flex items-center gap-3 text-white">
+                  SAY HELLO
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
