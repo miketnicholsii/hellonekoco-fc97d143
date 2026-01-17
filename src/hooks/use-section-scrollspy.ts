@@ -24,11 +24,12 @@ export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
 ];
 
 /**
- * Nav links derived from section definitions
+ * Nav links - simplified NÈKO navigation
+ * Only 5 core pages
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home", isAnchor: false },
-  { href: "/sandbox", label: "Sandbox", isAnchor: false },
+  { href: "/sandbox", label: "The Sandbox", isAnchor: false },
   { href: "/fields", label: "Fields", isAnchor: false },
   { href: "/invite", label: "Work With Me", isAnchor: false },
   { href: "/contact", label: "Say Hello", isAnchor: false },
@@ -142,21 +143,14 @@ export function useScrollPosition(threshold = 20) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > threshold);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      setIsScrolled(window.scrollY > threshold);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Check initial state
     handleScroll();
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [threshold]);
 
@@ -164,7 +158,7 @@ export function useScrollPosition(threshold = 20) {
 }
 
 /**
- * Smooth scroll to anchor with offset for sticky header
+ * Smooth scroll to a section by ID
  */
 export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth") {
   const element = document.getElementById(id);
