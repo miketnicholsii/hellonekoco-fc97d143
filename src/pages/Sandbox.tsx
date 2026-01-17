@@ -4,7 +4,8 @@ import { motion, useReducedMotion, Variants } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TreePine, Compass, Sparkles } from "lucide-react";
+import { ArrowRight, TreePine, Compass, Sparkles, Layers, Eye, Zap } from "lucide-react";
+import { nekoConfig } from "@/lib/neko-config";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -23,6 +24,24 @@ const floatVariants: Variants = {
     transition: { duration: 8, repeat: Infinity, ease: "easeInOut" },
   },
 };
+
+const principles = [
+  {
+    icon: Layers,
+    title: "Real Work",
+    description: "Everything here has been designed, built, and shipped for real use.",
+  },
+  {
+    icon: Eye,
+    title: "Selective Sharing",
+    description: "Some things become public. Some stay private. Both are intentional.",
+  },
+  {
+    icon: Zap,
+    title: "Human Pace",
+    description: "No rush. No urgency theater. Good work takes time.",
+  },
+];
 
 export default function Sandbox() {
   const prefersReducedMotion = useReducedMotion();
@@ -156,6 +175,98 @@ export default function Sandbox() {
             />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* Principles - Warm Taupe */}
+      <section
+        className="py-24 sm:py-32"
+        style={{ background: "linear-gradient(180deg, hsl(35 12% 94%) 0%, hsl(35 15% 90%) 100%)" }}
+      >
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <motion.div
+            className="max-w-5xl mx-auto"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+          >
+            <motion.div variants={itemVariants} className="text-center mb-16">
+              <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-secondary mb-4">
+                Philosophy
+              </span>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-primary">
+                How the sandbox works
+              </h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+              {principles.map((principle, i) => (
+                <motion.div
+                  key={i}
+                  variants={itemVariants}
+                  className="group p-8 sm:p-10 rounded-2xl bg-white border border-border shadow-lg hover:shadow-xl transition-all duration-500"
+                  whileHover={prefersReducedMotion ? {} : { y: -6 }}
+                >
+                  <div 
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 25%) 100%)" }}
+                  >
+                    <principle.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-primary mb-3">{principle.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{principle.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA - Forest Green */}
+      <section
+        className="py-24 sm:py-32 relative overflow-hidden noise-texture"
+        style={{ background: "linear-gradient(180deg, hsl(135 22% 14%) 0%, hsl(135 25% 10%) 100%)" }}
+      >
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.08) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 text-center relative z-10">
+          <motion.div
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-8">
+              Want to explore the <span className="text-secondary">landscape</span>?
+            </motion.h2>
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button 
+                asChild 
+                size="lg" 
+                className="group rounded-full px-12 py-6 font-semibold shadow-xl text-base border-0"
+                style={{ background: "linear-gradient(135deg, hsl(16 100% 42%) 0%, hsl(16 90% 35%) 100%)" }}
+              >
+                <Link to="/fields" className="flex items-center gap-3">
+                  See the fields
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+              <Button 
+                asChild 
+                variant="ghost" 
+                size="lg" 
+                className="rounded-full px-10 py-6 text-white/60 hover:text-white hover:bg-white/10 font-medium text-base"
+              >
+                <Link to="/proof">See the proof</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       <Footer />
