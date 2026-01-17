@@ -78,15 +78,14 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Index />} />
-          <Route path="/sandbox" element={<Sandbox />} />
-          <Route path="/fields" element={<Fields />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-          {/* Legacy redirects */}
           <Route path="/services" element={<Services />} />
           <Route path="/personal-brand" element={<PersonalBrand />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/get-started" element={<GetStarted />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/sandbox" element={<Sandbox />} />
+          <Route path="/fields" element={<Fields />} />
           <Route path="/resources" element={<ResourcesPreview />} />
           
           {/* Auth routes */}

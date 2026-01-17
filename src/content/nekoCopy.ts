@@ -3,86 +3,91 @@
 export const nekoCopy = {
   brand: {
     wordmark: "NÈKO.",
-    signature: "Hello, NÈKO.",
-    descriptor: "An independent creative sandbox.",
+    tagline: "Build Your Business. Build Your Brand.",
+    descriptor: "Your guided path from idea to reality.",
     subdescriptor:
-      "A place where I build real websites, real strategies, and real digital systems — sometimes collaboratively, sometimes quietly.",
-    boundary:
-      "Not a service. Not a product. Access happens by alignment.",
+      "A structured approach to building legitimate businesses and personal brands — with clarity at every step.",
   },
 
   ctas: {
-    primary: "Say hello",
-    secondary: "Read the sandbox note",
+    primary: "Get Started",
+    secondary: "Explore Services",
   },
 
   sections: {
-    whatLivesHere: {
-      label: "What lives here",
-      title: "Work, in motion.",
+    whatIsNeko: {
+      label: "What is NÈKO?",
+      title: "Your guided path from idea to reality.",
       body: [
-        "NÈKO is where ideas are tested in the real world.",
-        "Some experiments turn into client work. Some become public artifacts. Some are just for learning.",
-        "What matters is that everything built here is real — designed, shipped, and used beyond the page.",
+        "NÈKO is a structured operating system that helps first-time founders, creators, freelancers, and side-hustlers build legitimate businesses and personal brands — with clear progress tracking at every stage.",
+        "We believe starting a business shouldn't be overwhelming. NÈKO provides the roadmap, education, and structure you need to move from \"I want to start something\" to \"I'm running a legitimate business.\"",
+      ],
+      notList: [
+        "Not a credit repair service",
+        "Not get-rich-quick schemes",
+        "Not legal or financial advice",
+        "Not a generic website builder",
       ],
     },
 
     fields: {
-      label: "Fields",
-      title: "Things that exist here.",
+      label: "Platform Features",
+      title: "Everything you need to start, build, and grow.",
+      subtitle: "From business formation to personal branding, NÈKO provides the tools and guidance for every stage of your journey.",
       cards: [
         {
-          title: "Digital Structures",
-          body:
-            "Websites, identities, and systems designed to work — not just look good.",
-          note: "Sometimes shipped. Sometimes shared. Always intentional.",
+          title: "Business Formation",
+          body: "Step-by-step guidance to properly form your LLC and establish your business the right way.",
+          icon: "building",
         },
         {
-          title: "Strategic Exploration",
-          body:
-            "Positioning, business models, and brand strategy tested through real use.",
-          note: "No hype. No templates. Just clarity.",
+          title: "Business Credit Roadmap",
+          body: "Clear, tiered approach to building business credit through legitimate means.",
+          icon: "creditCard",
         },
         {
-          title: "Public Artifacts",
-          body:
-            "Pages, tools, and ideas released when they're ready — not before.",
-          note: "Some things stay in the sandbox.",
+          title: "Personal Brand Builder",
+          body: "Create a professional presence that tells your story and showcases your work.",
+          icon: "user",
+        },
+        {
+          title: "Progress Tracking",
+          body: "Visual milestones and achievements to keep you motivated and on track.",
+          icon: "trendingUp",
         },
       ],
-      footerNote: "Not everything is available. Everything is intentional.",
     },
 
-    howWorkHappens: {
-      label: "How work happens",
-      title: "There's no checkout.",
-      body: [
-        "NÈKO isn't a marketplace or an agency pipeline.",
-        "Work happens through conversation, timing, and mutual interest.",
-        "Sometimes that leads to professional collaboration. Sometimes it doesn't. Both outcomes are fine.",
+    journey: {
+      label: "Your Journey",
+      steps: [
+        {
+          title: "Start Your Business",
+          body: "Form your LLC, get your EIN, and establish legitimacy.",
+        },
+        {
+          title: "Build Business Credit",
+          body: "Progress through credit tiers with starter vendor accounts.",
+        },
+        {
+          title: "Create Your Brand",
+          body: "Build your personal brand and digital presence.",
+        },
+        {
+          title: "Scale Responsibly",
+          body: "Grow with intention when you're ready.",
+        },
       ],
     },
 
-    legitimacy: {
-      label: "Reality check",
-      title: "Yes, this is real.",
-      body: [
-        "NÈKO has produced real websites, real business strategy, and real results.",
-        "Some projects are paid. Some are exploratory. Some never leave the sandbox.",
-        "The work speaks for itself — even when it's quiet.",
-      ],
-    },
-
-    invitation: {
-      label: "Invitation",
-      title: "If something here resonates…",
-      body: ["Reach out.", "Not to buy — but to talk."],
+    cta: {
+      label: "Ready to Start?",
+      title: "Begin your journey today.",
+      body: "Join thousands of founders who are building their businesses the right way — with NÈKO as their guide.",
     },
   },
 
   footer: {
-    line1: "An independent creative sandbox.",
-    line2: "Building real things, at a human pace.",
-    micro: "Invite only. By alignment.",
+    tagline: "Your guided operating system for building businesses and personal brands — from idea to scale.",
   },
 };
