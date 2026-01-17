@@ -21,13 +21,6 @@ export const DASHBOARD_WIDGETS: WidgetConfig[] = [
     minWidth: "full",
   },
   {
-    id: "product-suite",
-    title: "Product Suite",
-    description: "Your credit building journey progress",
-    defaultVisible: true,
-    minWidth: "full",
-  },
-  {
     id: "activity-feed",
     title: "Recent Activity",
     description: "Your latest updates and achievements",
