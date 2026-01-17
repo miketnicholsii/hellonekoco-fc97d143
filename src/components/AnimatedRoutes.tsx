@@ -10,6 +10,7 @@ import NotFound from "@/pages/NotFound";
 // Lazy load public routes
 const Sandbox = lazyWithRetry(() => import("@/pages/Sandbox"));
 const Fields = lazyWithRetry(() => import("@/pages/Fields"));
+const Proof = lazyWithRetry(() => import("@/pages/Proof"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
 const Invite = lazyWithRetry(() => import("@/pages/Invite"));
 const Notes = lazyWithRetry(() => import("@/pages/Notes"));
@@ -40,6 +41,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           <Route path="/" element={<Index />} />
           <Route path="/sandbox" element={<Sandbox />} />
           <Route path="/fields" element={<Fields />} />
+          <Route path="/proof" element={<Proof />} />
           <Route path="/invite" element={<Invite />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/notes" element={<Notes />} />

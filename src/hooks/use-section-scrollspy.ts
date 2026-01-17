@@ -24,13 +24,14 @@ export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
 ];
 
 /**
- * Nav links - simplified NÈKO navigation
- * Only 5 core pages
+ * Nav links - NÈKO navigation
+ * Core pages as specified in sitemap
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home", isAnchor: false },
   { href: "/sandbox", label: "The Sandbox", isAnchor: false },
   { href: "/fields", label: "Fields", isAnchor: false },
+  { href: "/proof", label: "Proof", isAnchor: false },
   { href: "/invite", label: "Work With Me", isAnchor: false },
   { href: "/contact", label: "Say Hello", isAnchor: false },
 ] as const;
