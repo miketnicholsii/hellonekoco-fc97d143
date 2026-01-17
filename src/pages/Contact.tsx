@@ -24,29 +24,12 @@ const contactSchema = z.object({
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
-
-const formVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] },
-  },
+  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
 export default function Contact() {
@@ -64,14 +47,10 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,9 +61,7 @@ export default function Contact() {
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
-        if (err.path[0]) {
-          fieldErrors[err.path[0] as string] = err.message;
-        }
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
       });
       setErrors(fieldErrors);
       return;
@@ -104,7 +81,6 @@ export default function Contact() {
       });
 
       if (error) throw error;
-
       setIsSubmitted(true);
       toast.success(c.contact.form.success);
     } catch {
@@ -118,201 +94,127 @@ export default function Contact() {
     <main className="min-h-screen bg-background overflow-hidden">
       <EccentricNavbar />
 
-      <section className="min-h-screen flex items-center justify-center relative py-32">
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background pointer-events-none"
-          aria-hidden="true"
-        />
+      {/* Hero - Dark */}
+      <section className="pt-36 sm:pt-44 pb-20 sm:pb-24 bg-[hsl(220,25%,8%)]">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <motion.div
+            className="max-w-2xl mx-auto text-center"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-10">
+              Say hello
+            </motion.h1>
 
-        <motion.div
-          className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full opacity-20 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, hsl(168 65% 50% / 0.15) 0%, transparent 70%)",
-          }}
-          animate={
-            prefersReducedMotion
-              ? {}
-              : { x: [0, 30, 0], opacity: [0.15, 0.25, 0.15] }
-          }
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
-        />
+            <motion.div className="space-y-4 text-lg sm:text-xl text-white/60 leading-relaxed">
+              <motion.p variants={itemVariants}>
+                If you've got a project, an idea, or a question — send it.
+              </motion.p>
+              <motion.p variants={itemVariants} className="text-white/50">
+                If it's aligned and the timing works, I'll respond.<br />
+                If not, that's not rejection — it's focus.
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-            {/* Left: Copy */}
+      {/* Form Section - White */}
+      <section className="py-20 sm:py-28 bg-white">
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            {/* Left: Email CTA */}
             <motion.div
               variants={prefersReducedMotion ? undefined : containerVariants}
               initial="hidden"
-              animate="visible"
+              whileInView="visible"
+              viewport={{ once: true }}
             >
-              <motion.h1
-                variants={itemVariants}
-                className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-8"
-              >
-                {c.contact.heading}
-              </motion.h1>
+              <motion.h2 variants={itemVariants} className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-tertiary mb-8">
+                Prefer email?
+              </motion.h2>
 
-              <motion.div
+              <motion.a
                 variants={itemVariants}
-                className="space-y-5 text-lg text-muted-foreground leading-relaxed mb-10"
+                href={`mailto:${c.contact.email}?subject=Hello%2C%20N%C3%88KO`}
+                className="group inline-flex items-center gap-4 px-6 py-5 rounded-2xl bg-[hsl(40,20%,97%)] border border-tertiary/5 hover:border-primary/20 transition-all duration-300"
               >
-                {c.contact.body.map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </motion.div>
+                <span className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
+                  <Mail className="w-5 h-5 text-primary" />
+                </span>
+                <span className="text-left">
+                  <span className="block text-xs text-tertiary/40 mb-0.5">Email</span>
+                  <span className="block text-lg font-display font-bold text-tertiary group-hover:text-primary transition-colors">
+                    {c.contact.email}
+                  </span>
+                </span>
+              </motion.a>
 
-              {/* Email CTA */}
-              <motion.div variants={itemVariants} className="mb-8">
-                <a
-                  href={`mailto:${c.contact.email}?subject=Hello%2C%20N%C3%88KO`}
-                  className="group inline-flex items-center gap-4 px-6 py-4 rounded-2xl bg-card border border-border/60 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300"
-                >
-                  <span className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
-                    <Mail className="w-4 h-4 text-primary" />
-                  </span>
-                  <span className="text-left">
-                    <span className="block text-xs text-muted-foreground mb-0.5">
-                      Email
-                    </span>
-                    <span className="block text-lg font-display font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {c.contact.email}
-                    </span>
-                  </span>
-                </a>
-              </motion.div>
+              <motion.p variants={itemVariants} className="text-sm text-tertiary/40 mt-8">
+                I read everything. I respond when it aligns.
+              </motion.p>
             </motion.div>
 
             {/* Right: Form */}
             <motion.div
-              variants={prefersReducedMotion ? undefined : formVariants}
+              variants={prefersReducedMotion ? undefined : containerVariants}
               initial="hidden"
-              animate="visible"
-              className="relative"
+              whileInView="visible"
+              viewport={{ once: true }}
             >
               {isSubmitted ? (
-                <div className="p-8 sm:p-10 rounded-2xl bg-card border border-border/60 shadow-sm text-center">
+                <motion.div variants={itemVariants} className="p-10 rounded-2xl bg-[hsl(40,20%,97%)] border border-tertiary/5 text-center">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="font-display text-2xl font-semibold text-foreground mb-3">
-                    Message sent
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {c.contact.form.success}
-                  </p>
-                </div>
+                  <h3 className="font-display text-2xl font-bold text-tertiary mb-3">Message sent</h3>
+                  <p className="text-tertiary/60">{c.contact.form.success}</p>
+                </motion.div>
               ) : (
-                <form
-                  onSubmit={handleSubmit}
-                  className="p-8 sm:p-10 rounded-2xl bg-card border border-border/60 shadow-sm space-y-6"
-                >
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">
-                    {c.contact.form.title}
-                  </h3>
+                <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-[hsl(40,20%,97%)] border border-tertiary/5 space-y-6">
+                  <motion.h3 variants={itemVariants} className="font-display text-xl font-bold text-tertiary mb-2">
+                    Or use this form
+                  </motion.h3>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="name">{c.contact.form.fields.name.label}</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.name.placeholder}
-                      className={errors.name ? "border-destructive" : ""}
-                    />
-                    {errors.name && (
-                      <p className="text-xs text-destructive">{errors.name}</p>
-                    )}
-                  </div>
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <Label htmlFor="name" className="text-tertiary/80">Name</Label>
+                    <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" className={`bg-white border-tertiary/10 ${errors.name ? "border-destructive" : ""}`} />
+                    {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                  </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="building">
-                      {c.contact.form.fields.building.label}
-                    </Label>
-                    <Textarea
-                      id="building"
-                      name="building"
-                      value={formData.building}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.building.placeholder}
-                      rows={3}
-                      className={errors.building ? "border-destructive" : ""}
-                    />
-                    {errors.building && (
-                      <p className="text-xs text-destructive">{errors.building}</p>
-                    )}
-                  </div>
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <Label htmlFor="building" className="text-tertiary/80">What are you building?</Label>
+                    <Textarea id="building" name="building" value={formData.building} onChange={handleChange} placeholder="Tell me about your project or idea..." rows={3} className={`bg-white border-tertiary/10 ${errors.building ? "border-destructive" : ""}`} />
+                    {errors.building && <p className="text-xs text-destructive">{errors.building}</p>}
+                  </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="success">
-                      {c.contact.form.fields.success.label}
-                    </Label>
-                    <Textarea
-                      id="success"
-                      name="success"
-                      value={formData.success}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.success.placeholder}
-                      rows={2}
-                    />
-                  </div>
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <Label htmlFor="success" className="text-tertiary/80">What does success look like?</Label>
+                    <Textarea id="success" name="success" value={formData.success} onChange={handleChange} placeholder="How will you know this worked?" rows={2} className="bg-white border-tertiary/10" />
+                  </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="timeline">
-                      {c.contact.form.fields.timeline.label}
-                    </Label>
-                    <Input
-                      id="timeline"
-                      name="timeline"
-                      value={formData.timeline}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.timeline.placeholder}
-                    />
-                  </div>
+                  <motion.div variants={itemVariants} className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="timeline" className="text-tertiary/80">Timeline (optional)</Label>
+                      <Input id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} placeholder="When hoping to start?" className="bg-white border-tertiary/10" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="budget" className="text-tertiary/80">Budget range (optional)</Label>
+                      <Input id="budget" name="budget" value={formData.budget} onChange={handleChange} placeholder="If you have a range" className="bg-white border-tertiary/10" />
+                    </div>
+                  </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="budget">
-                      {c.contact.form.fields.budget.label}
-                    </Label>
-                    <Input
-                      id="budget"
-                      name="budget"
-                      value={formData.budget}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.budget.placeholder}
-                    />
-                  </div>
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <Label htmlFor="links" className="text-tertiary/80">Links (optional)</Label>
+                    <Input id="links" name="links" value={formData.links} onChange={handleChange} placeholder="Portfolio, existing site, references..." className="bg-white border-tertiary/10" />
+                  </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="links">
-                      {c.contact.form.fields.links.label}
-                    </Label>
-                    <Input
-                      id="links"
-                      name="links"
-                      value={formData.links}
-                      onChange={handleChange}
-                      placeholder={c.contact.form.fields.links.placeholder}
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="w-full rounded-full py-6 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
-                  >
-                    {isSubmitting ? (
-                      "Sending..."
-                    ) : (
-                      <>
-                        {c.contact.form.submit}
-                        <Send className="w-4 h-4 ml-2" />
-                      </>
-                    )}
-                  </Button>
+                  <motion.div variants={itemVariants}>
+                    <Button type="submit" size="lg" disabled={isSubmitting} className="w-full rounded-full py-6 font-semibold">
+                      {isSubmitting ? "Sending..." : <><Send className="w-4 h-4 mr-2" />Send</>}
+                    </Button>
+                  </motion.div>
                 </form>
               )}
             </motion.div>
