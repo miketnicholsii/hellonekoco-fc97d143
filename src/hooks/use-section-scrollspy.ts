@@ -19,27 +19,21 @@ export interface SectionDefinition {
  */
 export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
   { id: "hero", label: "Home", isNavItem: true },
-  { id: "starting-points", label: "Start", isNavItem: false, parentNavId: "hero" },
-  { id: "how-we-help", label: "About", isNavItem: false, parentNavId: "services" },
-  { id: "services", label: "Solutions", isNavItem: true },
-  { id: "paths", label: "Paths", isNavItem: true },
-  { id: "pricing", label: "Pricing", isNavItem: true },
-  { id: "experience", label: "Experience", isNavItem: false, parentNavId: "demos" },
-  { id: "demos", label: "Demos", isNavItem: true },
-  { id: "faq", label: "FAQ", isNavItem: true },
-  { id: "cta", label: "Start", isNavItem: false, parentNavId: "faq" },
+  { id: "what-lives-here", label: "Work", isNavItem: false, parentNavId: "hero" },
+  { id: "fields", label: "Fields", isNavItem: true },
+  { id: "how-work-happens", label: "Process", isNavItem: false, parentNavId: "fields" },
+  { id: "legitimacy", label: "Real", isNavItem: false, parentNavId: "fields" },
+  { id: "invitation", label: "Contact", isNavItem: true },
 ];
 
 /**
  * Nav links derived from section definitions
  */
 export const NAV_LINKS = [
-  ...HOMEPAGE_SECTIONS.filter((s) => s.isNavItem).map((s) => ({
-    href: `#${s.id}`,
-    label: s.label,
-    isAnchor: true,
-  })),
-  { href: "/about", label: "About", isAnchor: false },
+  { href: "/", label: "Home", isAnchor: false },
+  { href: "/fields", label: "Fields", isAnchor: false },
+  { href: "/sandbox", label: "Sandbox", isAnchor: false },
+  { href: "/contact", label: "Say Hello", isAnchor: false },
 ] as const;
 
 export type NavHref = (typeof NAV_LINKS)[number]["href"];
