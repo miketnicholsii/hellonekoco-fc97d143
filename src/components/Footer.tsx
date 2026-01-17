@@ -2,16 +2,16 @@ import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { InstagramSection } from "./InstagramSection";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { nekoCopy } from "@/content/nekoCopy";
 
 const footerLinks = {
-  platform: [
-    { href: "/services", label: "Services" },
-    { href: "/personal-brand", label: "Personal Brand" },
-    { href: "/pricing", label: "Pricing" },
+  explore: [
+    { href: "/sandbox", label: "The Sandbox" },
+    { href: "/fields", label: "Fields" },
+    { href: "/contact", label: "Say Hello" },
   ],
   company: [
     { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
   ],
   support: [
     { href: "mailto:support@helloneko.co", label: "Report a Problem", external: true },
@@ -23,6 +23,8 @@ const footerLinks = {
 };
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
+  const c = nekoCopy;
+  
   return (
     <footer ref={ref} role="contentinfo" aria-label="Site footer" className="relative bg-tertiary text-tertiary-foreground overflow-hidden">
       {/* Gradient overlay */}
@@ -38,18 +40,24 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 NÈKO.
               </span>
             </Link>
-            <p className="text-primary-foreground/60 text-xs sm:text-sm leading-relaxed max-w-sm mb-4 sm:mb-6">
-              Your guided operating system for building businesses and personal brands — from idea to scale.
+            <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-xs mb-2">
+              {c.footer.line1}
+            </p>
+            <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-xs mb-6">
+              {c.footer.line2}
+            </p>
+            <p className="text-primary-foreground/40 text-xs tracking-wide">
+              {c.footer.micro}
             </p>
           </div>
 
-          {/* Platform Links */}
-          <nav aria-label="Platform links">
+          {/* Explore Links */}
+          <nav aria-label="Explore links">
             <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 sm:mb-6 uppercase">
-              Platform
+              Explore
             </h4>
             <ul className="space-y-2.5 sm:space-y-3.5" role="list">
-              {footerLinks.platform.map((link) => (
+              {footerLinks.explore.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
@@ -124,7 +132,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               © {new Date().getFullYear()} NÈKO. All rights reserved.
             </p>
             <p className="text-[10px] sm:text-xs text-primary-foreground/40 tracking-wide">
-              Hello, NÈKO.
+              {c.brand.signature}
             </p>
           </div>
         </div>
