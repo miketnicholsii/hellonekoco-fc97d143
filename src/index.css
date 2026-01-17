@@ -6,94 +6,101 @@
 
 @layer base {
   :root {
-    /* NEKO Brand Colors - Forest Green / Vibrant Orange / Warm Taupe */
-    --background: 0 0% 100%;
-    --foreground: 140 15% 15%;
+    /* NÈKO Brand Colors - Exact Palette
+       Primary Accent: #E5530A (vibrant orange)
+       Dark Base: #334336 (forest green)
+       Soft Neutral: #EDE7E3 (warm cream)
+       Warm Muted: #C8BFB5 (taupe)
+       White: #FFFFFF
+    */
+    --background: 30 20% 97%; /* #EDE7E3 soft neutral */
+    --foreground: 140 14% 23%; /* #334336 dark base */
 
     --card: 0 0% 100%;
-    --card-foreground: 140 15% 15%;
+    --card-foreground: 140 14% 23%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 140 15% 15%;
+    --popover-foreground: 140 14% 23%;
 
-    /* Primary - Deep Forest Green (#283529) */
-    --primary: 135 22% 18%;
+    /* Primary - Dark Forest Green (#334336) */
+    --primary: 140 14% 23%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 135 28% 28%;
-    --primary-muted: 135 12% 94%;
-    --primary-dark: 135 25% 12%;
+    --primary-glow: 140 14% 30%;
+    --primary-muted: 30 20% 97%;
+    --primary-dark: 140 14% 16%;
 
-    /* Secondary - Vibrant Orange (#D83B00) */
-    --secondary: 16 100% 42%;
+    /* Secondary - Vibrant Orange (#E5530A) */
+    --secondary: 20 91% 47%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Tertiary - Warm Taupe (#BCB3A5) */
-    --tertiary: 35 15% 69%;
-    --tertiary-foreground: 140 15% 15%;
+    /* Tertiary - Warm Taupe (#C8BFB5) */
+    --tertiary: 30 15% 75%;
+    --tertiary-foreground: 140 14% 23%;
 
     /* Accent - Vibrant Orange for emphasis */
-    --accent-gold: 16 100% 42%;
+    --accent-gold: 20 91% 47%;
     --accent-gold-foreground: 0 0% 100%;
 
-    --muted: 35 10% 94%;
-    --muted-foreground: 35 8% 45%;
+    /* Muted - Soft cream tones */
+    --muted: 30 15% 92%;
+    --muted-foreground: 30 8% 45%;
 
-    --accent: 135 15% 95%;
-    --accent-foreground: 135 22% 18%;
+    --accent: 30 20% 95%;
+    --accent-foreground: 140 14% 23%;
 
     --destructive: 0 80% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 12% 88%;
-    --input: 35 12% 88%;
-    --ring: 16 100% 42%;
+    --border: 30 12% 85%;
+    --input: 30 12% 85%;
+    --ring: 20 91% 47%;
 
     --radius: 0.875rem;
     --scroll-offset: calc(6rem + env(safe-area-inset-top));
 
-    /* Progress tiers - Forest to Orange */
-    --tier-0: 35 10% 70%;
-    --tier-1: 135 22% 18%;
-    --tier-2: 35 15% 69%;
-    --tier-3: 16 100% 42%;
+    /* Progress tiers */
+    --tier-0: 30 10% 70%;
+    --tier-1: 140 14% 23%;
+    --tier-2: 30 15% 75%;
+    --tier-3: 20 91% 47%;
 
     /* Status colors */
-    --status-success: 135 50% 35%;
+    --status-success: 140 50% 35%;
     --status-success-foreground: 0 0% 100%;
     --status-warning: 45 93% 47%;
     --status-warning-foreground: 26 83% 14%;
-    --status-info: 16 100% 42%;
+    --status-info: 20 91% 47%;
     --status-info-foreground: 0 0% 100%;
 
     /* Enhanced Gradients - Forest/Orange theme */
-    --gradient-primary: linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 28%) 100%);
-    --gradient-hero: linear-gradient(160deg, hsl(135 22% 18%) 0%, hsl(135 20% 12%) 50%, hsl(140 25% 8%) 100%);
-    --gradient-hero-radial: radial-gradient(ellipse 120% 100% at 50% 0%, hsl(16 100% 42% / 0.08) 0%, transparent 60%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(35 15% 97%) 100%);
-    --gradient-dark: linear-gradient(180deg, hsl(135 22% 16%) 0%, hsl(135 25% 10%) 100%);
-    --gradient-glow: radial-gradient(ellipse at center, hsl(16 100% 42% / 0.12) 0%, transparent 70%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsl(16 100% 42% / 0.06) 0px, transparent 50%), 
-                     radial-gradient(at 80% 0%, hsl(35 15% 69% / 0.08) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsl(135 22% 18% / 0.04) 0px, transparent 50%);
+    --gradient-primary: linear-gradient(135deg, hsl(140 14% 23%) 0%, hsl(140 14% 30%) 100%);
+    --gradient-hero: linear-gradient(160deg, hsl(140 14% 20%) 0%, hsl(140 14% 16%) 50%, hsl(140 15% 12%) 100%);
+    --gradient-hero-radial: radial-gradient(ellipse 120% 100% at 50% 0%, hsl(20 91% 47% / 0.08) 0%, transparent 60%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(30 20% 97%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(140 14% 20%) 0%, hsl(140 14% 14%) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(20 91% 47% / 0.12) 0%, transparent 70%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsl(20 91% 47% / 0.06) 0px, transparent 50%), 
+                     radial-gradient(at 80% 0%, hsl(30 15% 75% / 0.08) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsl(140 14% 23% / 0.04) 0px, transparent 50%);
 
-    /* Enhanced Shadows - Warmer tones */
-    --shadow-xs: 0 1px 2px 0 hsl(35 15% 12% / 0.03);
-    --shadow-sm: 0 2px 8px -2px hsl(35 15% 12% / 0.06), 0 4px 16px -4px hsl(35 15% 12% / 0.08);
-    --shadow-md: 0 4px 12px -4px hsl(35 15% 12% / 0.08), 0 8px 24px -8px hsl(35 15% 12% / 0.12);
-    --shadow-lg: 0 8px 24px -8px hsl(35 15% 12% / 0.1), 0 16px 48px -12px hsl(35 15% 12% / 0.15);
-    --shadow-xl: 0 16px 32px -8px hsl(35 15% 12% / 0.12), 0 32px 64px -16px hsl(35 15% 12% / 0.18);
-    --shadow-glow: 0 0 0 1px hsl(16 100% 42% / 0.1), 0 4px 20px hsl(16 100% 42% / 0.2), 0 8px 40px hsl(16 100% 42% / 0.15);
-    --shadow-glow-lg: 0 0 0 1px hsl(16 100% 42% / 0.15), 0 8px 40px hsl(16 100% 42% / 0.25), 0 16px 64px hsl(16 100% 42% / 0.2);
+    /* Enhanced Shadows */
+    --shadow-xs: 0 1px 2px 0 hsl(30 15% 12% / 0.03);
+    --shadow-sm: 0 2px 8px -2px hsl(30 15% 12% / 0.06), 0 4px 16px -4px hsl(30 15% 12% / 0.08);
+    --shadow-md: 0 4px 12px -4px hsl(30 15% 12% / 0.08), 0 8px 24px -8px hsl(30 15% 12% / 0.12);
+    --shadow-lg: 0 8px 24px -8px hsl(30 15% 12% / 0.1), 0 16px 48px -12px hsl(30 15% 12% / 0.15);
+    --shadow-xl: 0 16px 32px -8px hsl(30 15% 12% / 0.12), 0 32px 64px -16px hsl(30 15% 12% / 0.18);
+    --shadow-glow: 0 0 0 1px hsl(20 91% 47% / 0.1), 0 4px 20px hsl(20 91% 47% / 0.2), 0 8px 40px hsl(20 91% 47% / 0.15);
+    --shadow-glow-lg: 0 0 0 1px hsl(20 91% 47% / 0.15), 0 8px 40px hsl(20 91% 47% / 0.25), 0 16px 64px hsl(20 91% 47% / 0.2);
     --shadow-inner-glow: inset 0 1px 0 hsl(0 0% 100% / 0.1);
 
     --sidebar-background: 0 0% 99%;
-    --sidebar-foreground: 140 15% 20%;
-    --sidebar-primary: 135 22% 18%;
+    --sidebar-foreground: 140 14% 23%;
+    --sidebar-primary: 140 14% 23%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 135 15% 95%;
-    --sidebar-accent-foreground: 135 22% 18%;
-    --sidebar-border: 35 12% 88%;
-    --sidebar-ring: 16 100% 42%;
+    --sidebar-accent: 30 20% 95%;
+    --sidebar-accent-foreground: 140 14% 23%;
+    --sidebar-border: 30 12% 85%;
+    --sidebar-ring: 20 91% 47%;
   }
 
   @media (min-width: 640px) {
