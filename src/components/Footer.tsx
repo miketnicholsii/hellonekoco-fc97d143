@@ -23,23 +23,36 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
   const c = nekoCopy;
 
   return (
-    <footer ref={ref} role="contentinfo" className="relative bg-tertiary text-tertiary-foreground overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-dark opacity-50 pointer-events-none" />
-      <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <footer 
+      ref={ref} 
+      role="contentinfo" 
+      className="relative overflow-hidden noise-texture"
+      style={{ background: "linear-gradient(180deg, hsl(135 25% 12%) 0%, hsl(135 28% 8%) 100%)" }}
+    >
+      {/* Subtle ambient glow */}
+      <div 
+        className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.06) 0%, transparent 60%)" }}
+      />
+      
+      <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 z-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 sm:gap-10">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
             <Link to="/" className="inline-block mb-4 group">
-              <span className="font-display text-2xl font-bold tracking-tight text-primary-foreground transition-colors group-hover:text-primary">NÈKO<span className="text-primary">.</span></span>
+              <span className="font-display text-2xl font-bold tracking-tight text-white transition-colors group-hover:text-secondary">NÈKO<span className="text-secondary">.</span></span>
             </Link>
-            <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-xs mb-2">{c.footer.line1}</p>
-            <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-xs mb-4">{c.footer.line2}</p>
+            <p className="text-white/60 text-sm leading-relaxed max-w-xs mb-2">{c.footer.line1}</p>
+            <p className="text-white/60 text-sm leading-relaxed max-w-xs mb-4">{c.footer.line2}</p>
             <div className="flex flex-col gap-2">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wide bg-primary/10 text-primary border border-primary/20 w-fit">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span 
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wide w-fit"
+                style={{ background: "hsl(16 100% 42% / 0.15)", color: "hsl(16 100% 55%)", border: "1px solid hsl(16 100% 42% / 0.3)" }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: "hsl(16 100% 50%)" }} />
                 {c.footer.micro}
               </span>
-              <span className="inline-flex items-center gap-2 text-[10px] text-primary-foreground/50">
+              <span className="inline-flex items-center gap-2 text-[10px] text-white/40">
                 <Heart className="w-3 h-3" />
                 {c.footer.mission}
               </span>
@@ -48,11 +61,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Explore */}
           <nav aria-label="Explore links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 uppercase">Explore</h4>
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">Explore</h4>
             <ul className="space-y-2.5">
               {footerLinks.explore.map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="group inline-flex items-center gap-1 text-xs sm:text-sm text-primary-foreground/60 hover:text-primary transition-colors">
+                  <Link to={link.href} className="group inline-flex items-center gap-1 text-xs sm:text-sm text-white/50 hover:text-secondary transition-colors">
                     {link.label}
                     <ArrowUpRight className="h-2.5 w-2.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
@@ -63,11 +76,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* More */}
           <nav aria-label="More links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 uppercase">More</h4>
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">More</h4>
             <ul className="space-y-2.5">
               {footerLinks.more.map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="group inline-flex items-center gap-1 text-xs sm:text-sm text-primary-foreground/60 hover:text-primary transition-colors">
+                  <Link to={link.href} className="group inline-flex items-center gap-1 text-xs sm:text-sm text-white/50 hover:text-secondary transition-colors">
                     {link.label}
                     <ArrowUpRight className="h-2.5 w-2.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
@@ -78,11 +91,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Legal */}
           <nav aria-label="Legal links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-primary-foreground/80 mb-4 uppercase">Legal</h4>
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">Legal</h4>
             <ul className="space-y-2.5">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="text-xs text-primary-foreground/40 hover:text-primary transition-colors">{link.label}</Link>
+                  <Link to={link.href} className="text-xs text-white/30 hover:text-secondary transition-colors">{link.label}</Link>
                 </li>
               ))}
             </ul>
@@ -90,10 +103,10 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         </div>
 
         {/* Bottom */}
-        <div className="mt-10 pt-6 border-t border-primary-foreground/10">
+        <div className="mt-10 pt-6 border-t border-white/10">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p className="text-[10px] sm:text-xs text-primary-foreground/40">© {new Date().getFullYear()} NÈKO. All rights reserved.</p>
-            <p className="text-[10px] sm:text-xs text-primary-foreground/40">{c.brand.signature}</p>
+            <p className="text-[10px] sm:text-xs text-white/30">© {new Date().getFullYear()} NÈKO. All rights reserved.</p>
+            <p className="text-[10px] sm:text-xs text-white/30">{c.brand.signature}</p>
           </div>
         </div>
       </div>
