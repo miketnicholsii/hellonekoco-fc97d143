@@ -121,7 +121,7 @@ export const nekoCopy = {
     },
     rateSignal: {
       title: "Rate signal",
-      hourlyRate: "$150",
+      hourlyRate: "$375",
       rateUnit: "/ hour",
       description: "If we work together, I typically price time as a baseline — not as a menu.",
       context: [
