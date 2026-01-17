@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
 import { 
   NAV_LINKS, 
   useSectionScrollspy, 
@@ -81,7 +80,6 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   position?: "fixed" | "static";
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -138,7 +136,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
     closeMenu();
   }, [closeMenu, location.hash, location.pathname, navigate]);
 
-  const isHeroPage = location.pathname === "/" || location.pathname === "/about";
+  const isHeroPage = location.pathname === "/";
   const showDarkText = !isHeroPage || isScrolled;
 
   return (
@@ -184,30 +182,9 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               </motion.div>
             </div>
 
-            {/* Right side - CTAs */}
-            <div className="hidden lg:flex items-center justify-end gap-3 flex-shrink-0 relative z-10">
-              {user ? (
-                <Link to="/app" className="flex items-center gap-2.5 group">
-                  <span className={`text-xs whitespace-nowrap transition-colors duration-200 ${showDarkText ? "text-muted-foreground group-hover:text-foreground" : "text-white/70 group-hover:text-white"}`}>
-                    {user.email?.split('@')[0]}
-                  </span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className={`h-8 px-3 text-xs font-medium rounded-full transition-all duration-200 ${showDarkText ? "bg-muted/60 hover:bg-primary hover:text-primary-foreground text-foreground" : "bg-white/15 hover:bg-white/30 text-white"}`}
-                  >
-                    Dashboard
-                    <ArrowRight className="h-3.5 w-3.5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5" />
-                  </Button>
-                </Link>
-              ) : (
-                <Link 
-                  to="/login" 
-                  className={`text-sm font-medium whitespace-nowrap transition-colors hover:opacity-80 ${showDarkText ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
-                >
-                  Member Login
-                </Link>
-              )}
+            {/* Right side - empty for symmetry, could add nonprofit badge */}
+            <div className="hidden lg:flex items-center justify-end gap-3 flex-shrink-0 relative z-10 w-40">
+              {/* Intentionally minimal - no login/dashboard buttons */}
             </div>
 
             <button
@@ -271,29 +248,15 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   })}
                 </nav>
                 <div className="space-y-2.5 pt-4 border-t border-border">
-                  {user ? (
-                    <>
-                      <p className="text-xs text-muted-foreground text-center pb-1">
-                        Signed in as <span className="font-semibold text-foreground">{user.email?.split('@')[0]}</span>
-                      </p>
-                      <Link to="/app" onClick={closeMenu}>
-                        <Button variant="cta" size="lg" className="w-full">Dashboard</Button>
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link to="/contact" onClick={closeMenu}>
-                        <Button variant="cta" size="lg" className="w-full">Say Hello</Button>
-                      </Link>
-                      <Link 
-                        to="/login" 
-                        onClick={closeMenu}
-                        className="block text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
-                      >
-                        Member Login
-                      </Link>
-                    </>
-                  )}
+                  <Link to="/contact" onClick={closeMenu}>
+                    <Button variant="cta" size="lg" className="w-full">
+                      Say Hello
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <p className="text-center text-[10px] text-muted-foreground pt-2">
+                    Invite-only. By alignment.
+                  </p>
                 </div>
               </div>
             </motion.div>

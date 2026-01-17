@@ -17,6 +17,7 @@ export const nekoCopy = {
     startConversation: "Start a conversation",
     seeFields: "See the fields",
     workWithMe: "Work with me",
+    donate: "Support the mission",
   },
 
   // Availability status options
@@ -31,6 +32,19 @@ export const nekoCopy = {
     inviteOnly: "Invite-only. By alignment.",
     noCheckout: "No checkout. Just conversation.",
     builtSeriously: "Built seriously. Shared selectively.",
+  },
+
+  // Nonprofit mission
+  mission: {
+    label: "The why",
+    title: "This work supports something bigger.",
+    body: [
+      "NÈKO is a registered nonprofit. 100% of proceeds support mental health institutions.",
+      "Money coming in helps me help others. This isn't charity framing — it's transparent impact.",
+      "When you pay for work that aligns, you're also funding care that reaches people who need it.",
+    ],
+    short: "A nonprofit creative sandbox. Proceeds support mental health care.",
+    badge: "501(c)(3) Nonprofit",
   },
 
   sections: {
@@ -130,6 +144,27 @@ export const nekoCopy = {
       note1: "I'll accept payment when the work aligns with NÈKO.",
       note2: "If it doesn't align, I'll say so — and I'll still try to be helpful.",
     },
+    engagement: {
+      title: "Ways to engage",
+      options: [
+        {
+          title: "Name your budget",
+          description: "Tell me what you're building and what you can invest. If it aligns, we'll find a shape.",
+          action: "Start a conversation",
+        },
+        {
+          title: "Pay for a preview",
+          description: "A small contribution to explore fit — a quick call, initial thoughts, or a lightweight audit.",
+          amount: "$150",
+          action: "Request a preview",
+        },
+        {
+          title: "Support the mission",
+          description: "Not here for a project? You can still contribute. Every dollar supports mental health care.",
+          action: "Donate",
+        },
+      ],
+    },
     cta: {
       button: "Start a conversation",
       small: "No promises. No pitch. Just alignment.",
@@ -171,6 +206,7 @@ export const nekoCopy = {
     line1: "An independent creative sandbox.",
     line2: "Building real things, at a human pace.",
     micro: "Invite-only. By alignment.",
+    mission: "Proceeds support mental health care.",
   },
 
   // One-line variations for rotating

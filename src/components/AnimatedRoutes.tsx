@@ -11,7 +11,6 @@ import NotFound from "@/pages/NotFound";
 const Sandbox = lazyWithRetry(() => import("@/pages/Sandbox"));
 const Fields = lazyWithRetry(() => import("@/pages/Fields"));
 const Contact = lazyWithRetry(() => import("@/pages/Contact"));
-const About = lazyWithRetry(() => import("@/pages/About"));
 const Invite = lazyWithRetry(() => import("@/pages/Invite"));
 const Notes = lazyWithRetry(() => import("@/pages/Notes"));
 
@@ -37,26 +36,26 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
     <LazyBoundary>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Core pages */}
+          {/* Core pages - NÈKO Sandbox */}
           <Route path="/" element={<Index />} />
           <Route path="/sandbox" element={<Sandbox />} />
           <Route path="/fields" element={<Fields />} />
           <Route path="/invite" element={<Invite />} />
-          <Route path="/notes" element={<Notes />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/notes" element={<Notes />} />
           
           {/* Legal */}
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/terms" element={<Terms />} />
           
-          {/* Legacy redirects */}
+          {/* Legacy redirects - all point to core pages */}
           <Route path="/services" element={<Navigate to="/fields" replace />} />
           <Route path="/pricing" element={<Navigate to="/invite" replace />} />
           <Route path="/get-started" element={<Navigate to="/contact" replace />} />
           <Route path="/personal-brand" element={<Navigate to="/sandbox" replace />} />
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/signup" element={<Navigate to="/contact" replace />} />
+          <Route path="/about" element={<Navigate to="/" replace />} />
           <Route path="/app/*" element={<Navigate to="/" replace />} />
           <Route path="/admin/*" element={<Navigate to="/" replace />} />
           
