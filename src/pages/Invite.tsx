@@ -84,7 +84,7 @@ export default function Invite() {
       <EccentricNavbar />
 
       {/* HERO — Deep Forest Green, cinematic */}
-      <section className="relative pt-36 sm:pt-48 pb-32 sm:pb-44 overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}>
+      <section className="relative pt-36 sm:pt-48 pb-32 sm:pb-44 overflow-hidden noise-texture" style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}>
         {/* Animated gradient orbs */}
         <motion.div
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
@@ -379,7 +379,7 @@ export default function Invite() {
       </section>
 
       {/* NONPROFIT / DONATION — Deep forest, emotional */}
-      <section className="py-28 sm:py-40 relative overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(135 22% 14%) 0%, hsl(135 25% 10%) 50%, hsl(140 28% 6%) 100%)" }}>
+      <section className="py-28 sm:py-40 relative overflow-hidden noise-texture" style={{ background: "linear-gradient(180deg, hsl(135 22% 14%) 0%, hsl(135 25% 10%) 50%, hsl(140 28% 6%) 100%)" }}>
         {/* Ambient glow */}
         <motion.div
           className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"

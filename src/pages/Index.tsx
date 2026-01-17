@@ -37,7 +37,7 @@ export default function Index() {
           HERO — Forest Green, signature entry
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}
       >
         {/* Subtle radial glow - orange accent */}

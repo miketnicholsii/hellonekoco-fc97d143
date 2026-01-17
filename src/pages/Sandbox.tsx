@@ -33,7 +33,7 @@ export default function Sandbox() {
 
       {/* Hero - Forest Green, cinematic */}
       <section 
-        className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}
       >
         {/* Ambient glow */}

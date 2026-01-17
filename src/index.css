@@ -377,6 +377,50 @@
     pointer-events: none;
   }
 
+  /* Rich noise overlay for dark sections - adds depth and texture */
+  .noise-texture {
+    position: relative;
+  }
+
+  .noise-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+
+  .noise-texture > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Subtle grain effect for dark forest sections */
+  .forest-grain {
+    position: relative;
+  }
+
+  .forest-grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, transparent 0%, hsl(135 25% 8% / 0.15) 100%);
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: soft-light;
+  }
+
+  .forest-grain > * {
+    position: relative;
+    z-index: 2;
+  }
+
   /* NEKO Title Styling - Premium typography */
   .neko-title {
     letter-spacing: -0.03em;

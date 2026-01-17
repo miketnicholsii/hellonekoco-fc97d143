@@ -96,7 +96,7 @@ export default function Contact() {
 
       {/* Hero - Forest Green */}
       <section 
-        className="pt-36 sm:pt-44 pb-20 sm:pb-24 relative overflow-hidden"
+        className="pt-36 sm:pt-44 pb-20 sm:pb-24 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 100%)" }}
       >
         {/* Ambient glow */}
