@@ -5,13 +5,13 @@ import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 const footerLinks = {
   platform: [
-    { href: "/fields", label: "Fields" },
-    { href: "/sandbox", label: "The Sandbox" },
-    { href: "/contact", label: "Say Hello" },
+    { href: "/services", label: "Services" },
+    { href: "/personal-brand", label: "Personal Brand" },
+    { href: "/pricing", label: "Pricing" },
   ],
   company: [
-    { href: "/sandbox", label: "About" },
-    { href: "/login", label: "Member Login" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ],
   support: [
     { href: "mailto:support@helloneko.co", label: "Report a Problem", external: true },
@@ -39,10 +39,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               </span>
             </Link>
             <p className="text-primary-foreground/60 text-xs sm:text-sm leading-relaxed max-w-sm mb-4 sm:mb-6">
-              An independent creative sandbox. Building real things, at a human pace.
-            </p>
-            <p className="text-primary-foreground/40 text-[10px] sm:text-xs leading-relaxed max-w-sm">
-              Invite only. By alignment.
+              Your guided operating system for building businesses and personal brands — from idea to scale.
             </p>
           </div>
 

@@ -19,11 +19,8 @@ export interface SectionDefinition {
  */
 export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
   { id: "hero", label: "Home", isNavItem: true },
-  { id: "what-lives-here", label: "Work", isNavItem: false, parentNavId: "hero" },
-  { id: "fields", label: "Fields", isNavItem: true },
-  { id: "how-work-happens", label: "Process", isNavItem: false, parentNavId: "fields" },
-  { id: "legitimacy", label: "Real", isNavItem: false, parentNavId: "fields" },
-  { id: "invitation", label: "Contact", isNavItem: true },
+  { id: "what-is-neko", label: "About", isNavItem: false, parentNavId: "hero" },
+  { id: "features", label: "Features", isNavItem: true },
 ];
 
 /**
@@ -31,9 +28,10 @@ export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
  */
 export const NAV_LINKS = [
   { href: "/", label: "Home", isAnchor: false },
-  { href: "/fields", label: "Fields", isAnchor: false },
-  { href: "/sandbox", label: "Sandbox", isAnchor: false },
-  { href: "/contact", label: "Say Hello", isAnchor: false },
+  { href: "/about", label: "About", isAnchor: false },
+  { href: "/services", label: "Services", isAnchor: false },
+  { href: "/personal-brand", label: "Personal Brand", isAnchor: false },
+  { href: "/pricing", label: "Pricing", isAnchor: false },
 ] as const;
 
 export type NavHref = (typeof NAV_LINKS)[number]["href"];
