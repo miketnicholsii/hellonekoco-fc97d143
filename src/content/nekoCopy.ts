@@ -8,12 +8,22 @@ export const nekoCopy = {
     subdescriptor:
       "A place where I build real websites, real strategies, and real digital systems — sometimes collaboratively, sometimes quietly.",
     boundary: "Not a service. Not a product. Access happens by alignment.",
+    tagline: "Invite only. By alignment.",
   },
 
   ctas: {
     primary: "Say hello",
     secondary: "Read the sandbox note",
-    contact: "Say hello",
+    startConversation: "Start a conversation",
+    seeFields: "See the fields",
+    workWithMe: "Work with me",
+  },
+
+  // Availability status options
+  availability: {
+    open: "Open to aligned collaborations",
+    building: "Heads down building",
+    current: "open" as "open" | "building",
   },
 
   sections: {
@@ -30,6 +40,7 @@ export const nekoCopy = {
     fields: {
       label: "Fields",
       title: "Things that exist here.",
+      intro: "These aren't packages. They're the kinds of work that show up in the sandbox. Sometimes they become collaborations. Sometimes they remain private. Either way, they're real.",
       cards: [
         {
           title: "Digital Structures",
@@ -90,6 +101,48 @@ export const nekoCopy = {
     footnote: "Some things are shared. Some aren't.",
   },
 
+  invite: {
+    title: "Work With Me",
+    intro: [
+      "NÈKO isn't always taking on projects.",
+      "When I do, it's through conversation — not a checkout.",
+      "If you're building something real and looking for a collaborator who cares about craft, reach out.",
+    ],
+    rateSignal: {
+      title: "Rate Signal",
+      description: "A baseline, not a price tag.",
+      hourlyRate: "$150",
+      rateUnit: "/ hour",
+      context: [
+        "This isn't a service menu. It's a signal — a baseline that respects the work.",
+        "Actual engagements are shaped by scope, complexity, and alignment.",
+        "Some work happens at this rate. Some doesn't happen at all. Both are fine.",
+      ],
+    },
+    whatWorks: {
+      title: "What tends to work",
+      items: [
+        "You have a clear vision but need a skilled collaborator to build it",
+        "You value craft over speed, quality over quantity",
+        "You're okay with honest feedback and real timelines",
+        "Budget and timing are flexible enough for good work",
+      ],
+    },
+    whatDoesnt: {
+      title: "What doesn't",
+      items: [
+        "Rush jobs or \"I need it yesterday\" requests",
+        "Spec work or unpaid \"tests\"",
+        "Projects without clear decision-makers",
+        "Work that conflicts with values",
+      ],
+    },
+    cta: {
+      title: "Interested?",
+      body: "Start a conversation. If it's aligned, we'll figure out the rest.",
+    },
+  },
+
   contact: {
     heading: "A conversation, not a checkout.",
     body: [
@@ -99,6 +152,24 @@ export const nekoCopy = {
     ],
     email: "neko@helloneko.co",
     footnote: "NÈKO isn't always taking on work. That's intentional.",
+    form: {
+      title: "Start the conversation",
+      fields: {
+        name: { label: "Your name", placeholder: "What should I call you?" },
+        building: { label: "What are you building?", placeholder: "Tell me about your project or idea..." },
+        timeline: { label: "Timeline", placeholder: "When are you hoping to start?" },
+        budget: { label: "Budget range (optional)", placeholder: "If you have a range in mind" },
+        links: { label: "Links (optional)", placeholder: "Portfolio, existing site, references..." },
+      },
+      submit: "Send",
+      success: "Message sent. I'll be in touch if we're aligned.",
+    },
+  },
+
+  notes: {
+    title: "Notes",
+    coming: "Coming soon.",
+    body: "A place for thoughts, process, and occasional artifacts. Not ready yet.",
   },
 
   footer: {
