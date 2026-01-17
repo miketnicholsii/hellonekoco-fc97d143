@@ -26,7 +26,6 @@ import { WidgetGridSkeleton } from "./DashboardSkeletons";
 
 // Widget components
 import DashboardStats from "./DashboardStats";
-import FullProductSuite from "./FullProductSuite";
 import ActivityFeed from "./ActivityFeed";
 import StreakTracker from "./StreakTracker";
 import AchievementsPreview from "./AchievementsPreview";
@@ -49,7 +48,6 @@ import { Label } from "@/components/ui/label";
 // Widget name mapping for error boundaries
 const WIDGET_NAMES: Record<string, string> = {
   "stats": "Dashboard Stats",
-  "product-suite": "Product Suite",
   "activity-feed": "Activity Feed",
   "streak-tracker": "Streak Tracker",
   "achievements": "Achievements",
@@ -67,8 +65,6 @@ function renderWidget(widgetId: string) {
     switch (widgetId) {
       case "stats":
         return <DashboardStats />;
-      case "product-suite":
-        return <FullProductSuite />;
       case "activity-feed":
         return <ActivityFeed />;
       case "streak-tracker":
