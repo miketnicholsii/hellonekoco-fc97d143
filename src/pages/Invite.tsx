@@ -1,9 +1,20 @@
 // src/pages/Invite.tsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   ArrowRight, 
   Check, 
@@ -18,35 +29,40 @@ import {
   Shield,
   Coffee,
   TreePine,
-  Flame
+  Flame,
+  Send,
+  CheckCircle
 } from "lucide-react";
+import { nekoConfig } from "@/lib/neko-config";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const proposalSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Valid email required").max(255),
+  whatBuilding: z.string().trim().min(10, "Please describe what you're building").max(2000),
+  whyNow: z.string().trim().min(10, "Please explain why now").max(1000),
+  budget: z.string().min(1, "Please select a budget range"),
+  justification: z.string().trim().min(10, "Please justify the budget").max(1000),
+  timeline: z.string().trim().max(200).optional(),
+  links: z.string().trim().max(500).optional(),
+  donationIntent: z.boolean().optional(),
+});
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
 };
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
-  },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
-  },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
 const floatVariants: Variants = {
@@ -59,8 +75,7 @@ const floatVariants: Variants = {
 
 const pulseVariants: Variants = {
   animate: {
-    scale: [1, 1.05, 1],
-    opacity: [0.8, 1, 0.8],
+    scale: [1, 1.02, 1],
     transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
   },
 };
@@ -69,7 +84,7 @@ const glowVariants: Variants = {
   animate: {
     boxShadow: [
       "0 0 30px hsl(16 100% 42% / 0.2)",
-      "0 0 60px hsl(16 100% 42% / 0.4)",
+      "0 0 60px hsl(16 100% 42% / 0.35)",
       "0 0 30px hsl(16 100% 42% / 0.2)",
     ],
     transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
@@ -78,29 +93,129 @@ const glowVariants: Variants = {
 
 export default function Invite() {
   const prefersReducedMotion = useReducedMotion();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    whatBuilding: "",
+    whyNow: "",
+    budget: "",
+    justification: "",
+    timeline: "",
+    links: "",
+    donationIntent: false,
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: type === "checkbox" ? checked : value 
+    }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, budget: value }));
+    if (errors.budget) setErrors((prev) => ({ ...prev, budget: "" }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const result = proposalSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.functions.invoke("contact-submit", {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          message: `
+PROPOSAL SUBMISSION
+
+What are you building:
+${formData.whatBuilding}
+
+Why now:
+${formData.whyNow}
+
+Budget: ${nekoConfig.budgetOptions.find(b => b.value === formData.budget)?.label || formData.budget}
+
+Justification:
+${formData.justification}
+
+Timeline: ${formData.timeline || "Not specified"}
+
+Links: ${formData.links || "None provided"}
+
+Donation Intent: ${formData.donationIntent ? "Yes - wants payment to support mental health institutions" : "No"}
+          `.trim(),
+          goal: "proposal",
+          stage: "invite-form",
+        },
+      });
+
+      if (error) throw error;
+      setIsSubmitted(true);
+      toast.success("Proposal received. If it aligns, you'll hear back.");
+    } catch {
+      // Fallback to mailto
+      const subject = encodeURIComponent("Proposal from " + formData.name);
+      const body = encodeURIComponent(`
+Name: ${formData.name}
+Email: ${formData.email}
+
+What are you building:
+${formData.whatBuilding}
+
+Why now:
+${formData.whyNow}
+
+Budget: ${nekoConfig.budgetOptions.find(b => b.value === formData.budget)?.label || formData.budget}
+
+Justification:
+${formData.justification}
+
+Timeline: ${formData.timeline || "Not specified"}
+
+Links: ${formData.links || "None provided"}
+
+Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
+      `.trim());
+      
+      window.location.href = `mailto:${nekoConfig.email}?subject=${subject}&body=${body}`;
+      toast.info("Opening email client as fallback...");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-background overflow-hidden">
       <EccentricNavbar />
 
-      {/* HERO — Deep Forest Green, cinematic */}
-      <section className="relative pt-36 sm:pt-48 pb-32 sm:pb-44 overflow-hidden noise-texture" style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}>
-        {/* Animated gradient orbs */}
+      {/* HERO — Deep Forest Green */}
+      <section 
+        className="relative pt-36 sm:pt-48 pb-32 sm:pb-44 overflow-hidden noise-texture" 
+        style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 50%, hsl(140 30% 6%) 100%)" }}
+      >
         <motion.div
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse 80% 60% at 70% 20%, hsl(16 100% 42% / 0.08) 0%, transparent 60%)",
-          }}
-          aria-hidden="true"
-        />
-        <motion.div
-          className="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, hsl(35 15% 69% / 0.06) 0%, transparent 70%)",
-          }}
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden="true"
+          style={{ background: "radial-gradient(ellipse 80% 60% at 70% 20%, hsl(16 100% 42% / 0.08) 0%, transparent 60%)" }}
         />
         
         {/* Floating icons */}
@@ -127,7 +242,6 @@ export default function Invite() {
             initial="hidden"
             animate="visible"
           >
-            {/* Badge */}
             <motion.div
               variants={itemVariants}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-10"
@@ -142,50 +256,29 @@ export default function Invite() {
 
             <motion.h1
               variants={itemVariants}
-              className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8"
-              style={{ textShadow: "0 4px 60px hsl(0 0% 0% / 0.5)" }}
+              className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-8"
             >
               Work With Me
             </motion.h1>
 
             <motion.div variants={itemVariants} className="space-y-6 max-w-2xl mx-auto">
-              <p className="text-2xl sm:text-3xl text-white/90 leading-relaxed font-light">
+              <p className="text-xl sm:text-2xl text-white/90 leading-relaxed font-light">
                 Sometimes NÈKO becomes <span className="text-secondary font-medium">collaboration</span>.
               </p>
-              <p className="text-lg sm:text-xl text-white/60 leading-relaxed">
+              <p className="text-lg text-white/60 leading-relaxed">
                 When it does, it's because the work fits —<br />
                 not because there's an opening on a calendar.
-              </p>
-              <p className="text-base text-white/40 leading-relaxed mt-10 tracking-wide uppercase font-medium">
-                This is invite-only by design.
               </p>
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-        >
-          <motion.div
-            animate={prefersReducedMotion ? {} : { y: [0, 10, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-7 h-12 rounded-full border-2 border-white/20 flex items-start justify-center p-2"
-          >
-            <motion.div
-              animate={prefersReducedMotion ? {} : { y: [0, 14, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-2 h-2 rounded-full bg-secondary"
-            />
-          </motion.div>
-        </motion.div>
       </section>
 
-      {/* HOW I WORK — Warm taupe, earthy */}
-      <section className="py-28 sm:py-40" style={{ background: "linear-gradient(180deg, hsl(35 12% 92%) 0%, hsl(35 15% 88%) 100%)" }}>
+      {/* HOW I WORK — Warm Taupe */}
+      <section 
+        className="py-24 sm:py-32" 
+        style={{ background: "linear-gradient(180deg, hsl(35 12% 92%) 0%, hsl(35 15% 88%) 100%)" }}
+      >
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <motion.div
             className="max-w-5xl mx-auto"
@@ -199,55 +292,30 @@ export default function Invite() {
                 <Target className="w-4 h-4" />
                 How I Work
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary mt-4">
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mt-4">
                 Focused. Honest. Real.
               </h2>
             </motion.div>
 
             <motion.div variants={itemVariants} className="grid md:grid-cols-3 gap-6">
               {[
-                {
-                  icon: Shield,
-                  title: "Clear Scope",
-                  desc: "Calm pace, honest feedback",
-                },
-                {
-                  icon: Zap,
-                  title: "High Craft",
-                  desc: "Real shipping, thoughtful over-delivery",
-                },
-                {
-                  icon: Compass,
-                  title: "True Partnership",
-                  desc: "Not a vendor — a focused collaboration",
-                },
+                { icon: Shield, title: "Clear Scope", desc: "Calm pace, honest feedback, no scope creep." },
+                { icon: Zap, title: "High Craft", desc: "Real shipping, production-grade, thoughtful detail." },
+                { icon: Compass, title: "True Partnership", desc: "Not a vendor — a focused collaboration." },
               ].map((item, i) => (
                 <motion.div
                   key={i}
-                  className="group relative p-8 sm:p-10 rounded-3xl bg-white border border-border/50 shadow-lg hover:shadow-xl transition-all duration-500"
-                  whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
+                  className="group relative p-8 sm:p-10 rounded-2xl bg-white border border-border/50 shadow-lg hover:shadow-xl transition-all duration-500"
+                  whileHover={prefersReducedMotion ? {} : { y: -8 }}
                 >
-                  <motion.div 
-                    className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ 
-                      background: "linear-gradient(135deg, hsl(16 100% 42% / 0.05) 0%, transparent 60%)",
-                    }}
-                  />
                   <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110"
-                    style={{ 
-                      background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 25%) 100%)",
-                    }}
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 25%) 100%)" }}
                   >
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <h3 className="font-display text-xl font-bold text-foreground mb-3">{item.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
                   <div className="absolute bottom-0 left-8 right-8 h-1 rounded-full bg-secondary/20 group-hover:bg-secondary transition-colors duration-500" />
                 </motion.div>
               ))}
@@ -256,10 +324,9 @@ export default function Invite() {
         </div>
       </section>
 
-      {/* RATE SIGNAL — Bold, dynamic, attention-grabbing */}
-      <section className="py-28 sm:py-40 bg-white relative overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "var(--gradient-mesh)" }} />
+      {/* RATE SIGNAL — White with dramatic card */}
+      <section className="py-24 sm:py-32 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-30" style={{ background: "var(--gradient-mesh)" }} />
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
@@ -272,18 +339,15 @@ export default function Invite() {
             <motion.div variants={itemVariants} className="text-center mb-16">
               <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-4">
                 <Clock className="w-4 h-4" />
-                A Note on Money
+                Rate Signal
               </span>
-              <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto">
-                If we work together, I use time as a baseline — not a menu.
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                {nekoConfig.rate.description}
               </p>
             </motion.div>
 
-            {/* The Big Rate Card */}
-            <motion.div
-              variants={cardVariants}
-              className="relative"
-            >
+            {/* Big Rate Card */}
+            <motion.div variants={cardVariants} className="relative">
               <motion.div
                 className="absolute -inset-1 rounded-[2.5rem] opacity-60 blur-xl"
                 style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(16 100% 42%) 100%)" }}
@@ -292,84 +356,56 @@ export default function Invite() {
               />
               
               <div 
-                className="relative p-12 sm:p-16 lg:p-20 rounded-[2rem] overflow-hidden"
+                className="relative p-10 sm:p-14 lg:p-16 rounded-[2rem] overflow-hidden"
                 style={{ background: "linear-gradient(160deg, hsl(135 22% 16%) 0%, hsl(135 28% 12%) 50%, hsl(140 30% 8%) 100%)" }}
               >
-                {/* Floating accent shapes */}
-                <motion.div
-                  className="absolute top-8 right-8 w-32 h-32 rounded-full"
-                  style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.15) 0%, transparent 70%)" }}
-                  animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <motion.div
-                  className="absolute bottom-12 left-12 w-48 h-48 rounded-full"
-                  style={{ background: "radial-gradient(circle, hsl(35 15% 69% / 0.08) 0%, transparent 70%)" }}
-                  animate={prefersReducedMotion ? {} : { scale: [1.1, 1, 1.1], opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                />
-
-                <div className="relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
                   {/* Rate Display */}
                   <div className="text-center lg:text-left">
                     <motion.div
-                      className="inline-flex items-baseline gap-3"
+                      className="inline-flex items-baseline gap-2"
                       variants={prefersReducedMotion ? undefined : pulseVariants}
                       animate="animate"
                     >
                       <span 
-                        className="font-display text-8xl sm:text-9xl lg:text-[10rem] font-bold tracking-tight"
+                        className="font-display text-7xl sm:text-8xl lg:text-9xl font-bold tracking-tight"
                         style={{ 
                           background: "linear-gradient(135deg, hsl(16 100% 50%) 0%, hsl(16 100% 42%) 50%, hsl(25 90% 45%) 100%)",
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
-                          textShadow: "0 0 80px hsl(16 100% 42% / 0.4)",
                         }}
                       >
-                        $375
+                        {nekoConfig.rate.formatted}
                       </span>
                     </motion.div>
                     <div className="flex items-center justify-center lg:justify-start gap-2 mt-4">
-                      <span className="text-2xl sm:text-3xl text-white/60 font-light">/ hour</span>
+                      <span className="text-xl sm:text-2xl text-white/60 font-light">{nekoConfig.rate.unit}</span>
                       <span className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide text-secondary bg-secondary/20 border border-secondary/30">
                         BASELINE
                       </span>
                     </div>
-                    <p className="text-white/40 text-sm mt-6 max-w-xs mx-auto lg:mx-0">
-                      Used to set expectations, not to sell blocks of time.
-                    </p>
                   </div>
 
                   {/* Options */}
-                  <div className="space-y-5">
-                    <p className="text-white/70 text-lg mb-6">
-                      For small explorations or previews:
-                    </p>
+                  <div className="space-y-4">
+                    <p className="text-white/70 text-lg mb-6">Other ways to engage:</p>
                     {[
-                      { icon: MessageCircle, text: "A short, capped session", desc: "Limited scope, focused outcome" },
-                      { icon: Gift, text: "Name-your-budget contribution", desc: "Flexible entry point" },
+                      { icon: MessageCircle, text: "Preview Session", desc: nekoConfig.preview.formatted + " — explore fit" },
+                      { icon: Gift, text: "Name your budget", desc: "Flexible, justified contribution" },
                     ].map((item, i) => (
-                      <motion.div
+                      <div
                         key={i}
-                        className="group flex items-start gap-4 p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-secondary/30 transition-all duration-300"
-                        whileHover={prefersReducedMotion ? {} : { x: 8 }}
+                        className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5"
                       >
-                        <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-secondary/30 transition-colors">
-                          <item.icon className="w-5 h-5 text-secondary" />
+                        <div className="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                          <item.icon className="w-4 h-4 text-secondary" />
                         </div>
                         <div>
-                          <span className="text-white font-semibold text-lg block">{item.text}</span>
+                          <span className="text-white font-medium block">{item.text}</span>
                           <span className="text-white/40 text-sm">{item.desc}</span>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
-                    
-                    <div className="pt-6 border-t border-white/10">
-                      <p className="text-white/50 text-sm leading-relaxed">
-                        If it aligns, we go deeper.<br />
-                        <span className="text-white/30">If not, that's okay.</span>
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -378,96 +414,251 @@ export default function Invite() {
         </div>
       </section>
 
-      {/* NONPROFIT / DONATION — Deep forest, emotional */}
-      <section className="py-28 sm:py-40 relative overflow-hidden noise-texture" style={{ background: "linear-gradient(180deg, hsl(135 22% 14%) 0%, hsl(135 25% 10%) 50%, hsl(140 28% 6%) 100%)" }}>
-        {/* Ambient glow */}
-        <motion.div
-          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.06) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+      {/* PROPOSAL FORM — Warm Taupe */}
+      <section 
+        className="py-24 sm:py-32"
+        style={{ background: "linear-gradient(180deg, hsl(35 12% 94%) 0%, hsl(35 15% 90%) 100%)" }}
+      >
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
           <motion.div
-            className="max-w-5xl mx-auto"
+            className="max-w-3xl mx-auto"
             variants={prefersReducedMotion ? undefined : containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true }}
           >
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Left: Message */}
-              <motion.div variants={itemVariants}>
-                <motion.div
-                  className="inline-flex items-center gap-3 mb-8"
-                  animate={prefersReducedMotion ? {} : { scale: [1, 1.05, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            <motion.div variants={itemVariants} className="text-center mb-12">
+              <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase text-secondary mb-4">
+                Submit a Proposal
+              </span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4">
+                Tell me what you're building
+              </h2>
+              <p className="text-muted-foreground">
+                I read everything. I respond when it aligns.
+              </p>
+            </motion.div>
+
+            {isSubmitted ? (
+              <motion.div 
+                variants={itemVariants} 
+                className="p-12 rounded-2xl bg-white border border-border text-center shadow-lg"
+              >
+                <div 
+                  className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                  style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 25%) 100%)" }}
                 >
-                  <Heart className="w-8 h-8 text-secondary" fill="currentColor" />
-                  <span className="text-xs font-bold tracking-[0.3em] uppercase text-secondary">
-                    Why Payment Matters
-                  </span>
-                </motion.div>
-
-                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-                  NÈKO operates as a <span className="text-secondary">nonprofit</span>.
-                </h2>
-
-                <p className="text-xl sm:text-2xl text-white/70 leading-relaxed mb-8">
-                  Any money that comes in helps fund <span className="text-white">mental health institutions</span> and support people who need it.
-                </p>
-
-                <div className="pt-8 border-t border-white/10">
-                  <p className="text-white/40 leading-relaxed text-lg">
-                    This work is a passion.<br />
-                    <span className="text-white/60">It's also how I help others.</span>
-                  </p>
+                  <CheckCircle className="w-10 h-10 text-white" />
                 </div>
+                <h3 className="font-display text-2xl font-bold text-primary mb-3">Received</h3>
+                <p className="text-muted-foreground text-lg">If it aligns, you'll hear back.</p>
               </motion.div>
+            ) : (
+              <motion.form 
+                variants={itemVariants}
+                onSubmit={handleSubmit} 
+                className="p-8 sm:p-10 rounded-2xl bg-white border border-border shadow-lg space-y-6"
+              >
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Name *</Label>
+                    <Input 
+                      id="name" 
+                      name="name" 
+                      value={formData.name} 
+                      onChange={handleChange}
+                      placeholder="Your name"
+                      className={`bg-muted/30 border-border ${errors.name ? "border-destructive" : ""}`}
+                    />
+                    {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email"
+                      value={formData.email} 
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      className={`bg-muted/30 border-border ${errors.email ? "border-destructive" : ""}`}
+                    />
+                    {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+                  </div>
+                </div>
 
-              {/* Right: Ways to contribute */}
-              <motion.div variants={cardVariants} className="space-y-4">
-                <p className="text-white/60 text-lg mb-6 font-medium">You can:</p>
-                {[
-                  { icon: Coffee, text: "Contribute toward a collaboration", highlight: false },
-                  { icon: Sparkles, text: "Pay for a small preview or review", highlight: false },
-                  { icon: Heart, text: "Simply donate to support the mission", highlight: true },
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    className={`group flex items-center gap-5 p-6 rounded-2xl border transition-all duration-300 ${
-                      item.highlight 
-                        ? "bg-secondary/10 border-secondary/40 hover:bg-secondary/15" 
-                        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-                    }`}
-                    whileHover={prefersReducedMotion ? {} : { x: 8, scale: 1.02 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                      item.highlight 
-                        ? "bg-secondary text-white" 
-                        : "bg-white/10 text-secondary group-hover:bg-secondary/20"
-                    }`}>
-                      <item.icon className="w-6 h-6" />
-                    </div>
-                    <span className={`text-lg font-medium ${item.highlight ? "text-white" : "text-white/80"}`}>
-                      {item.text}
-                    </span>
-                    {item.highlight && (
-                      <ArrowRight className="w-5 h-5 text-secondary ml-auto group-hover:translate-x-1 transition-transform" />
-                    )}
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="whatBuilding">What do you need built? *</Label>
+                  <Textarea 
+                    id="whatBuilding" 
+                    name="whatBuilding" 
+                    value={formData.whatBuilding} 
+                    onChange={handleChange}
+                    placeholder="Describe the project or idea..."
+                    rows={4}
+                    className={`bg-muted/30 border-border ${errors.whatBuilding ? "border-destructive" : ""}`}
+                  />
+                  {errors.whatBuilding && <p className="text-xs text-destructive">{errors.whatBuilding}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="whyNow">Why now? *</Label>
+                  <Textarea 
+                    id="whyNow" 
+                    name="whyNow" 
+                    value={formData.whyNow} 
+                    onChange={handleChange}
+                    placeholder="What's driving this project?"
+                    rows={3}
+                    className={`bg-muted/30 border-border ${errors.whyNow ? "border-destructive" : ""}`}
+                  />
+                  {errors.whyNow && <p className="text-xs text-destructive">{errors.whyNow}</p>}
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label>Budget range *</Label>
+                    <Select value={formData.budget} onValueChange={handleSelectChange}>
+                      <SelectTrigger className={`bg-muted/30 border-border ${errors.budget ? "border-destructive" : ""}`}>
+                        <SelectValue placeholder="Select a range" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {nekoConfig.budgetOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.budget && <p className="text-xs text-destructive">{errors.budget}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="timeline">Timeline (optional)</Label>
+                    <Input 
+                      id="timeline" 
+                      name="timeline" 
+                      value={formData.timeline} 
+                      onChange={handleChange}
+                      placeholder="When hoping to start?"
+                      className="bg-muted/30 border-border"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="justification">Justify the budget + expected outcome *</Label>
+                  <Textarea 
+                    id="justification" 
+                    name="justification" 
+                    value={formData.justification} 
+                    onChange={handleChange}
+                    placeholder="What do you expect to achieve with this investment?"
+                    rows={3}
+                    className={`bg-muted/30 border-border ${errors.justification ? "border-destructive" : ""}`}
+                  />
+                  {errors.justification && <p className="text-xs text-destructive">{errors.justification}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="links">Links / references (optional)</Label>
+                  <Input 
+                    id="links" 
+                    name="links" 
+                    value={formData.links} 
+                    onChange={handleChange}
+                    placeholder="Portfolio, existing site, inspiration..."
+                    className="bg-muted/30 border-border"
+                  />
+                </div>
+
+                {/* Donation intent toggle */}
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary/5 border border-secondary/20">
+                  <input
+                    type="checkbox"
+                    id="donationIntent"
+                    name="donationIntent"
+                    checked={formData.donationIntent}
+                    onChange={handleChange}
+                    className="mt-1 accent-secondary"
+                  />
+                  <label htmlFor="donationIntent" className="text-sm text-muted-foreground cursor-pointer">
+                    <span className="font-medium text-foreground">I want my payment to support mental health institutions.</span>
+                    <br />
+                    <span className="text-xs">NÈKO is for-profit. Proceeds support mental health care.</span>
+                  </label>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  disabled={isSubmitting}
+                  className="w-full rounded-full py-6 font-semibold border-0"
+                  style={{ background: "linear-gradient(135deg, hsl(16 100% 42%) 0%, hsl(16 90% 35%) 100%)" }}
+                >
+                  {isSubmitting ? "Sending..." : <><Send className="w-4 h-4 mr-2" />Submit Proposal</>}
+                </Button>
+              </motion.form>
+            )}
           </motion.div>
         </div>
       </section>
 
-      {/* FINAL CTA — White, powerful, clean */}
-      <section className="py-32 sm:py-48 bg-white relative overflow-hidden">
-        {/* Subtle pattern */}
+      {/* DONATION NOTE — Forest Green */}
+      <section 
+        className="py-24 sm:py-32 relative overflow-hidden noise-texture" 
+        style={{ background: "linear-gradient(180deg, hsl(135 22% 14%) 0%, hsl(135 25% 10%) 100%)" }}
+      >
+        <motion.div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.06) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-12 items-center"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div variants={itemVariants}>
+              <div className="flex items-center gap-3 mb-6">
+                <Heart className="w-6 h-6 text-secondary" fill="currentColor" />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-secondary">
+                  Why Payment Matters
+                </span>
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-6">
+                {nekoConfig.brand.missionStatement}
+              </h2>
+              <p className="text-lg text-white/60 leading-relaxed">
+                When you pay for work that aligns, you're also funding care that reaches people who need it.
+              </p>
+            </motion.div>
+
+            <motion.div variants={cardVariants}>
+              <a
+                href={nekoConfig.external.donate}
+                className="group flex items-center gap-5 p-6 rounded-2xl bg-secondary/10 border border-secondary/30 hover:bg-secondary/15 transition-colors"
+              >
+                <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <span className="text-white font-semibold text-lg block">Donate directly</span>
+                  <span className="text-white/50 text-sm">Support mental health institutions</span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-secondary group-hover:translate-x-1 transition-transform" />
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FINAL CTA — White */}
+      <section className="py-24 sm:py-32 bg-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-30" style={{ background: "var(--gradient-mesh)" }} />
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
@@ -478,48 +669,26 @@ export default function Invite() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2
-              variants={itemVariants}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-8 leading-tight"
-            >
-              If something here <br />
-              <span className="text-secondary">resonates</span>…
+            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+              If something here <span className="text-secondary">resonates</span>…
             </motion.h2>
-
-            <motion.p
-              variants={itemVariants}
-              className="text-xl text-muted-foreground mb-14"
-            >
+            <motion.p variants={itemVariants} className="text-xl text-muted-foreground mb-10">
               Reach out. Not to buy — but to talk.
             </motion.p>
-
             <motion.div variants={itemVariants}>
               <Button
                 asChild
                 size="lg"
-                className="group relative rounded-full px-14 py-8 font-semibold text-xl overflow-hidden transition-all duration-500 border-0"
-                style={{ 
-                  background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 22%) 100%)",
-                }}
+                className="group rounded-full px-12 py-7 font-semibold text-lg border-0"
+                style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 22%) 100%)" }}
               >
                 <Link to="/contact" className="flex items-center gap-3">
-                  <span className="relative z-10">Start a conversation</span>
-                  <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-2 transition-transform duration-300" />
-                  <motion.div
-                    className="absolute inset-0"
-                    style={{ background: "linear-gradient(135deg, hsl(16 100% 42%) 0%, hsl(16 90% 35%) 100%)" }}
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: 0 }}
-                    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                  />
+                  Start a conversation
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </motion.div>
-
-            <motion.p
-              variants={itemVariants}
-              className="text-sm text-muted-foreground/60 mt-10 tracking-wide"
-            >
+            <motion.p variants={itemVariants} className="text-sm text-muted-foreground/60 mt-8">
               No promises. No pressure. <span className="text-secondary">Just alignment.</span>
             </motion.p>
           </motion.div>

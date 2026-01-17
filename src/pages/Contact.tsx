@@ -7,18 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { nekoCopy } from "@/content/nekoCopy";
-import { Mail, Send, CheckCircle, MessageCircle } from "lucide-react";
+import { nekoConfig } from "@/lib/neko-config";
+import { Mail, Send, CheckCircle, MessageCircle, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
-  building: z.string().trim().min(1, "Please tell me what you're building").max(2000),
-  success: z.string().trim().max(1000).optional(),
-  timeline: z.string().trim().max(200).optional(),
-  budget: z.string().trim().max(200).optional(),
+  email: z.string().trim().email("Valid email required").max(255),
+  message: z.string().trim().min(10, "Please include a message").max(2000),
   links: z.string().trim().max(500).optional(),
 });
 
@@ -33,16 +31,13 @@ const itemVariants: Variants = {
 };
 
 export default function Contact() {
-  const c = nekoCopy;
   const prefersReducedMotion = useReducedMotion();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    building: "",
-    success: "",
-    timeline: "",
-    budget: "",
+    email: "",
+    message: "",
     links: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -73,18 +68,31 @@ export default function Contact() {
       const { error } = await supabase.functions.invoke("contact-submit", {
         body: {
           name: formData.name,
-          email: "via-form@helloneko.co",
-          message: `What are you building: ${formData.building}\n\nWhat does success look like: ${formData.success || "Not specified"}\n\nTimeline: ${formData.timeline || "Not specified"}\n\nBudget: ${formData.budget || "Not specified"}\n\nLinks: ${formData.links || "None provided"}`,
-          goal: "alignment-inquiry",
+          email: formData.email,
+          message: `${formData.message}${formData.links ? `\n\nLinks: ${formData.links}` : ""}`,
+          goal: "contact",
           stage: "contact-form",
         },
       });
 
       if (error) throw error;
       setIsSubmitted(true);
-      toast.success(c.contact.form.success);
+      toast.success("Message sent. I'll be in touch if we're aligned.");
     } catch {
-      toast.error("Something went wrong. Please try emailing directly.");
+      // Fallback to mailto
+      const subject = encodeURIComponent("Hello from " + formData.name);
+      const body = encodeURIComponent(`
+Name: ${formData.name}
+Email: ${formData.email}
+
+Message:
+${formData.message}
+
+${formData.links ? `Links: ${formData.links}` : ""}
+      `.trim());
+      
+      window.location.href = `mailto:${nekoConfig.email}?subject=${subject}&body=${body}`;
+      toast.info("Opening email client as fallback...");
     } finally {
       setIsSubmitting(false);
     }
@@ -99,7 +107,6 @@ export default function Contact() {
         className="pt-36 sm:pt-44 pb-20 sm:pb-24 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, hsl(135 25% 14%) 0%, hsl(135 28% 10%) 100%)" }}
       >
-        {/* Ambient glow */}
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, hsl(16 100% 42% / 0.06) 0%, transparent 60%)" }}
@@ -112,7 +119,6 @@ export default function Contact() {
             initial="hidden"
             animate="visible"
           >
-            {/* Badge */}
             <motion.div
               variants={itemVariants}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
@@ -142,7 +148,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Form Section - Warm taupe */}
+      {/* Form Section - Warm Taupe */}
       <section 
         className="py-20 sm:py-28"
         style={{ background: "linear-gradient(180deg, hsl(35 12% 94%) 0%, hsl(35 15% 90%) 100%)" }}
@@ -162,11 +168,11 @@ export default function Contact() {
 
               <motion.a
                 variants={itemVariants}
-                href={`mailto:${c.contact.email}?subject=Hello%2C%20N%C3%88KO`}
+                href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`}
                 className="group inline-flex items-center gap-4 px-6 py-5 rounded-2xl bg-white border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300"
               >
                 <span 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                   style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(135 28% 25%) 100%)" }}
                 >
                   <Mail className="w-5 h-5 text-white" />
@@ -174,14 +180,32 @@ export default function Contact() {
                 <span className="text-left">
                   <span className="block text-xs text-muted-foreground mb-0.5">Email</span>
                   <span className="block text-lg font-display font-bold text-primary group-hover:text-secondary transition-colors">
-                    {c.contact.email}
+                    {nekoConfig.email}
                   </span>
                 </span>
               </motion.a>
 
-              <motion.p variants={itemVariants} className="text-sm text-muted-foreground/60 mt-8">
+              <motion.p variants={itemVariants} className="text-sm text-muted-foreground/60 mt-8 mb-10">
                 I read everything. I respond when it aligns.
               </motion.p>
+
+              {/* Work with me CTA */}
+              <motion.div variants={itemVariants} className="p-6 rounded-2xl bg-white border border-border">
+                <h3 className="font-display font-bold text-primary mb-2">Have a bigger project?</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Submit a full proposal with budget and timeline.
+                </p>
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="rounded-full group"
+                >
+                  <a href="/invite" className="flex items-center gap-2">
+                    Submit a proposal
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </Button>
+              </motion.div>
             </motion.div>
 
             {/* Right: Form */}
@@ -200,88 +224,65 @@ export default function Contact() {
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-display text-2xl font-bold text-primary mb-3">Message sent</h3>
-                  <p className="text-muted-foreground">{c.contact.form.success}</p>
+                  <p className="text-muted-foreground">I'll be in touch if we're aligned.</p>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-white border border-border shadow-lg space-y-6">
                   <motion.h3 variants={itemVariants} className="font-display text-xl font-bold text-primary mb-2">
-                    Or use this form
+                    Quick message
                   </motion.h3>
-
-                  <motion.div variants={itemVariants} className="space-y-2">
-                    <Label htmlFor="name" className="text-foreground/80">Name</Label>
-                    <Input 
-                      id="name" 
-                      name="name" 
-                      value={formData.name} 
-                      onChange={handleChange} 
-                      placeholder="Your name" 
-                      className={`bg-muted/30 border-border focus:border-secondary ${errors.name ? "border-destructive" : ""}`} 
-                    />
-                    {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
-                  </motion.div>
-
-                  <motion.div variants={itemVariants} className="space-y-2">
-                    <Label htmlFor="building" className="text-foreground/80">What are you building?</Label>
-                    <Textarea 
-                      id="building" 
-                      name="building" 
-                      value={formData.building} 
-                      onChange={handleChange} 
-                      placeholder="Tell me about your project or idea..." 
-                      rows={3} 
-                      className={`bg-muted/30 border-border focus:border-secondary ${errors.building ? "border-destructive" : ""}`} 
-                    />
-                    {errors.building && <p className="text-xs text-destructive">{errors.building}</p>}
-                  </motion.div>
-
-                  <motion.div variants={itemVariants} className="space-y-2">
-                    <Label htmlFor="success" className="text-foreground/80">What does success look like?</Label>
-                    <Textarea 
-                      id="success" 
-                      name="success" 
-                      value={formData.success} 
-                      onChange={handleChange} 
-                      placeholder="How will you know this worked?" 
-                      rows={2} 
-                      className="bg-muted/30 border-border focus:border-secondary" 
-                    />
-                  </motion.div>
 
                   <motion.div variants={itemVariants} className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="timeline" className="text-foreground/80">Timeline (optional)</Label>
+                      <Label htmlFor="name">Name *</Label>
                       <Input 
-                        id="timeline" 
-                        name="timeline" 
-                        value={formData.timeline} 
+                        id="name" 
+                        name="name" 
+                        value={formData.name} 
                         onChange={handleChange} 
-                        placeholder="When hoping to start?" 
-                        className="bg-muted/30 border-border focus:border-secondary" 
+                        placeholder="Your name" 
+                        className={`bg-muted/30 border-border ${errors.name ? "border-destructive" : ""}`} 
                       />
+                      {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="budget" className="text-foreground/80">Budget range (optional)</Label>
+                      <Label htmlFor="email">Email *</Label>
                       <Input 
-                        id="budget" 
-                        name="budget" 
-                        value={formData.budget} 
+                        id="email" 
+                        name="email" 
+                        type="email"
+                        value={formData.email} 
                         onChange={handleChange} 
-                        placeholder="If you have a range" 
-                        className="bg-muted/30 border-border focus:border-secondary" 
+                        placeholder="you@example.com" 
+                        className={`bg-muted/30 border-border ${errors.email ? "border-destructive" : ""}`} 
                       />
+                      {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
                     </div>
                   </motion.div>
 
                   <motion.div variants={itemVariants} className="space-y-2">
-                    <Label htmlFor="links" className="text-foreground/80">Links (optional)</Label>
+                    <Label htmlFor="message">Message *</Label>
+                    <Textarea 
+                      id="message" 
+                      name="message" 
+                      value={formData.message} 
+                      onChange={handleChange} 
+                      placeholder="What's on your mind?" 
+                      rows={5} 
+                      className={`bg-muted/30 border-border ${errors.message ? "border-destructive" : ""}`} 
+                    />
+                    {errors.message && <p className="text-xs text-destructive">{errors.message}</p>}
+                  </motion.div>
+
+                  <motion.div variants={itemVariants} className="space-y-2">
+                    <Label htmlFor="links">Links (optional)</Label>
                     <Input 
                       id="links" 
                       name="links" 
                       value={formData.links} 
                       onChange={handleChange} 
                       placeholder="Portfolio, existing site, references..." 
-                      className="bg-muted/30 border-border focus:border-secondary" 
+                      className="bg-muted/30 border-border" 
                     />
                   </motion.div>
 
