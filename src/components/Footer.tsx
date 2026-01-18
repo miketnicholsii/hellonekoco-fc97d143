@@ -147,12 +147,23 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <span className="mx-1.5 text-white/20">•</span>
                 <span className="italic text-white/25">/NEH-koh/</span>
               </div>
-              <Link 
-                to="/meet"
-                className="text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
-              >
-                Meet NÈKO.
-              </Link>
+              <motion.div whileHover="hover" initial="rest">
+                <Link 
+                  to="/meet"
+                  className="inline-flex items-center gap-1.5 text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
+                >
+                  <span>Meet NÈKO.</span>
+                  <motion.span
+                    variants={{
+                      rest: { opacity: 0, x: -8, scale: 0.8 },
+                      hover: { opacity: 1, x: 0, scale: 1 }
+                    }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <ArrowUpRight className="h-4 w-4 text-[#E5530A]" />
+                  </motion.span>
+                </Link>
+              </motion.div>
             </div>
             
             <p className="text-xs text-white/30">
