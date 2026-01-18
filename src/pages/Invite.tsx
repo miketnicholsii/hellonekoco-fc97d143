@@ -258,7 +258,7 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
               variants={itemVariants}
               className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-8"
             >
-              Work With Me
+              Work With NÈKO.
             </motion.h1>
 
             <motion.div variants={itemVariants} className="space-y-6 max-w-2xl mx-auto">
