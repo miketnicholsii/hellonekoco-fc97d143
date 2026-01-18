@@ -224,7 +224,7 @@ export default function Index() {
             </motion.p>
 
             {/* Body copy with staggered fade */}
-            <motion.div variants={itemVariants} className="max-w-xl mx-auto space-y-5 text-lg sm:text-xl text-white/65 leading-relaxed mb-8">
+            <motion.div variants={itemVariants} className="max-w-xl mx-auto text-lg sm:text-xl text-white/65 leading-relaxed mb-8">
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -232,14 +232,6 @@ export default function Index() {
               >
                 We build real websites, real strategies, and real digital systems.<br />
                 Sometimes collaboratively. Sometimes quietly.
-              </motion.p>
-              <motion.p 
-                className="text-white/45"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.6 }}
-              >
-                Sometimes we share what we're learning. Sometimes we don't.
               </motion.p>
             </motion.div>
 
