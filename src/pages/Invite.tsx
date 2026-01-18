@@ -290,7 +290,7 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
         </div>
       </section>
 
-      {/* HOW I WORK — Warm Taupe */}
+      {/* HOW WE WORK — Warm Taupe */}
       <section 
         className="py-24 sm:py-32" 
         style={{ background: "linear-gradient(180deg, hsl(35 12% 92%) 0%, hsl(35 15% 88%) 100%)" }}
@@ -306,7 +306,7 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
             <motion.div variants={itemVariants} className="text-center mb-16">
               <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-4">
                 <Target className="w-4 h-4" />
-                How I Work
+                How We Work
               </span>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mt-4">
                 Focused. Honest. Real.
@@ -388,10 +388,10 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
                 Submit a Proposal
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4">
-                Tell me what you're building
+                Tell us what you're building
               </h2>
               <p className="text-muted-foreground">
-                I read everything. I respond when it aligns.
+                We read everything. We respond when it aligns.
               </p>
             </motion.div>
 

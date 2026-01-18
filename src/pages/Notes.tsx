@@ -56,7 +56,7 @@ export default function Notes() {
             </motion.h1>
 
             <motion.p variants={itemVariants} className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-6">
-              Occasional updates, experiments, and things I've learned.
+              Occasional updates, experiments, and things we've learned.
             </motion.p>
 
             <motion.div 
