@@ -856,7 +856,7 @@ export default function Index() {
               variants={itemVariants} 
               className="text-center text-sm text-white/50 mb-16"
             >
-              Most engagements begin with a paid diagnostic. Some continue. Many shouldn't.
+              Most engagements start with a paid diagnostic — a focused first step to see if we're the right fit.
             </motion.p>
 
             {/* Horizontal Divider */}
