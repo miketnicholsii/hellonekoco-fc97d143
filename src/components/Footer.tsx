@@ -86,11 +86,42 @@ const ExternalLink = ({ href, children, className }: { href: string; children: R
   </motion.a>
 );
 
+// Container animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,
+    },
+  },
+};
+
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
     <>
       {/* Divider before footer */}
-      <div className="h-1 w-full" style={{ background: "#E5530A" }} />
+      <motion.div 
+        className="h-1 w-full" 
+        style={{ background: "#E5530A" }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      />
       
       <footer 
         ref={ref} 
@@ -98,13 +129,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         className="relative overflow-hidden"
         style={{ background: "#1f2a21" }}
       >
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
+        <motion.div 
+          className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           
           {/* Main grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
             
-            {/* Brand column */}
-            <div className="lg:col-span-4">
+            {/* Brand column - centered on mobile */}
+            <motion.div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left" variants={itemVariants}>
               <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
                 <span className="font-display text-2xl font-bold tracking-tight text-white">
                   NÈKO<span className="text-[#E5530A]">.</span>
@@ -144,58 +181,61 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
                 </motion.span>
               </motion.a>
-            </div>
+            </motion.div>
 
-            {/* Nav columns */}
-            <div className="lg:col-span-8 grid grid-cols-3 gap-8">
+            {/* Nav columns - centered on mobile */}
+            <div className="lg:col-span-8 grid grid-cols-3 gap-8 text-center lg:text-left">
               {/* Explore */}
-              <nav aria-label="Explore links">
+              <motion.nav aria-label="Explore links" variants={itemVariants}>
                 <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
                   Explore
                 </h4>
                 <ul className="space-y-3">
                   {footerLinks.explore.map((link) => (
-                    <li key={link.label}>
+                    <li key={link.label} className="flex justify-center lg:justify-start">
                       <FooterLink href={link.href} label={link.label} />
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </motion.nav>
 
               {/* Connect */}
-              <nav aria-label="Connect links">
+              <motion.nav aria-label="Connect links" variants={itemVariants}>
                 <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
                   Connect
                 </h4>
                 <ul className="space-y-3">
                   {footerLinks.connect.map((link) => (
-                    <li key={link.label}>
+                    <li key={link.label} className="flex justify-center lg:justify-start">
                       <FooterLink href={link.href} label={link.label} />
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </motion.nav>
 
               {/* Legal */}
-              <nav aria-label="Legal links">
+              <motion.nav aria-label="Legal links" variants={itemVariants}>
                 <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
                   Legal
                 </h4>
                 <ul className="space-y-3">
                   {footerLinks.legal.map((link) => (
-                    <li key={link.label}>
+                    <li key={link.label} className="flex justify-center lg:justify-start">
                       <FooterLink href={link.href} label={link.label} showArrow={false} />
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </motion.nav>
             </div>
           </div>
 
           {/* Bottom bar */}
-          <div className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-6 text-center">
+          <motion.div 
+            className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-6 text-center"
+            variants={itemVariants}
+          >
             {/* Pronunciation & Meet NÈKO */}
-            <div className="flex flex-col items-center gap-3">
+            <motion.div className="flex flex-col items-center gap-3" variants={itemVariants}>
               <div className="text-xs text-white/30">
                 <span className="font-display">NÈKO</span>
                 <span className="mx-1.5 text-white/20">•</span>
@@ -218,12 +258,12 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   </motion.span>
                 </Link>
               </motion.div>
-            </div>
+            </motion.div>
             
-            <p className="text-xs text-white/30">
+            <motion.p className="text-xs text-white/30" variants={itemVariants}>
               © 2026 NÈKO. All rights reserved.
-            </p>
-            <motion.div whileHover="hover" initial="rest" className="relative">
+            </motion.p>
+            <motion.div whileHover="hover" initial="rest" className="relative" variants={itemVariants}>
               <a 
                 href="https://miketnicholsii.com" 
                 target="_blank" 
@@ -250,8 +290,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 </motion.span>
               </a>
             </motion.div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </footer>
     </>
   );
