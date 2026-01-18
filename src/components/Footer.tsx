@@ -139,7 +139,19 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </div>
 
           {/* Bottom bar */}
-          <div className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-2 text-center">
+          <div className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-4 text-center">
+            {/* Meet NÈKO Easter Egg Button */}
+            <Link 
+              to="/meet"
+              className="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-white/70 hover:text-white transition-all duration-300 hover:scale-105"
+              style={{ 
+                background: "rgba(229, 83, 10, 0.15)",
+                border: "1px solid rgba(229, 83, 10, 0.3)"
+              }}
+            >
+              Meet NÈKO.
+            </Link>
+            
             <p className="text-xs text-white/30">
               © 2026 NÈKO. All rights reserved.
             </p>

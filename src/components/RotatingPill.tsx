@@ -2,11 +2,11 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const phrases = [
-  "FAILURE-TOLERANT",
-  "NO VANITY METRICS",
-  "NO SAFETY NET",
-  "PRODUCTION ONLY",
-  "CONSEQUENCES APPLY",
+  "BUILT TO LAST",
+  "RESULTS FIRST",
+  "MOMENTUM MATTERS",
+  "GROWTH READY",
+  "OUTCOME DRIVEN",
 ];
 
 export function RotatingPill() {

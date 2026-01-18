@@ -17,6 +17,7 @@ const Invite = lazyWithRetry(() => import("@/pages/Invite"));
 const Notes = lazyWithRetry(() => import("@/pages/Notes"));
 const Donate = lazyWithRetry(() => import("@/pages/Donate"));
 const DonationSuccess = lazyWithRetry(() => import("@/pages/DonationSuccess"));
+const MeetNeko = lazyWithRetry(() => import("@/pages/MeetNeko"));
 
 // Legal pages
 const Privacy = lazyWithRetry(() => import("@/pages/legal/Privacy"));
@@ -59,6 +60,7 @@ export const AnimatedRoutes = memo(function AnimatedRoutes() {
           <Route path="/notes" element={withTransition(Notes)} />
           <Route path="/donate" element={withTransition(Donate)} />
           <Route path="/donation-success" element={withTransition(DonationSuccess)} />
+          <Route path="/meet" element={withTransition(MeetNeko)} />
           
           {/* Legal */}
           <Route path="/legal/privacy" element={withTransition(Privacy)} />
