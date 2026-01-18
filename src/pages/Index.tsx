@@ -1024,7 +1024,12 @@ export default function Index() {
                 transition={{ delay: 0.8 }}
               >
                 <p className="text-lg font-medium mb-2 inline-flex items-center gap-2" style={{ color: "#E5530A" }}>
-                  <Heart className="w-4 h-4" fill="#E5530A" />
+                  <motion.span
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Heart className="w-4 h-4" fill="#E5530A" />
+                  </motion.span>
                   Need something free?
                 </p>
                 <p className="opacity-70 text-sm mb-4">
