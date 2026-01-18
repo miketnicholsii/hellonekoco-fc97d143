@@ -218,35 +218,33 @@ export default function Index() {
             {/* Descriptor with typing effect feel */}
             <motion.p 
               variants={itemVariants} 
-              className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-12 tracking-tight"
+              className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-10 tracking-tight"
             >
               An independent creative sandbox.
             </motion.p>
 
-            {/* Body copy with staggered fade */}
-            <motion.div variants={itemVariants} className="max-w-xl mx-auto text-lg sm:text-xl text-white/65 leading-relaxed mb-8">
+            {/* Body copy - consolidated for cleaner flow */}
+            <motion.div 
+              variants={itemVariants} 
+              className="max-w-lg mx-auto mb-14"
+            >
               <motion.p
+                className="text-lg sm:text-xl text-white/60 leading-relaxed mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.6 }}
               >
-                We build real websites, real strategies, and real digital systems.<br />
-                Sometimes collaboratively. Sometimes quietly.
+                We build real websites, real strategies, and real digital systems.
+                <span className="block mt-1 text-white/45">Sometimes collaboratively. Sometimes quietly.</span>
               </motion.p>
-            </motion.div>
-
-            {/* Statement - Updated CTA */}
-            <motion.div 
-              variants={itemVariants} 
-              className="max-w-md mx-auto mb-12"
-            >
+              
               <motion.p 
-                className="text-lg text-white/50 leading-relaxed"
+                className="text-lg text-white/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.2, duration: 0.8 }}
+                transition={{ delay: 1, duration: 0.6 }}
               >
-                Want to build cool sh*t?<br />
+                Want to build cool sh*t?{" "}
                 <span className="text-[#E5530A] font-semibold">Just say hello.</span>
               </motion.p>
             </motion.div>
