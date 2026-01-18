@@ -891,14 +891,24 @@ export default function Index() {
                 </h3>
                 <p className="text-sm text-white/50 mb-3">Projects commonly land between</p>
                 <div className="relative inline-block mb-4">
-                  <span 
-                    className="text-xl sm:text-2xl font-bold text-[#E5530A] select-none"
-                    style={{ filter: "blur(3px)" }}
+                  <motion.span 
+                    className="text-xl sm:text-2xl font-bold text-[#E5530A] select-none cursor-pointer inline-block"
+                    initial={{ filter: "blur(3px)" }}
+                    whileHover={{ filter: "blur(0px)", scale: 1.05 }}
+                    animate={{ 
+                      filter: "blur(3px)",
+                      textShadow: ["0 0 8px rgba(229,83,10,0.3)", "0 0 16px rgba(229,83,10,0.5)", "0 0 8px rgba(229,83,10,0.3)"]
+                    }}
+                    transition={{ 
+                      filter: { duration: 0.3 },
+                      scale: { duration: 0.2 },
+                      textShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                    }}
                     aria-hidden="true"
                   >
                     $4k – $15k
-                  </span>
-                  <span className="sr-only">Price range hidden - let's talk</span>
+                  </motion.span>
+                  <span className="sr-only">Price range: $4k to $15k</span>
                 </div>
                 <div className="space-y-1 text-xs text-white/40 mt-4">
                   <p>Stakes increase → number moves</p>
