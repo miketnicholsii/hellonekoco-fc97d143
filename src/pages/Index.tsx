@@ -825,6 +825,16 @@ export default function Index() {
                 </div>
               </motion.div>
 
+              {/* Visual Separator */}
+              <motion.div 
+                variants={itemVariants}
+                className="flex items-center justify-center gap-3 py-2"
+              >
+                <span className="h-px w-8 bg-white/10" />
+                <span className="w-1 h-1 rounded-full bg-white/20" />
+                <span className="h-px w-8 bg-white/10" />
+              </motion.div>
+
               {/* Not Included */}
               <motion.div 
                 variants={itemVariants} 
