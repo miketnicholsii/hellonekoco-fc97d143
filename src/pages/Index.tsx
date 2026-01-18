@@ -269,8 +269,15 @@ export default function Index() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.6 }}
               >
-                Want to build cool sh*t?{" "}
-                <span className="text-[#E5530A] font-semibold">Just say hello.</span>
+                Want to build cool sh*t?
+              </motion.p>
+              <motion.p 
+                className="text-lg text-[#E5530A] font-semibold mt-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 0.6 }}
+              >
+                Just say hello.
               </motion.p>
             </motion.div>
 
