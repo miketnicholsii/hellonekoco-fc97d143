@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, Variants } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -205,8 +206,15 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
   };
 
   return (
-    <main className="min-h-screen bg-background overflow-hidden">
-      <EccentricNavbar />
+    <>
+      <Helmet>
+        <title>Work With NÈKO | Invite-Only Collaboration</title>
+        <meta name="description" content="Submit a proposal to work with NÈKO. Invite-only collaboration for focused, high-craft digital projects. Clear scope, honest feedback, real partnership." />
+        <meta property="og:title" content="Work With NÈKO | Invite-Only Collaboration" />
+        <meta property="og:description" content="Submit a proposal to work with NÈKO. Invite-only collaboration for focused, high-craft digital projects." />
+      </Helmet>
+      <main className="min-h-screen bg-background overflow-hidden">
+        <EccentricNavbar />
 
       {/* HERO — Deep Forest Green */}
       <section 
@@ -260,6 +268,13 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
             >
               Work With NÈKO.
             </motion.h1>
+            
+            <motion.p 
+              variants={itemVariants}
+              className="text-sm text-white/40 font-mono tracking-wider mb-6"
+            >
+              /NEH-koh/
+            </motion.p>
 
             <motion.div variants={itemVariants} className="space-y-6 max-w-2xl mx-auto">
               <p className="text-xl sm:text-2xl text-white/90 leading-relaxed font-light">
@@ -699,5 +714,6 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
 
       <Footer />
     </main>
+    </>
   );
 }
