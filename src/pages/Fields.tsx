@@ -175,7 +175,7 @@ export default function Fields() {
               Something here match what you're <span className="text-[#E5530A]">building</span>?
             </motion.h2>
             <motion.p variants={itemVariants} className="text-white/60 text-lg mb-10">
-              No checkout. Just conversation.
+              For-profit, invitation-led, and built on fit.
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button 

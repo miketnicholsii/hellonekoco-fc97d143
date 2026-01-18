@@ -189,7 +189,7 @@ export default function Contact() {
 
             {/* Proposal link */}
             <motion.div variants={itemVariants} className="mt-14 pt-10 border-t border-white/10">
-              <p className="text-white/40 mb-4 text-sm">Have a bigger project with budget and timeline?</p>
+              <p className="text-white/40 mb-4 text-sm">Planning something substantial with a clear scope and horizon?</p>
               <Button 
                 asChild 
                 variant="outline" 
