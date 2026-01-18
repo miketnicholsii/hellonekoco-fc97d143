@@ -1,11 +1,8 @@
 import { motion, useReducedMotion, Variants, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { nekoConfig } from "@/lib/neko-config";
+import { useLiveCharts } from "@/hooks/use-live-charts";
 import {
-  PieChart,
-  Pie,
-  Cell,
   ResponsiveContainer,
   AreaChart,
   XAxis,
@@ -28,35 +25,6 @@ const cardVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.92, rotateX: 8 },
   visible: { opacity: 1, y: 0, scale: 1, rotateX: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
-
-// Generate dynamic focus data based on current date
-const generateFocusData = () => {
-  const now = new Date();
-  const months = [];
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-  // Generate 8 months of data ending with current month
-  for (let i = 7; i >= 0; i--) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const monthLabel = `${monthNames[date.getMonth()]} '${String(date.getFullYear()).slice(-2)}`;
-    
-    // Create realistic wave pattern with some randomness seeded by month
-    const seed = date.getMonth() + date.getFullYear();
-    const baseExploration = 35 + Math.sin(seed * 0.8) * 20;
-    const variance = ((seed * 7) % 15) - 7;
-    const exploration = Math.max(25, Math.min(75, Math.round(baseExploration + variance)));
-    
-    months.push({
-      month: monthLabel,
-      exploration,
-      delivery: 100 - exploration,
-    });
-  }
-  
-  return months;
-};
-
-const focusData = generateFocusData();
 
 // Animated pie chart segment
 const AnimatedPieSegment = ({ 
@@ -115,42 +83,32 @@ function polarToCartesian(cx: number, cy: number, radius: number, angle: number)
   };
 }
 
-// Animated percentage display
-const AnimatedPercentage = ({ value, color, delay = 0 }: { value: number; color: string; delay?: number }) => {
-  const [displayValue, setDisplayValue] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
+// Animated live percentage with smooth transitions
+const LivePercentage = ({ value, color }: { value: number; color: string }) => {
+  const [displayValue, setDisplayValue] = useState(value);
   
   useEffect(() => {
-    if (!isInView) return;
+    // Smooth transition to new value
+    const diff = value - displayValue;
+    if (diff === 0) return;
     
-    let startTime: number;
-    let animationFrame: number;
+    const step = diff > 0 ? 1 : -1;
+    const interval = setInterval(() => {
+      setDisplayValue(prev => {
+        const next = prev + step;
+        if ((step > 0 && next >= value) || (step < 0 && next <= value)) {
+          clearInterval(interval);
+          return value;
+        }
+        return next;
+      });
+    }, 50);
     
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / 1200, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      
-      setDisplayValue(Math.round(eased * value));
-      
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-    
-    const timeout = setTimeout(() => {
-      animationFrame = requestAnimationFrame(animate);
-    }, delay);
-    
-    return () => {
-      clearTimeout(timeout);
-      cancelAnimationFrame(animationFrame);
-    };
-  }, [value, isInView, delay]);
+    return () => clearInterval(interval);
+  }, [value]);
 
   return (
-    <span ref={ref} style={{ color }} className="font-display font-bold text-lg tabular-nums">
+    <span style={{ color }} className="font-display font-bold text-lg tabular-nums">
       {displayValue}%
     </span>
   );
@@ -181,6 +139,25 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+// Live timestamp display
+const LiveTimestamp = ({ timestamp, secondsUntilRefresh }: { timestamp: string; secondsUntilRefresh: number }) => (
+  <motion.div 
+    className="flex items-center gap-2 text-[10px] font-mono"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+  >
+    <motion.span
+      className="w-1.5 h-1.5 rounded-full bg-green-500"
+      animate={{ opacity: [1, 0.4, 1] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    />
+    <span className="text-current/50">LIVE</span>
+    <span className="text-current/70 tabular-nums">{timestamp}</span>
+    <span className="text-current/40">•</span>
+    <span className="text-current/40 tabular-nums">refresh in {secondsUntilRefresh}s</span>
+  </motion.div>
+);
+
 type WorkBreakdownVariant = "home" | "signals";
 
 interface WorkBreakdownChartsProps {
@@ -189,7 +166,7 @@ interface WorkBreakdownChartsProps {
 
 export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownChartsProps) {
   const prefersReducedMotion = useReducedMotion();
-  const workMixData = [...nekoConfig.workMix];
+  const { workMix, focusData, timestamp, secondsUntilRefresh } = useLiveCharts();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
@@ -198,10 +175,10 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
       ? "A quick, quiet read on where the work tends to land. Signals, not a pitch."
       : "Directional signals on how effort splits between exploration and delivery.";
 
-  // Calculate pie chart angles
-  const total = workMixData.reduce((sum, item) => sum + item.value, 0);
+  // Calculate pie chart angles from live data
+  const total = workMix.reduce((sum, item) => sum + item.value, 0);
   let currentAngle = 0;
-  const pieSegments = workMixData.map((item, index) => {
+  const pieSegments = workMix.map((item, index) => {
     const startAngle = currentAngle;
     const angle = (item.value / total) * 360;
     currentAngle += angle;
@@ -309,7 +286,7 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
             />
             
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-2">
                 <div>
                   <h3 className="font-display text-xl font-bold" style={{ color: "#334336" }}>Work Mix</h3>
                   <p className="text-sm text-[#334336]/60">How time typically divides</p>
@@ -325,6 +302,11 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                     <path d="M12 2a10 10 0 0110 10h-10V2z"/>
                   </svg>
                 </motion.div>
+              </div>
+              
+              {/* Live timestamp */}
+              <div className="mb-4 text-[#334336]">
+                <LiveTimestamp timestamp={timestamp} secondsUntilRefresh={secondsUntilRefresh} />
               </div>
 
               <div className="h-64 relative">
@@ -372,7 +354,7 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
               </div>
 
               <div className="grid grid-cols-2 gap-4 mt-6">
-                {workMixData.map((item, i) => (
+                {workMix.map((item, i) => (
                   <motion.div 
                     key={i} 
                     className="flex items-center justify-between p-3 rounded-xl"
@@ -392,7 +374,7 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                       />
                       <span className="text-xs text-[#334336]/80 font-medium">{item.name}</span>
                     </div>
-                    <AnimatedPercentage value={item.value} color={item.color} delay={i * 150 + 800} />
+                    <LivePercentage value={item.value} color={item.color} />
                   </motion.div>
                 ))}
               </div>
@@ -419,7 +401,7 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
             />
             
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-2">
                 <div>
                   <h3 className="font-display text-xl font-bold text-white">Focus Over Time</h3>
                   <p className="text-sm text-white/50">Exploration vs. delivery balance</p>
@@ -434,6 +416,11 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                   </svg>
                 </motion.div>
+              </div>
+              
+              {/* Live timestamp */}
+              <div className="mb-4 text-white">
+                <LiveTimestamp timestamp={timestamp} secondsUntilRefresh={secondsUntilRefresh} />
               </div>
 
               <div className="h-64">
@@ -466,7 +453,7 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                       strokeWidth={3}
                       dot={{ fill: "#E5530A", strokeWidth: 0, r: 4 }}
                       activeDot={{ r: 6, fill: "#E5530A", stroke: "#fff", strokeWidth: 2 }}
-                      animationDuration={2000}
+                      animationDuration={500}
                       animationEasing="ease-out"
                     />
                     <Area 
@@ -478,9 +465,8 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                       strokeWidth={3}
                       dot={{ fill: "#C8BFB5", strokeWidth: 0, r: 4 }}
                       activeDot={{ r: 6, fill: "#C8BFB5", stroke: "#fff", strokeWidth: 2 }}
-                      animationDuration={2000}
+                      animationDuration={500}
                       animationEasing="ease-out"
-                      animationBegin={300}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
