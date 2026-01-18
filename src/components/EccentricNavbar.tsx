@@ -208,7 +208,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               <Button
                 asChild
                 size="sm"
-                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px]"
+                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px] haptic-tap-strong"
                 style={{ 
                   background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                   boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
@@ -222,7 +222,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               
               <button
                 ref={menuButtonRef}
-                className={`p-3 rounded-xl transition-colors relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center ${
+                className={`p-3 rounded-xl transition-colors relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center haptic-tap-icon ${
                   showDarkText 
                     ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" 
                     : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
@@ -273,7 +273,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] ${mobileLinkFocusClass} ${
+                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] haptic-tap-subtle ${mobileLinkFocusClass} ${
                           isActive 
                             ? "text-secondary bg-secondary/10 border border-secondary/20" 
                             : "text-foreground hover:bg-muted hover:pl-6"
@@ -289,7 +289,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   <Button 
                     asChild
                     size="lg" 
-                    className="w-full rounded-full font-semibold border-0 min-h-[56px] text-base"
+                    className="w-full rounded-full font-semibold border-0 min-h-[56px] text-base haptic-tap-strong"
                     style={{ 
                       background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                       boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"

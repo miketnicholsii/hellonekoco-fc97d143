@@ -618,6 +618,109 @@
     }
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+     HAPTIC FEEDBACK SIMULATION - Mobile tap feedback using CSS
+     ═══════════════════════════════════════════════════════════════════ */
+  
+  /* Base haptic tap class - apply to any interactive element */
+  .haptic-tap {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                opacity 0.1s ease,
+                filter 0.1s ease;
+  }
+  
+  .haptic-tap:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+  
+  /* Stronger haptic feedback for primary buttons */
+  .haptic-tap-strong {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.08s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                opacity 0.08s ease,
+                box-shadow 0.08s ease;
+  }
+  
+  .haptic-tap-strong:active {
+    transform: scale(0.95) translateY(1px);
+    opacity: 0.85;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  /* Subtle haptic for nav links and small touches */
+  .haptic-tap-subtle {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.06s ease-out, 
+                background-color 0.1s ease;
+  }
+  
+  .haptic-tap-subtle:active {
+    transform: scale(0.98);
+    background-color: hsl(var(--muted) / 0.5);
+  }
+  
+  /* Icon button haptic - for hamburger menu, close buttons */
+  .haptic-tap-icon {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.08s ease-out, 
+                opacity 0.08s ease;
+  }
+  
+  .haptic-tap-icon:active {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  
+  /* Card press effect - for larger tappable areas */
+  .haptic-tap-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                box-shadow 0.12s ease;
+  }
+  
+  .haptic-tap-card:active {
+    transform: scale(0.985) translateY(2px);
+    box-shadow: var(--shadow-xs) !important;
+  }
+
+  /* Apply haptic feedback to all buttons and interactive elements on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    /* Primary action buttons */
+    button:not([disabled]),
+    [role="button"]:not([disabled]) {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    button:not([disabled]):active,
+    [role="button"]:not([disabled]):active {
+      transform: scale(0.97);
+      opacity: 0.9;
+      transition: transform 0.08s ease-out, opacity 0.08s ease;
+    }
+    
+    /* Navigation links */
+    nav a:active {
+      transform: scale(0.98);
+      opacity: 0.85;
+      transition: transform 0.06s ease-out, opacity 0.06s ease;
+    }
+    
+    /* Cards and larger touch targets */
+    .card:active,
+    [class*="Card"]:active {
+      transform: scale(0.99);
+      transition: transform 0.1s ease-out;
+    }
+  }
+
   /* Reduce motion for battery saving on mobile */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
