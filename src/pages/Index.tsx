@@ -488,7 +488,7 @@ export default function Index() {
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
-            className="text-center max-w-2xl mx-auto mb-16 sm:mb-20"
+            className="text-center max-w-3xl mx-auto mb-16 sm:mb-20"
             variants={prefersReducedMotion ? undefined : containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -497,9 +497,40 @@ export default function Index() {
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/60 mb-6">
               Fields
             </motion.span>
-            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight" style={{ color: "#334336" }}>
-              Things that exist here.
+            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-12" style={{ color: "#334336" }}>
+              The Work
             </motion.h2>
+            
+            {/* Three Pillars */}
+            <motion.div 
+              variants={itemVariants}
+              className="grid sm:grid-cols-3 gap-6 sm:gap-8 text-left"
+            >
+              <div className="space-y-2">
+                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                  Chosen:
+                </h3>
+                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                  Only work that earns its place.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                  Refined:
+                </h3>
+                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                  Pressure-tested, not theoretical.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                  Controlled:
+                </h3>
+                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                  Access is intentional.
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
 
           <motion.div
