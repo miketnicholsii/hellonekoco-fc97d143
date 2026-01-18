@@ -992,8 +992,8 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                We choose carefully.<br />
-                We don't need your money.
+                We're selective about who we work with.<br />
+                We value the work — not just the check.
               </motion.p>
               <motion.p
                 className="font-display text-xl sm:text-2xl font-bold"
@@ -1012,7 +1012,7 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.6 }}
               >
-                An invoice will follow.
+                Trust us, an invoice will follow.
               </motion.p>
             </motion.div>
           </motion.div>
