@@ -4,14 +4,29 @@ import { cn } from "@/lib/utils";
 import { HOMEPAGE_SECTIONS } from "@/hooks/use-section-scrollspy";
 
 /**
- * Desktop: Vertical dot indicator on the right side
+ * Desktop: Enhanced vertical progress indicator on the right side with glow effects
  */
 export const SectionIndicator = memo(function SectionIndicator() {
   const [activeSection, setActiveSection] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [sectionProgress, setSectionProgress] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const sectionIds = useMemo(() => HOMEPAGE_SECTIONS.map((section) => section.id), []);
   const entriesRef = useRef<Map<string, IntersectionObserverEntry>>(new Map());
+  const positionsRef = useRef<{ top: number; height: number }[]>([]);
+  
+  const { scrollY } = useScroll();
+
+  // Update section positions for progress calculation
+  const updatePositions = useCallback(() => {
+    positionsRef.current = sectionIds.map((id) => {
+      const element = document.getElementById(id);
+      if (!element) return { top: 0, height: 0 };
+      const rect = element.getBoundingClientRect();
+      return { top: rect.top + window.scrollY, height: rect.height };
+    });
+  }, [sectionIds]);
 
   useEffect(() => {
     const hero = document.getElementById("hero");
@@ -81,6 +96,40 @@ export const SectionIndicator = memo(function SectionIndicator() {
     return () => observer.disconnect();
   }, [sectionIds]);
 
+  // Handle resize for position updates
+  useEffect(() => {
+    const handleResize = () => updatePositions();
+    updatePositions();
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, [updatePositions]);
+
+  // Track scroll progress within current section
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const positions = positionsRef.current;
+    const current = positions[activeSection];
+    if (!current) return;
+
+    const next = positions[activeSection + 1];
+    const viewportHeight = window.innerHeight;
+    const pivot = latest + viewportHeight * 0.4;
+
+    let progress = 0;
+    if (next) {
+      const sectionHeight = Math.max(1, next.top - current.top);
+      progress = (pivot - current.top) / sectionHeight;
+    } else {
+      const docHeight = document.documentElement.scrollHeight;
+      const remaining = docHeight - (latest + viewportHeight);
+      progress =
+        remaining < 120
+          ? 1
+          : (pivot - current.top) / Math.max(current.height || viewportHeight, 1);
+    }
+
+    setSectionProgress(Math.min(1, Math.max(0, progress)));
+  });
+
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -93,89 +142,151 @@ export const SectionIndicator = memo(function SectionIndicator() {
 
   if (!isVisible) return null;
 
+  const totalProgress = (activeSection + sectionProgress) / HOMEPAGE_SECTIONS.length;
+
   return (
     <motion.nav
-      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
+      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 30 }}
       animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, x: 0 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-end gap-2"
+      exit={{ opacity: 0, x: 30 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end gap-1"
       aria-label="Page sections"
     >
-      {HOMEPAGE_SECTIONS.map((section, index) => {
-        const isActive = index === activeSection;
-        const isPast = index < activeSection;
-
-        return (
-          <button
-            key={section.id}
-            onClick={() => scrollToSection(section.id)}
-            className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full"
-            aria-label={`Go to ${section.label}`}
-            aria-current={isActive ? "true" : undefined}
-          >
-            {/* Label - shows on hover */}
-            <span
-              className={cn(
-                "text-xs font-medium transition-all duration-200 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 translate-x-2 group-hover:translate-x-0 group-focus-visible:translate-x-0",
-                isActive 
-                  ? "text-foreground" 
-                  : isPast 
-                    ? "text-muted-foreground" 
-                    : "text-muted-foreground/60"
-              )}
-            >
-              {section.label}
-            </span>
-
-            {/* Indicator dot */}
-            <span
-              className={cn(
-                "relative flex items-center justify-center transition-all duration-300",
-                isActive ? "w-3 h-3" : "w-2 h-2"
-              )}
-            >
-              <span
-                className={cn(
-                  "absolute inset-0 rounded-full transition-all duration-300",
-                  isActive
-                    ? "bg-primary scale-100"
-                    : isPast
-                      ? "bg-primary/40 scale-100"
-                      : "bg-muted-foreground/30 scale-100 group-hover:bg-muted-foreground/50"
-                )}
-              />
-              {isActive && !prefersReducedMotion && (
-                <motion.span
-                  layoutId="active-indicator"
-                  className="absolute inset-0 rounded-full bg-primary/30"
-                  initial={false}
-                  animate={{ scale: [1, 1.8, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-              )}
-            </span>
-          </button>
-        );
-      })}
-
-      {/* Progress line */}
-      <div className="absolute right-[5px] top-0 bottom-0 w-px bg-border -z-10">
+      {/* Background track with glow */}
+      <div className="absolute right-[7px] top-0 bottom-0 w-[2px] rounded-full bg-white/10 backdrop-blur-sm">
+        {/* Animated glow behind progress */}
         <motion.div
-          className="absolute top-0 left-0 w-full bg-primary origin-top"
+          className="absolute -inset-1 rounded-full blur-sm"
           style={{ 
-            height: `${((activeSection + 1) / HOMEPAGE_SECTIONS.length) * 100}%`,
+            background: "linear-gradient(180deg, transparent, hsl(16 100% 50% / 0.3), transparent)",
+            height: `${totalProgress * 100}%`,
+          }}
+          animate={{ opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Progress fill */}
+        <motion.div
+          className="absolute top-0 left-0 w-full rounded-full origin-top"
+          style={{ 
+            background: "linear-gradient(180deg, hsl(16 100% 55%), hsl(16 100% 45%))",
+            height: `${totalProgress * 100}%`,
           }}
           initial={false}
-          animate={{ height: `${((activeSection + 1) / HOMEPAGE_SECTIONS.length) * 100}%` }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
+
+      {HOMEPAGE_SECTIONS.map((section, index) => {
+        const isActive = index === activeSection;
+        const isPast = index < activeSection;
+        const isHovered = hoveredIndex === index;
+
+        return (
+          <motion.button
+            key={section.id}
+            onClick={() => scrollToSection(section.id)}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="group relative flex items-center gap-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-full"
+            aria-label={`Go to ${section.label}`}
+            aria-current={isActive ? "true" : undefined}
+            initial={false}
+            animate={{ scale: isActive ? 1 : 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
+            {/* Label - shows on hover with slide animation */}
+            <AnimatePresence mode="wait">
+              {(isHovered || isActive) && (
+                <motion.span
+                  initial={{ opacity: 0, x: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: 5, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className={cn(
+                    "text-xs font-semibold tracking-wide whitespace-nowrap px-3 py-1.5 rounded-full backdrop-blur-md",
+                    isActive 
+                      ? "bg-primary/20 text-white border border-primary/30" 
+                      : "bg-white/10 text-white/80 border border-white/10"
+                  )}
+                >
+                  {section.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+
+            {/* Indicator dot container */}
+            <span className="relative flex items-center justify-center w-4 h-4">
+              {/* Outer glow ring for active */}
+              {isActive && !prefersReducedMotion && (
+                <motion.span
+                  className="absolute inset-[-4px] rounded-full"
+                  style={{ 
+                    background: "radial-gradient(circle, hsl(16 100% 50% / 0.3) 0%, transparent 70%)"
+                  }}
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0.2, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+              )}
+              
+              {/* Secondary pulse ring */}
+              {isActive && !prefersReducedMotion && (
+                <motion.span
+                  className="absolute inset-[-2px] rounded-full border border-primary/40"
+                  animate={{ scale: [1, 1.3, 1], opacity: [1, 0, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+                />
+              )}
+
+              {/* Main dot */}
+              <motion.span
+                className={cn(
+                  "relative rounded-full transition-colors duration-300",
+                  isActive
+                    ? "w-3 h-3 bg-primary shadow-lg"
+                    : isPast
+                      ? "w-2.5 h-2.5 bg-primary/60"
+                      : "w-2 h-2 bg-white/30 group-hover:bg-white/50"
+                )}
+                style={isActive ? { 
+                  boxShadow: "0 0 12px hsl(16 100% 50% / 0.6), 0 0 24px hsl(16 100% 50% / 0.3)"
+                } : undefined}
+                animate={isActive ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+                transition={{ duration: 0.8, repeat: isActive ? Infinity : 0, ease: "easeInOut" }}
+              />
+
+              {/* Inner progress indicator for active section */}
+              {isActive && (
+                <motion.span
+                  className="absolute inset-0.5 rounded-full overflow-hidden"
+                  style={{ 
+                    background: `conic-gradient(from 0deg, hsl(16 100% 60%) ${sectionProgress * 100}%, transparent ${sectionProgress * 100}%)`,
+                    opacity: 0.6
+                  }}
+                />
+              )}
+            </span>
+          </motion.button>
+        );
+      })}
+
+      {/* Overall percentage indicator */}
+      <motion.div
+        className="mt-4 text-[10px] font-bold tracking-wider text-white/40 tabular-nums"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        {Math.round(totalProgress * 100)}%
+      </motion.div>
     </motion.nav>
   );
 });
 
 /**
- * Mobile: Horizontal progress bar at the bottom with section indicators (no swipe gestures)
+ * Mobile: Enhanced horizontal progress bar at the bottom with section indicators
  */
 export const MobileProgressBar = memo(function MobileProgressBar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -305,13 +416,13 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
     setSectionProgress(Math.min(1, Math.max(0, progress)));
   });
 
-  // Haptic feedback helper - triggers vibration on supported devices
+  // Haptic feedback helper
   const triggerHaptic = useCallback((pattern: number | number[] = 10) => {
     if ('vibrate' in navigator) {
       try {
         navigator.vibrate(pattern);
       } catch {
-        // Silently fail if vibration is not supported or blocked
+        // Silently fail
       }
     }
   }, []);
@@ -319,7 +430,6 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
   const scrollToSection = useCallback((sectionIndex: number) => {
     if (sectionIndex < 0 || sectionIndex >= HOMEPAGE_SECTIONS.length) return;
     
-    // Trigger haptic feedback
     triggerHaptic(15);
     
     const element = document.getElementById(HOMEPAGE_SECTIONS[sectionIndex].id);
@@ -338,10 +448,10 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
       initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
       animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-lg border-t border-border safe-area-bottom"
+      className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-[#1f2a21]/95 backdrop-blur-lg border-t border-white/10 safe-area-bottom"
     >
       {/* Section dot indicators */}
-      <div className="flex items-center justify-center gap-1.5 pt-2.5 pb-1">
+      <div className="flex items-center justify-center gap-2 pt-3 pb-1.5 px-4">
         {HOMEPAGE_SECTIONS.map((section, index) => {
           const isActive = index === activeSection;
           const isPast = index < activeSection;
@@ -350,26 +460,35 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
             <button
               key={section.id}
               onClick={() => scrollToSection(index)}
-              className="group relative p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-full"
+              className="group relative p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-full"
               aria-label={`Go to ${section.label}`}
               aria-current={isActive ? "true" : undefined}
             >
-              {/* Outer container for the dot */}
+              {/* Outer glow for active */}
+              {isActive && !prefersReducedMotion && (
+                <motion.span
+                  className="absolute inset-[-2px] rounded-full bg-primary/20"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.2, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+              )}
+              
+              {/* Dot/pill container */}
               <span
                 className={cn(
                   "relative flex items-center justify-center transition-all duration-300",
-                  isActive ? "w-6 h-2" : "w-2 h-2"
+                  isActive ? "w-8 h-2.5" : "w-2.5 h-2.5"
                 )}
               >
-                {/* Background dot/pill */}
+                {/* Background */}
                 <span
                   className={cn(
                     "absolute inset-0 rounded-full transition-all duration-300",
                     isActive
-                      ? "bg-primary/20"
+                      ? "bg-white/10"
                       : isPast
                         ? "bg-primary/60"
-                        : "bg-muted-foreground/30"
+                        : "bg-white/20"
                   )}
                 />
                 
@@ -379,33 +498,15 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
                     className="absolute inset-y-0 left-0 bg-primary rounded-full"
                     initial={false}
                     animate={{ 
-                      width: prefersReducedMotion ? "100%" : `${Math.max(20, sectionProgress * 100)}%`
+                      width: prefersReducedMotion ? "100%" : `${Math.max(15, sectionProgress * 100)}%`
                     }}
-                    transition={{ 
-                      duration: 0.15, 
-                      ease: "easeOut" 
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    style={{ 
+                      boxShadow: "0 0 8px hsl(16 100% 50% / 0.5)"
                     }}
                   />
                 )}
               </span>
-              
-              {/* Tooltip on tap/hold */}
-              <AnimatePresence mode="sync">
-                {isActive && (
-                  <motion.span
-                    key={`tooltip-${section.id}`}
-                    initial={{ opacity: 0, y: 8, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 4, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 text-[10px] font-medium bg-foreground text-background rounded-md whitespace-nowrap shadow-lg"
-                  >
-                    {section.label}
-                    {/* Tooltip arrow */}
-                    <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
             </button>
           );
         })}
@@ -420,18 +521,24 @@ export const MobileProgressBar = memo(function MobileProgressBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="text-[10px] font-medium text-muted-foreground"
+            className="text-[10px] font-semibold tracking-wider uppercase text-white/50"
           >
             {HOMEPAGE_SECTIONS[activeSection]?.label}
           </motion.p>
         </AnimatePresence>
       </div>
       
-      {/* Overall progress bar - uses spring animation for smoothness */}
-      <motion.div 
-        className="absolute top-0 left-0 right-0 h-[2px] bg-primary origin-left"
-        style={{ scaleX }}
-      />
+      {/* Overall progress bar with glow */}
+      <div className="relative h-[3px] bg-white/5">
+        <motion.div 
+          className="absolute inset-y-0 left-0 origin-left"
+          style={{ 
+            scaleX,
+            background: "linear-gradient(90deg, hsl(16 100% 50%), hsl(16 100% 55%))",
+            boxShadow: "0 0 12px hsl(16 100% 50% / 0.5)"
+          }}
+        />
+      </div>
     </motion.div>
   );
 });

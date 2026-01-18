@@ -12,6 +12,7 @@ import { AdminPreviewIndicator } from "@/components/admin/AdminPreviewPanel";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { FloatingCTA } from "@/components/FloatingCTA";
 import ScrollManager from "@/components/ScrollManager";
+import { SectionIndicator, MobileProgressBar } from "@/components/SectionIndicator";
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { MissingConfigScreen } from "@/components/MissingConfigScreen";
 import { hasSupabaseConfig } from "@/lib/env";
@@ -45,6 +46,8 @@ const App = () => (
                   <ScrollManager />
                   <UpgradeModalProvider>
                     <AnimatedRoutes />
+                    <SectionIndicator />
+                    <MobileProgressBar />
                     <FloatingCTA />
                     <AdminPreviewIndicator />
                   </UpgradeModalProvider>

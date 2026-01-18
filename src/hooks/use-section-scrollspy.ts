@@ -19,8 +19,12 @@ export interface SectionDefinition {
  */
 export const HOMEPAGE_SECTIONS: SectionDefinition[] = [
   { id: "hero", label: "Home", isNavItem: true },
-  { id: "what-is-neko", label: "About", isNavItem: false, parentNavId: "hero" },
-  { id: "features", label: "Features", isNavItem: true },
+  { id: "rate-signal", label: "Rate", isNavItem: true },
+  { id: "work-in-motion", label: "Work", isNavItem: true },
+  { id: "fields", label: "Fields", isNavItem: true },
+  { id: "how-it-works", label: "Process", isNavItem: true },
+  { id: "philosophy", label: "Philosophy", isNavItem: true },
+  { id: "cta", label: "Connect", isNavItem: true },
 ];
 
 /**
