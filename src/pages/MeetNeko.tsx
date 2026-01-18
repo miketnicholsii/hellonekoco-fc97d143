@@ -35,7 +35,7 @@ export default function MeetNeko() {
         </motion.h1>
         
         <motion.p
-          className="text-white/50 text-lg sm:text-xl mb-12"
+          className="text-white/50 text-lg sm:text-xl mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -43,10 +43,19 @@ export default function MeetNeko() {
           Nice try though.
         </motion.p>
 
+        <motion.p
+          className="text-white/30 text-sm mb-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+        >
+          You want in? Bring the work.
+        </motion.p>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -67,8 +76,8 @@ export default function MeetNeko() {
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.1 }}
-        transition={{ delay: 1, duration: 1 }}
+        animate={{ opacity: 0.08 }}
+        transition={{ delay: 1.2, duration: 1 }}
       >
         <span className="font-display text-6xl sm:text-8xl font-bold text-white tracking-tight">
           NÈKO
