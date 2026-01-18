@@ -36,7 +36,7 @@ export const NAV_LINKS = [
   { href: "/sandbox", label: "The Sandbox", isAnchor: false },
   { href: "/fields", label: "Fields", isAnchor: false },
   { href: "/proof", label: "Signals", isAnchor: false },
-  { href: "/invite", label: "Work With Me", isAnchor: false },
+  { href: "/invite", label: "Work With Us", isAnchor: false },
   { href: "/contact", label: "Say Hello", isAnchor: false },
 ] as const;
 

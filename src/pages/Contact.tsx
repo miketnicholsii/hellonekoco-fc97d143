@@ -76,7 +76,7 @@ export default function Contact() {
                 If you've got a project, an idea, or a question — send it.
               </motion.p>
               <motion.p variants={itemVariants} className="text-white/45">
-                If it's aligned and the timing works, I'll respond.<br />
+                If it's aligned and the timing works, we'll respond.<br />
                 If not, that's not rejection — it's focus.
               </motion.p>
             </motion.div>

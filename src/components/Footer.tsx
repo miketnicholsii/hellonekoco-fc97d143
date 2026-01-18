@@ -1,7 +1,7 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Heart, Instagram } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowUpRight, Heart, Instagram, HelpCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { nekoConfig } from "@/lib/neko-config";
 
 const footerLinks = {
@@ -56,29 +56,6 @@ const FooterLink = ({ href, label, showArrow = true }: { href: string; label: st
   </motion.div>
 );
 
-// Animated external link component
-const ExternalLink = ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
-  <motion.a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={className}
-    whileHover="hover"
-    initial="rest"
-  >
-    <motion.span
-      className="inline-flex items-center gap-2"
-      variants={{
-        rest: { scale: 1 },
-        hover: { scale: 1.02 }
-      }}
-      transition={{ duration: 0.2 }}
-    >
-      {children}
-    </motion.span>
-  </motion.a>
-);
-
 // Container animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -102,6 +79,131 @@ const itemVariants = {
     },
   },
 };
+
+// Easter egg component for "Who is NÈKO?"
+const WhoIsNekoEasterEgg = () => {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  
+  const mysteryResponses = [
+    "Nice try.",
+    "Still no.",
+    "You're persistent.",
+    "The mystery deepens.",
+    "Perhaps... no.",
+    "🐱",
+    "...",
+    "We are everywhere.",
+    "We are nowhere.",
+    "Just vibes.",
+  ];
+  
+  const handleClick = () => {
+    setIsRevealed(true);
+    setClickCount(prev => prev + 1);
+    setTimeout(() => setIsRevealed(false), 2000);
+  };
+  
+  const currentResponse = mysteryResponses[clickCount % mysteryResponses.length];
+  
+  return (
+    <motion.button
+      onClick={handleClick}
+      className="relative inline-flex items-center gap-1.5 text-xs text-white/20 hover:text-white/40 transition-colors cursor-pointer group"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <HelpCircle className="w-3 h-3 opacity-50 group-hover:opacity-80 transition-opacity" />
+      <span className="italic">Who is NÈKO?</span>
+      
+      <AnimatePresence>
+        {isRevealed && (
+          <motion.span
+            className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full text-xs font-medium text-white/80 whitespace-nowrap pointer-events-none"
+            style={{ 
+              background: "rgba(229, 83, 10, 0.3)",
+              backdropFilter: "blur(8px)",
+              border: "1px solid rgba(229, 83, 10, 0.4)"
+            }}
+            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.8 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {currentResponse}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+};
+
+const BottomBar = () => (
+  <motion.div 
+    className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-6 text-center"
+    variants={itemVariants}
+  >
+    {/* Pronunciation & Meet NÈKO */}
+    <motion.div className="flex flex-col items-center gap-3" variants={itemVariants}>
+      <div className="text-xs text-white/30">
+        <span className="font-display">NÈKO</span>
+        <span className="mx-1.5 text-white/20">•</span>
+        <span className="italic text-white/25">/NEH-koh/</span>
+      </div>
+      <motion.div whileHover="hover" initial="rest">
+        <Link 
+          to="/meet"
+          className="inline-flex items-center gap-1.5 text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
+        >
+          <span>Meet NÈKO.</span>
+          <motion.span
+            variants={{
+              rest: { opacity: 0, x: -8, scale: 0.8 },
+              hover: { opacity: 1, x: 0, scale: 1 }
+            }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <ArrowUpRight className="h-4 w-4 text-[#E5530A]" />
+          </motion.span>
+        </Link>
+      </motion.div>
+    </motion.div>
+    
+    {/* Easter egg */}
+    <WhoIsNekoEasterEgg />
+    
+    <motion.p className="text-xs text-white/30" variants={itemVariants}>
+      © 2026 NÈKO. All rights reserved.
+    </motion.p>
+    <motion.div whileHover="hover" initial="rest" className="relative" variants={itemVariants}>
+      <a 
+        href="https://miketnicholsii.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
+      >
+        <motion.span
+          variants={{
+            rest: { x: 0 },
+            hover: { x: 2 }
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          Mike T. Nichols II
+        </motion.span>
+        <motion.span
+          variants={{
+            rest: { opacity: 0, x: -6, scale: 0.8 },
+            hover: { opacity: 1, x: 0, scale: 1 }
+          }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+        >
+          <ArrowUpRight className="h-3 w-3" />
+        </motion.span>
+      </a>
+    </motion.div>
+  </motion.div>
+);
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
@@ -185,7 +287,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               >
                 <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
               </motion.span>
-          </motion.a>
+            </motion.a>
           </motion.div>
 
           {/* Nav columns - stack on mobile with dividers, 3 columns on desktop */}
@@ -280,67 +382,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </div>
 
           {/* Bottom bar */}
-          <motion.div 
-            className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-6 text-center"
-            variants={itemVariants}
-          >
-            {/* Pronunciation & Meet NÈKO */}
-            <motion.div className="flex flex-col items-center gap-3" variants={itemVariants}>
-              <div className="text-xs text-white/30">
-                <span className="font-display">NÈKO</span>
-                <span className="mx-1.5 text-white/20">•</span>
-                <span className="italic text-white/25">/NEH-koh/</span>
-              </div>
-              <motion.div whileHover="hover" initial="rest">
-                <Link 
-                  to="/meet"
-                  className="inline-flex items-center gap-1.5 text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
-                >
-                  <span>Meet NÈKO.</span>
-                  <motion.span
-                    variants={{
-                      rest: { opacity: 0, x: -8, scale: 0.8 },
-                      hover: { opacity: 1, x: 0, scale: 1 }
-                    }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    <ArrowUpRight className="h-4 w-4 text-[#E5530A]" />
-                  </motion.span>
-                </Link>
-              </motion.div>
-            </motion.div>
-            
-            <motion.p className="text-xs text-white/30" variants={itemVariants}>
-              © 2026 NÈKO. All rights reserved.
-            </motion.p>
-            <motion.div whileHover="hover" initial="rest" className="relative" variants={itemVariants}>
-              <a 
-                href="https://miketnicholsii.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
-              >
-                <motion.span
-                  variants={{
-                    rest: { x: 0 },
-                    hover: { x: 2 }
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  Mike T. Nichols II
-                </motion.span>
-                <motion.span
-                  variants={{
-                    rest: { opacity: 0, x: -6, scale: 0.8 },
-                    hover: { opacity: 1, x: 0, scale: 1 }
-                  }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
-                  <ArrowUpRight className="h-3 w-3" />
-                </motion.span>
-              </a>
-            </motion.div>
-          </motion.div>
+          <BottomBar />
         </motion.div>
       </footer>
     </>

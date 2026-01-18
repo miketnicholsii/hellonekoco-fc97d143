@@ -9,7 +9,7 @@ const CompaniesSection = () => {
             Select collaborators
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#334336] mb-5">
-            Companies I&apos;ve built with
+            Companies we&apos;ve built with
           </h2>
           <p className="text-base sm:text-lg text-[#334336]/60">
             A small, selective list across product, strategy, and digital systems.

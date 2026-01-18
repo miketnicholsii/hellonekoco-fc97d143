@@ -22,9 +22,9 @@ Buttons should feel like invitations:
 
 **The Clarity Test**: Does this increase clarity without increasing obligation?
 
-**The Availability Test**: Would someone reasonably think they can "buy" me after reading this?
+**The Availability Test**: Would someone reasonably think they can "buy" us after reading this?
 
-**The Confidence Test**: Am I explaining this because it's unclear — or because I'm nervous?
+**The Confidence Test**: Are we explaining this because it's unclear — or because we're nervous?
 
 ## One-Line Variations
 

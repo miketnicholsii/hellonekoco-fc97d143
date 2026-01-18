@@ -230,7 +230,7 @@ export default function Index() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.6 }}
               >
-                I build real websites, real strategies, and real digital systems.<br />
+                We build real websites, real strategies, and real digital systems.<br />
                 Sometimes collaboratively. Sometimes quietly.
               </motion.p>
               <motion.p 
@@ -239,7 +239,7 @@ export default function Index() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1, duration: 0.6 }}
               >
-                Sometimes I share what I'm learning. Sometimes I don't.
+                Sometimes we share what we're learning. Sometimes we don't.
               </motion.p>
             </motion.div>
 

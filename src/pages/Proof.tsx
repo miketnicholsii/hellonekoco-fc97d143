@@ -298,7 +298,7 @@ export default function Proof() {
               Toolbox
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight" style={{ color: "#334336" }}>
-              I build with modern tools
+              We build with modern tools
             </motion.h2>
             <motion.p variants={itemVariants} className="text-lg text-[#334336]/60 mt-4">
               The stack changes by the job.
