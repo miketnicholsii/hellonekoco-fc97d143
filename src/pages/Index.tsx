@@ -495,34 +495,23 @@ export default function Index() {
             >
               Work, in motion.
             </motion.h2>
-            <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
+            <motion.div variants={itemVariants} className="space-y-5 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                NÈKO is where ideas get tested by building them for real.
+                Ideas tested by building them for real.
               </motion.p>
               <motion.p 
-                className="opacity-70"
+                className="opacity-60"
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.7 }}
+                whileInView={{ opacity: 0.6 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                Some experiments become public artifacts.<br />
-                Some become paid collaborations.<br />
-                Some stay in the sandbox.
-              </motion.p>
-              <motion.p 
-                className="opacity-50"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.5 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-              >
-                What matters is that the work is real — designed, shipped, and used beyond this page.
+                Some become public. Some become collaborations. Some stay here.
               </motion.p>
             </motion.div>
           </motion.div>
