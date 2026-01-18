@@ -240,13 +240,38 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <span className="relative z-10">NÈKO<span className="text-[#E5530A]">.</span></span>
-                {/* Hover glow effect */}
+                {/* Persistent ambient glow */}
                 <motion.span
-                  className="absolute -inset-x-4 -inset-y-2 rounded-full pointer-events-none"
+                  className="absolute -inset-x-8 -inset-y-4 rounded-full pointer-events-none"
                   style={{ 
-                    background: "radial-gradient(circle, rgba(229, 83, 10, 0.3) 0%, transparent 70%)",
+                    background: "radial-gradient(ellipse at center, rgba(229, 83, 10, 0.25) 0%, rgba(229, 83, 10, 0.08) 40%, transparent 70%)",
+                    filter: "blur(12px)"
+                  }}
+                  animate={{ 
+                    opacity: [0.6, 0.9, 0.6],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                />
+                {/* Secondary glow layer for depth */}
+                <motion.span
+                  className="absolute -inset-x-6 -inset-y-3 rounded-full pointer-events-none"
+                  style={{ 
+                    background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%)",
                     filter: "blur(8px)"
+                  }}
+                />
+                <span className="relative z-10">NÈKO<span className="text-[#E5530A]">.</span></span>
+                {/* Hover boost effect */}
+                <motion.span
+                  className="absolute -inset-x-6 -inset-y-3 rounded-full pointer-events-none"
+                  style={{ 
+                    background: "radial-gradient(circle, rgba(229, 83, 10, 0.4) 0%, transparent 60%)",
+                    filter: "blur(10px)"
                   }}
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
