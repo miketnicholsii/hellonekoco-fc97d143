@@ -48,7 +48,7 @@ const floatVariants: Variants = {
 const fields = [
   { icon: Layers, title: "Digital Structures", body: "Websites, identities, and systems designed to work — not just look good." },
   { icon: Target, title: "Strategic Exploration", body: "Positioning, business models, and brand strategy tested in practice." },
-  { icon: FileText, title: "Public Artifacts", body: "Pages, tools, and ideas shared when they're ready — not before." },
+  { icon: FileText, title: "Case Studies", body: "Real builds. Real results. Selected work with permission to share." },
 ];
 
 export default function Index() {
@@ -200,7 +200,7 @@ export default function Index() {
               </motion.p>
             </motion.div>
 
-            {/* Statement */}
+            {/* Statement - Updated CTA */}
             <motion.div 
               variants={itemVariants} 
               className="max-w-md mx-auto mb-12"
@@ -211,8 +211,8 @@ export default function Index() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2, duration: 0.8 }}
               >
-                NÈKO isn't a marketplace.<br />
-                It's a place.
+                Want to build cool sh*t?<br />
+                <span className="text-[#E5530A] font-semibold">Just say hello.</span>
               </motion.p>
             </motion.div>
 
@@ -699,42 +699,51 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50 mb-6">
-              The fine print
+            {/* Subtle "who the f*ck is NÈKO?" easter egg */}
+            <motion.span 
+              variants={itemVariants} 
+              className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/30 mb-6 cursor-default select-none"
+              whileHover={{ 
+                color: "#E5530A",
+                letterSpacing: "0.3em",
+                transition: { duration: 0.3 }
+              }}
+              title="Just say hello."
+            >
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                who the f*ck is NÈKO?
+              </motion.span>
             </motion.span>
             <motion.h2 
               variants={itemVariants} 
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" 
               style={{ color: "#334336" }}
             >
-              Built different. On purpose.
+              Want to build cool sh*t?
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
               <motion.p
+                className="font-display text-2xl sm:text-3xl font-bold"
+                style={{ color: "#E5530A" }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                Professional-level work. Real outcomes.<br />
-                Payment when alignment exists.
+                Just say hello.
               </motion.p>
               <motion.p 
-                className="opacity-70"
+                className="opacity-60 text-base sm:text-lg"
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.7 }}
+                whileInView={{ opacity: 0.6 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                NÈKO isn't "for hire" on demand.<br />It's invite-only — because that's how the best work happens.
-              </motion.p>
-              <motion.p 
-                className="opacity-50"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.5 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-              >
+                NÈKO is invite-only — because that's how the best work happens.<br />
                 If it fits, we'll shape something together.
               </motion.p>
             </motion.div>
