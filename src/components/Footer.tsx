@@ -9,7 +9,7 @@ const footerLinks = {
     { href: "/fields", label: "Fields" },
     { href: "/proof", label: "Proof" },
   ],
-  more: [
+  connect: [
     { href: "/invite", label: "Work With Me" },
     { href: "/notes", label: "Notes" },
     { href: "/contact", label: "Say Hello" },
@@ -30,47 +30,40 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
     >
       {/* Subtle ambient glow */}
       <div 
-        className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsl(16 100% 42% / 0.06) 0%, transparent 60%)" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, hsl(16 100% 42% / 0.04) 0%, transparent 70%)" }}
       />
       
-      <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 z-10">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 sm:gap-10">
-          {/* Brand */}
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <Link to="/" className="inline-block mb-4 group">
-              <span className="font-display text-2xl font-bold tracking-tight text-white transition-colors group-hover:text-secondary">
-                NÈKO<span className="text-secondary">.</span>
-              </span>
-            </Link>
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs mb-2">
-              {nekoConfig.brand.tagline}
-            </p>
-            <p className="text-white/50 text-sm leading-relaxed max-w-xs mb-4">
-              Building real things, at a human pace.
-            </p>
-            <div className="flex flex-col gap-2">
-              <span 
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wide w-fit"
-                style={{ 
-                  background: "hsl(16 100% 42% / 0.15)", 
-                  color: "hsl(16 100% 55%)", 
-                  border: "1px solid hsl(16 100% 42% / 0.3)" 
-                }}
-              >
-                <Sparkles className="w-3 h-3" />
-                {nekoConfig.brand.badge}
-              </span>
-              <span className="inline-flex items-center gap-2 text-[10px] text-white/40">
-                <Heart className="w-3 h-3" />
-                {nekoConfig.brand.missionStatement}
-              </span>
-            </div>
-          </div>
+      <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 z-10">
+        
+        {/* Top section - centered brand */}
+        <div className="text-center mb-14 sm:mb-16">
+          <Link to="/" className="inline-block mb-5 group">
+            <span className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white transition-colors group-hover:text-secondary">
+              NÈKO<span className="text-secondary">.</span>
+            </span>
+          </Link>
+          <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto mb-5">
+            {nekoConfig.brand.tagline}
+          </p>
+          <span 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-medium tracking-wide"
+            style={{ 
+              background: "hsl(16 100% 42% / 0.12)", 
+              color: "hsl(16 100% 55%)", 
+              border: "1px solid hsl(16 100% 42% / 0.25)" 
+            }}
+          >
+            <Sparkles className="w-3 h-3" />
+            {nekoConfig.brand.badge}
+          </span>
+        </div>
 
+        {/* Middle section - symmetrical nav columns */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 max-w-2xl mx-auto mb-14 sm:mb-16">
           {/* Explore */}
-          <nav aria-label="Explore links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">
+          <nav aria-label="Explore links" className="text-center">
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
               Explore
             </h4>
             <ul className="space-y-2.5">
@@ -78,30 +71,30 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <li key={link.label}>
                   <Link 
                     to={link.href} 
-                    className="group inline-flex items-center gap-1 text-xs sm:text-sm text-white/50 hover:text-secondary transition-colors"
+                    className="group inline-flex items-center justify-center gap-1 text-sm text-white/45 hover:text-secondary transition-colors"
                   >
                     {link.label}
-                    <ArrowUpRight className="h-2.5 w-2.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          {/* More */}
-          <nav aria-label="More links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">
-              More
+          {/* Connect */}
+          <nav aria-label="Connect links" className="text-center">
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+              Connect
             </h4>
             <ul className="space-y-2.5">
-              {footerLinks.more.map((link) => (
+              {footerLinks.connect.map((link) => (
                 <li key={link.label}>
                   <Link 
                     to={link.href} 
-                    className="group inline-flex items-center gap-1 text-xs sm:text-sm text-white/50 hover:text-secondary transition-colors"
+                    className="group inline-flex items-center justify-center gap-1 text-sm text-white/45 hover:text-secondary transition-colors"
                   >
                     {link.label}
-                    <ArrowUpRight className="h-2.5 w-2.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
               ))}
@@ -109,8 +102,8 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </nav>
 
           {/* Legal */}
-          <nav aria-label="Legal links">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-wider text-white/70 mb-4 uppercase">
+          <nav aria-label="Legal links" className="text-center col-span-2 sm:col-span-1">
+            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
               Legal
             </h4>
             <ul className="space-y-2.5">
@@ -118,7 +111,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                 <li key={link.label}>
                   <Link 
                     to={link.href} 
-                    className="text-xs text-white/30 hover:text-secondary transition-colors"
+                    className="text-sm text-white/35 hover:text-secondary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -128,20 +121,33 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </nav>
         </div>
 
-        {/* Legacy note - subtle */}
-        <div className="mt-8 pt-6 border-t border-white/10">
-          <p className="text-[10px] text-white/25 italic">
-            {nekoConfig.legacyNote}
-          </p>
+        {/* Mission statement - centered */}
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-2 text-[11px] text-white/35">
+            <Heart className="w-3 h-3 text-[#E5530A]/50" />
+            {nekoConfig.brand.missionStatement}
+          </span>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-6 pt-6 border-t border-white/10">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p className="text-[10px] sm:text-xs text-white/30">
+        {/* Bottom section - symmetrical with legacy note */}
+        <div className="pt-8 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-center">
+            <p className="text-[11px] text-white/30 order-2 sm:order-1">
               © {new Date().getFullYear()} NÈKO. All rights reserved.
             </p>
-            <p className="text-[10px] sm:text-xs text-white/30">
+            
+            {/* Legacy note - subtle, linked, orange */}
+            <a 
+              href="https://miketnicholsii.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[11px] italic transition-colors order-1 sm:order-2 hover:opacity-80"
+              style={{ color: "hsl(16 100% 55% / 0.45)" }}
+            >
+              miketnicholsii.com is being folded into NÈKO
+            </a>
+            
+            <p className="text-[11px] text-white/30 order-3">
               Hello, NÈKO.
             </p>
           </div>
