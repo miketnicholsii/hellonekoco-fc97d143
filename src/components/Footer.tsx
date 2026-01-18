@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Heart } from "lucide-react";
+import { ArrowUpRight, Heart, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
 import { nekoConfig } from "@/lib/neko-config";
 
@@ -46,95 +46,115 @@ const FooterLink = ({ href, label, showArrow = true }: { href: string; label: st
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <footer 
-      ref={ref} 
-      role="contentinfo" 
-      className="relative overflow-hidden"
-      style={{ background: "#1f2a21" }}
-    >
-      <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
-        
-        {/* Main grid layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
+    <>
+      {/* Divider before footer */}
+      <div className="h-1 w-full" style={{ background: "#E5530A" }} />
+      
+      <footer 
+        ref={ref} 
+        role="contentinfo" 
+        className="relative overflow-hidden"
+        style={{ background: "#1f2a21" }}
+      >
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
           
-          {/* Brand column */}
-          <div className="lg:col-span-4">
-            <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
-              <span className="font-display text-2xl font-bold tracking-tight text-white">
-                NÈKO<span className="text-[#E5530A]">.</span>
-              </span>
-            </Link>
-            <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-6">
-              {nekoConfig.brand.tagline}
-            </p>
-            <div className="flex items-center gap-2 text-xs text-white/30">
-              <Heart className="w-3 h-3 text-[#E5530A]/60" />
-              <span>{nekoConfig.brand.missionLine}</span>
+          {/* Main grid layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
+            
+            {/* Brand column */}
+            <div className="lg:col-span-4">
+              <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
+                <span className="font-display text-2xl font-bold tracking-tight text-white">
+                  NÈKO<span className="text-[#E5530A]">.</span>
+                </span>
+              </Link>
+              <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-6">
+                {nekoConfig.brand.tagline}
+              </p>
+              <div className="flex items-center gap-2 text-xs text-white/30 mb-6">
+                <Heart className="w-3 h-3 text-[#E5530A]/60" />
+                <span>{nekoConfig.brand.missionLine}</span>
+              </div>
+              
+              {/* Instagram callout */}
+              <a 
+                href="https://www.instagram.com/helloneko.co"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 hover:text-[#E5530A] transition-all duration-300 hover:scale-105"
+                style={{ 
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)"
+                }}
+              >
+                <Instagram className="w-4 h-4" />
+                <span>@helloneko.co</span>
+              </a>
+            </div>
+
+            {/* Nav columns */}
+            <div className="lg:col-span-8 grid grid-cols-3 gap-8">
+              {/* Explore */}
+              <nav aria-label="Explore links">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Explore
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.explore.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Connect */}
+              <nav aria-label="Connect links">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Connect
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.connect.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Legal */}
+              <nav aria-label="Legal links">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Legal
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.legal.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink href={link.href} label={link.label} showArrow={false} />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </div>
 
-          {/* Nav columns */}
-          <div className="lg:col-span-8 grid grid-cols-3 gap-8">
-            {/* Explore */}
-            <nav aria-label="Explore links">
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Explore
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.explore.map((link) => (
-                  <li key={link.label}>
-                    <FooterLink href={link.href} label={link.label} />
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Connect */}
-            <nav aria-label="Connect links">
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Connect
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.connect.map((link) => (
-                  <li key={link.label}>
-                    <FooterLink href={link.href} label={link.label} />
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Legal */}
-            <nav aria-label="Legal links">
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Legal
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.label}>
-                    <FooterLink href={link.href} label={link.label} showArrow={false} />
-                  </li>
-                ))}
-              </ul>
-            </nav>
+          {/* Bottom bar */}
+          <div className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-2 text-center">
+            <p className="text-xs text-white/30">
+              © 2026 NÈKO. All rights reserved.
+            </p>
+            <a 
+              href="https://miketnicholsii.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
+            >
+              Mike T. Nichols II
+            </a>
           </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/30">
-            © {new Date().getFullYear()} NÈKO. All rights reserved.
-          </p>
-          <a 
-            href="https://miketnicholsii.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
-          >
-            Mike T. Nichols II
-          </a>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 });
 

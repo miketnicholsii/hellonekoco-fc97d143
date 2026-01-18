@@ -525,17 +525,22 @@ export default function Index() {
                   style={{ background: "radial-gradient(circle at 50% 0%, rgba(229, 83, 10, 0.12) 0%, transparent 60%)" }}
                 />
                 
-                {/* Badge */}
+                {/* Badge with pulse animation */}
                 <div className="absolute top-4 right-4">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                    field.badge === "Core" 
-                      ? "bg-[#334336] text-white" 
-                      : field.badge === "New" 
-                        ? "bg-[#E5530A] text-white" 
-                        : "bg-[#334336]/10 text-[#334336]"
-                  }`}>
+                  <motion.span 
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      field.badge === "Core" 
+                        ? "bg-[#334336] text-white" 
+                        : field.badge === "New" 
+                          ? "bg-[#E5530A] text-white" 
+                          : "bg-[#334336]/10 text-[#334336]"
+                    }`}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: 2, delay: i * 0.3 }}
+                  >
                     {field.badge}
-                  </span>
+                  </motion.span>
                 </div>
                 
                 <motion.div 
