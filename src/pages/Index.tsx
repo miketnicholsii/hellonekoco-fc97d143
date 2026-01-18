@@ -50,9 +50,9 @@ const fields = [
   { 
     icon: Layers, 
     title: "Digital Structures", 
-    body: "Revenue systems designed to hold under load, break cleanly, and recover fast.",
-    details: "Built for scale, decay, and reality — not demos.",
-    badge: "FAILURE-TOLERANT"
+    body: "Revenue systems engineered for scale. Built to perform under load, adapt under pressure, and compound over time.",
+    details: "Production-grade infrastructure that grows with you — not against you.",
+    badge: "BUILT TO LAST"
   },
   { 
     icon: BarChart3, 
@@ -965,10 +965,10 @@ export default function Index() {
               variants={itemVariants} 
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-8"
             >
-              If something here resonates…
+              If this resonates,
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-white/60 mb-12">
-              Reach out. Not to buy — but to talk.
+              say hello. We'll talk.
             </motion.p>
             <motion.div 
               variants={itemVariants}
