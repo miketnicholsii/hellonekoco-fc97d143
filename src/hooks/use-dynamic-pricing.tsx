@@ -8,6 +8,7 @@ import {
   isPriceIncreasing,
   type PricingPeriod,
 } from "@/lib/dynamic-pricing";
+import { formatLiveTimestamp } from "@/lib/dynamic-charts";
 
 export interface DynamicPricingState {
   currentPeriod: PricingPeriod;
@@ -21,6 +22,7 @@ export interface DynamicPricingState {
   };
   isIncreasing: boolean;
   formattedRate: string;
+  timestamp: string;
 }
 
 export function useDynamicPricing(): DynamicPricingState {
@@ -39,6 +41,7 @@ export function useDynamicPricing(): DynamicPricingState {
       },
       isIncreasing: isPriceIncreasing(),
       formattedRate: `$${currentPeriod.rate}`,
+      timestamp: formatLiveTimestamp(new Date()),
     };
   });
 
@@ -59,6 +62,7 @@ export function useDynamicPricing(): DynamicPricingState {
         },
         isIncreasing: isPriceIncreasing(),
         formattedRate: `$${currentPeriod.rate}`,
+        timestamp: formatLiveTimestamp(new Date()),
       });
     }, 1000);
 

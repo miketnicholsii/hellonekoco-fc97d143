@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { nekoConfig } from "@/lib/neko-config";
 import { WorkBreakdownCharts } from "@/components/WorkBreakdownCharts";
+import { useLiveMetrics } from "@/hooks/use-live-metrics";
 import { 
   ArrowRight, 
   Rocket, 
@@ -15,7 +16,11 @@ import {
   Code,
   Target,
   Palette,
-  Cog
+  Cog,
+  Activity,
+  CheckCircle,
+  Zap,
+  Star
 } from "lucide-react";
 
 const containerVariants: Variants = {
@@ -56,8 +61,36 @@ const toolboxIcons: Record<string, React.ElementType> = {
   design: Palette,
 };
 
+// Live metrics icons
+const liveMetricIcons = {
+  activeProjects: Activity,
+  completionRate: CheckCircle,
+  efficiency: Zap,
+  clientSatisfaction: Star,
+};
+
+// Live timestamp display component
+const LiveTimestamp = ({ timestamp, secondsUntilRefresh }: { timestamp: string; secondsUntilRefresh: number }) => (
+  <motion.div 
+    className="flex items-center gap-2 text-[10px] font-mono"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+  >
+    <motion.span
+      className="w-1.5 h-1.5 rounded-full bg-green-500"
+      animate={{ opacity: [1, 0.4, 1] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    />
+    <span className="text-white/50">LIVE</span>
+    <span className="text-white/70 tabular-nums">{timestamp}</span>
+    <span className="text-white/40">•</span>
+    <span className="text-white/40 tabular-nums">refresh in {secondsUntilRefresh}s</span>
+  </motion.div>
+);
+
 export default function Proof() {
   const prefersReducedMotion = useReducedMotion();
+  const liveMetrics = useLiveMetrics();
   const { toolbox } = nekoConfig;
   return (
     <main className="min-h-screen bg-background overflow-hidden">
@@ -99,6 +132,97 @@ export default function Proof() {
             
             <motion.p variants={itemVariants} className="text-sm text-white/40">
               Directional, not exhaustive. Clarity over precision.
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Live Metrics - Dark Section */}
+      <section 
+        className="py-16 sm:py-20 relative overflow-hidden"
+        style={{ background: "linear-gradient(180deg, #1f2a21 0%, #334336 100%)" }}
+      >
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+          <motion.div
+            className="max-w-4xl mx-auto"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+          >
+            {/* Header with live indicator */}
+            <motion.div variants={itemVariants} className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-1">Live Status</h3>
+                <p className="text-sm text-white/50">Real-time operational metrics</p>
+              </div>
+              <LiveTimestamp timestamp={liveMetrics.timestamp} secondsUntilRefresh={liveMetrics.secondsUntilRefresh} />
+            </motion.div>
+
+            {/* Live metrics grid */}
+            <motion.div 
+              variants={itemVariants}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+            >
+              {[
+                { 
+                  icon: liveMetricIcons.activeProjects, 
+                  label: "Active Projects", 
+                  value: liveMetrics.activeProjects,
+                  suffix: "",
+                  color: "#E5530A"
+                },
+                { 
+                  icon: liveMetricIcons.completionRate, 
+                  label: "Completion Rate", 
+                  value: liveMetrics.completionRate,
+                  suffix: "%",
+                  color: "#4ade80"
+                },
+                { 
+                  icon: liveMetricIcons.efficiency, 
+                  label: "Efficiency", 
+                  value: liveMetrics.efficiency,
+                  suffix: "%",
+                  color: "#C8BFB5"
+                },
+                { 
+                  icon: liveMetricIcons.clientSatisfaction, 
+                  label: "Satisfaction", 
+                  value: liveMetrics.clientSatisfaction,
+                  suffix: "%",
+                  color: "#fbbf24"
+                },
+              ].map((metric, i) => (
+                <motion.div
+                  key={i}
+                  className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
+                  whileHover={{ scale: 1.02, borderColor: "rgba(255,255,255,0.2)" }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <metric.icon className="w-4 h-4" style={{ color: metric.color }} />
+                    <span className="text-xs text-white/50 uppercase tracking-wider">{metric.label}</span>
+                  </div>
+                  <motion.div 
+                    key={metric.value}
+                    className="font-display text-3xl sm:text-4xl font-bold tabular-nums"
+                    style={{ color: metric.color }}
+                    initial={{ opacity: 0.7 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {metric.value}{metric.suffix}
+                  </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.p 
+              variants={itemVariants}
+              className="text-center text-xs text-white/30 mt-6"
+            >
+              Metrics update every 5 seconds based on current operational state
             </motion.p>
           </motion.div>
         </div>
