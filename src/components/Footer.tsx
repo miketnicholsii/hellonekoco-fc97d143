@@ -21,6 +21,51 @@ const footerLinks = {
   ],
 };
 
+// Animated link component with glow effect
+const FooterLink = ({ href, label, showArrow = true }: { href: string; label: string; showArrow?: boolean }) => (
+  <motion.div
+    className="relative inline-block"
+    whileHover="hover"
+    initial="rest"
+  >
+    <Link 
+      to={href} 
+      className="relative inline-flex items-center justify-center gap-1 text-sm text-white/45 transition-colors z-10"
+    >
+      <motion.span
+        variants={{
+          rest: { color: "rgba(255, 255, 255, 0.45)" },
+          hover: { color: "hsl(16, 100%, 55%)" }
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        {label}
+      </motion.span>
+      {showArrow && (
+        <motion.span
+          variants={{
+            rest: { opacity: 0, x: -4 },
+            hover: { opacity: 1, x: 0 }
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <ArrowUpRight className="h-3 w-3" style={{ color: "hsl(16, 100%, 55%)" }} />
+        </motion.span>
+      )}
+    </Link>
+    {/* Glow effect */}
+    <motion.div
+      className="absolute inset-0 -inset-x-3 -inset-y-1 rounded-full pointer-events-none"
+      style={{ background: "radial-gradient(ellipse, hsl(16 100% 50% / 0.15) 0%, transparent 70%)" }}
+      variants={{
+        rest: { opacity: 0, scale: 0.8 },
+        hover: { opacity: 1, scale: 1 }
+      }}
+      transition={{ duration: 0.25 }}
+    />
+  </motion.div>
+);
+
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -100,13 +145,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <ul className="space-y-2.5">
               {footerLinks.explore.map((link) => (
                 <li key={link.label}>
-                  <Link 
-                    to={link.href} 
-                    className="group inline-flex items-center justify-center gap-1 text-sm text-white/45 hover:text-secondary transition-colors"
-                  >
-                    {link.label}
-                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </Link>
+                  <FooterLink href={link.href} label={link.label} />
                 </li>
               ))}
             </ul>
@@ -120,13 +159,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <ul className="space-y-2.5">
               {footerLinks.connect.map((link) => (
                 <li key={link.label}>
-                  <Link 
-                    to={link.href} 
-                    className="group inline-flex items-center justify-center gap-1 text-sm text-white/45 hover:text-secondary transition-colors"
-                  >
-                    {link.label}
-                    <ArrowUpRight className="h-3 w-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </Link>
+                  <FooterLink href={link.href} label={link.label} />
                 </li>
               ))}
             </ul>
@@ -140,12 +173,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <ul className="space-y-2.5">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <Link 
-                    to={link.href} 
-                    className="text-sm text-white/35 hover:text-secondary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
+                  <FooterLink href={link.href} label={link.label} showArrow={false} />
                 </li>
               ))}
             </ul>
