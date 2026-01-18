@@ -29,16 +29,16 @@ const fields = [
     expanded: "Production-grade code. Modern tools. Built for clarity, longevity, and real use.",
   },
   {
-    icon: Target,
-    title: "Strategic Exploration",
-    description: "Positioning, business models, and brand strategy tested in practice.",
-    expanded: "No templates. No theater. Just honest thinking applied to real problems.",
+    icon: FileText,
+    title: "Case Studies",
+    description: "Real builds. Real results. Selected work with permission to share.",
+    expanded: "Documented outcomes from real projects. Shared with permission.",
   },
   {
-    icon: FileText,
-    title: "Public Artifacts",
-    description: "Pages, tools, and ideas shared when they're ready — not before.",
-    expanded: "Some things stay private. What gets shared is intentional.",
+    icon: Target,
+    title: "Digital & Business Strategy",
+    description: "Positioning, business models, and brand strategy tested in practice.",
+    expanded: "No templates. No theater. Just honest thinking applied to real problems.",
   },
 ];
 
