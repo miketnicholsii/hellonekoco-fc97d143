@@ -341,11 +341,45 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Section Divider - Angular transition */}
+      <div className="h-24 sm:h-32 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
+        <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <motion.path
+            d="M0,120 L0,60 Q360,0 720,60 T1440,60 L1440,120 Z"
+            fill="#ffffff"
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          />
+        </svg>
+      </div>
+
       {/* ═══════════════════════════════════════════════════════════════════
           WORK IN MOTION — White (#FFFFFF)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 bg-white">
-        <div className="container mx-auto px-5 sm:px-6 lg:px-8">
+      <section className="py-24 sm:py-32 relative overflow-hidden bg-white">
+        {/* Subtle animated grid pattern */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{ 
+            backgroundImage: "linear-gradient(#334336 1px, transparent 1px), linear-gradient(90deg, #334336 1px, transparent 1px)",
+            backgroundSize: "60px 60px"
+          }}
+        />
+        {/* Floating accent */}
+        <motion.div
+          className="absolute top-20 right-10 w-3 h-3 rounded-full bg-[#E5530A]/20"
+          animate={prefersReducedMotion ? {} : { y: [-10, 10, -10], x: [-5, 5, -5] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-32 left-16 w-2 h-2 rounded-full bg-[#334336]/10"
+          animate={prefersReducedMotion ? {} : { y: [10, -10, 10] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+        
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             className="max-w-2xl mx-auto text-center"
             variants={prefersReducedMotion ? undefined : containerVariants}
@@ -353,18 +387,62 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
+            <motion.span 
+              variants={itemVariants} 
+              className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6"
+            >
+              <motion.div 
+                className="w-8 h-px bg-[#E5530A]"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              />
               What lives here
+              <motion.div 
+                className="w-8 h-px bg-[#E5530A]"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              />
             </motion.span>
-            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" style={{ color: "#334336" }}>
+            <motion.h2 
+              variants={itemVariants} 
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" 
+              style={{ color: "#334336" }}
+            >
               Work, in motion.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
-              <p>NÈKO is where ideas get tested by building them for real.</p>
-              <p className="opacity-70">Some experiments become public artifacts.<br />
-              Some become paid collaborations.<br />
-              Some stay in the sandbox.</p>
-              <p className="opacity-50">What matters is that the work is real — designed, shipped, and used beyond this page.</p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                NÈKO is where ideas get tested by building them for real.
+              </motion.p>
+              <motion.p 
+                className="opacity-70"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.7 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+              >
+                Some experiments become public artifacts.<br />
+                Some become paid collaborations.<br />
+                Some stay in the sandbox.
+              </motion.p>
+              <motion.p 
+                className="opacity-50"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.5 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+              >
+                What matters is that the work is real — designed, shipped, and used beyond this page.
+              </motion.p>
             </motion.div>
           </motion.div>
         </div>
@@ -465,22 +543,53 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Diagonal section divider */}
+      <div 
+        className="h-20 sm:h-28 relative"
+        style={{ background: "linear-gradient(175deg, #C8BFB5 50%, #334336 50%)" }}
+      />
+
       {/* ═══════════════════════════════════════════════════════════════════
           NO CHECKOUT — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
         className="py-24 sm:py-32 relative overflow-hidden noise-texture"
-        style={{ background: "linear-gradient(180deg, #334336 0%, #2a3a2d 100%)" }}
+        style={{ background: "linear-gradient(180deg, #334336 0%, #263029 100%)" }}
       >
-        {/* Animated aurora effect */}
+        {/* Multiple animated aurora layers */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
           style={{ 
-            background: "radial-gradient(ellipse 100% 50% at 50% 100%, rgba(229, 83, 10, 0.06) 0%, transparent 50%)",
+            background: "radial-gradient(ellipse 80% 40% at 20% 80%, rgba(229, 83, 10, 0.08) 0%, transparent 50%)",
           }}
-          animate={prefersReducedMotion ? {} : { opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          animate={prefersReducedMotion ? {} : { opacity: [0.3, 0.8, 0.3], x: [0, 30, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{ 
+            background: "radial-gradient(ellipse 60% 50% at 80% 20%, rgba(200, 191, 181, 0.05) 0%, transparent 50%)",
+          }}
+          animate={prefersReducedMotion ? {} : { opacity: [0.5, 1, 0.5], y: [0, -20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+        {/* Floating particles */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-[#E5530A]/30"
+            style={{ 
+              left: `${20 + i * 15}%`, 
+              top: `${30 + (i % 3) * 20}%` 
+            }}
+            animate={prefersReducedMotion ? {} : { 
+              y: [-20, 20, -20], 
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.5, 1]
+            }}
+            transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+          />
+        ))}
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
@@ -497,7 +606,14 @@ export default function Index() {
               variants={itemVariants} 
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-10"
             >
-              Not for sale. Still for real.
+              Not for sale.<br />
+              <motion.span 
+                className="text-[#E5530A]"
+                animate={prefersReducedMotion ? {} : { opacity: [1, 0.7, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                But it'll cost ya.
+              </motion.span>
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl text-white/60 leading-relaxed">
               <motion.p
@@ -506,7 +622,7 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                NÈKO is for-profit — not free, not a commodity for sale.
+                NÈKO is for-profit — not free, not available on demand.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, x: 20 }}
@@ -532,16 +648,46 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Wave divider */}
+      <div className="relative h-16 sm:h-24 overflow-hidden" style={{ background: "#334336" }}>
+        <svg className="absolute bottom-0 w-full" viewBox="0 0 1440 80" preserveAspectRatio="none">
+          <motion.path
+            d="M0,80 L0,40 Q180,0 360,40 T720,40 T1080,40 T1440,40 L1440,80 Z"
+            fill="#EDE7E3"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          />
+        </svg>
+      </div>
+
       {/* ═══════════════════════════════════════════════════════════════════
           NOT A PITCH — Soft Neutral (#EDE7E3)
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
+        {/* Decorative corner accents */}
+        <div 
+          className="absolute top-0 left-0 w-32 h-32 pointer-events-none"
+          style={{ background: "linear-gradient(135deg, rgba(51, 67, 54, 0.03) 0%, transparent 50%)" }}
+        />
+        <div 
+          className="absolute bottom-0 right-0 w-48 h-48 pointer-events-none"
+          style={{ background: "linear-gradient(-45deg, rgba(229, 83, 10, 0.03) 0%, transparent 50%)" }}
+        />
+        
         {/* Subtle moving shapes */}
         <motion.div
           className="absolute top-1/4 right-0 w-96 h-96 rounded-full pointer-events-none"
           style={{ background: "radial-gradient(circle, rgba(51, 67, 54, 0.04) 0%, transparent 60%)" }}
           animate={prefersReducedMotion ? {} : { x: [0, -30, 0], rotate: [0, 180, 360] }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 left-10 w-64 h-64 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.03) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { y: [0, 20, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
@@ -595,21 +741,36 @@ export default function Index() {
         </div>
       </section>
 
-      <CompaniesSection />
+      {/* Accent strip before final CTA */}
+      <div className="h-2" style={{ background: "linear-gradient(90deg, #E5530A 0%, #C74A09 50%, #E5530A 100%)" }} />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
-        className="py-24 sm:py-32 relative overflow-hidden noise-texture"
+        className="py-28 sm:py-36 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #1f2a21 100%)" }}
       >
-        {/* Ambient glow */}
+        {/* Multiple layered glows for depth */}
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.08) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.1) 0%, transparent 50%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1], rotate: [0, 45, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(200, 191, 181, 0.06) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { x: [0, 50, 0], y: [0, -30, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        {/* Animated border accents */}
+        <motion.div
+          className="absolute top-0 left-0 w-full h-px"
+          style={{ background: "linear-gradient(90deg, transparent 0%, rgba(229, 83, 10, 0.3) 50%, transparent 100%)" }}
+          animate={{ opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity }}
         />
 
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
@@ -620,30 +781,68 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
+            <motion.span 
+              variants={itemVariants} 
+              className="inline-flex items-center gap-3 text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6"
+            >
+              <motion.div
+                className="w-2 h-2 rounded-full bg-[#E5530A]"
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
               Invitation
+              <motion.div
+                className="w-2 h-2 rounded-full bg-[#E5530A]"
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+              />
             </motion.span>
-            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-8">
+            <motion.h2 
+              variants={itemVariants} 
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-8"
+            >
               If something here resonates…
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-white/60 mb-12">
               Reach out. Not to buy — but to talk.
             </motion.p>
-            <motion.div variants={itemVariants}>
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
               <Button 
                 asChild 
                 size="lg" 
-                className="group rounded-full px-10 py-7 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:-translate-y-1 border-0"
+                className="group relative rounded-full px-12 py-8 text-lg font-semibold shadow-2xl transition-all duration-300 border-0 overflow-hidden"
                 style={{ 
                   background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
-                  boxShadow: "0 8px 30px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                  boxShadow: "0 12px 40px rgba(229, 83, 10, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)"
                 }}
               >
-                <Link to="/contact" className="flex items-center gap-3 text-white">
+                <Link to="/contact" className="flex items-center gap-3 text-white relative z-10">
                   Start a conversation
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <motion.span
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.span>
                 </Link>
               </Button>
+            </motion.div>
+            
+            {/* Decorative line */}
+            <motion.div
+              className="mt-16 flex items-center justify-center gap-4"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="w-12 h-px bg-white/20" />
+              <span className="text-xs text-white/30 tracking-widest">NÈKO</span>
+              <div className="w-12 h-px bg-white/20" />
             </motion.div>
           </motion.div>
         </div>
@@ -653,3 +852,4 @@ export default function Index() {
     </main>
   );
 }
+
