@@ -235,8 +235,8 @@ const BottomBar = () => (
     <motion.div className="flex flex-col items-center gap-3" variants={itemVariants}>
       <div className="text-xs text-white/30">
         <span className="font-display">NÈKO</span>
-        <span className="mx-1.5 text-white/20">•</span>
-        <span className="italic text-white/25">/NEH-koh/</span>
+        <span className="mx-1.5 text-white">•</span>
+        <span className="italic text-[#E5530A]">/NEH-koh/</span>
       </div>
       <motion.div whileHover="hover" initial="rest" className="relative inline-flex justify-center">
         <Link 
