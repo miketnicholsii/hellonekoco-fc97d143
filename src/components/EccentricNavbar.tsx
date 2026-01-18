@@ -203,27 +203,28 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               </Button>
             </div>
 
-            {/* Mobile: Menu button + SAY HELLO - Better touch targets */}
-            <div className="flex lg:hidden items-center gap-3">
+            {/* Mobile: Menu button + SAY HELLO - Better positioning */}
+            <div className="flex lg:hidden items-center gap-2">
               <Button
                 asChild
                 size="sm"
-                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px] active:scale-95 active:opacity-90 transition-transform"
+                className="rounded-full px-4 py-2 font-semibold text-xs shadow-lg border-0 min-h-[40px] active:scale-95 active:opacity-90 transition-transform"
                 style={{ 
                   background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                   boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
                 }}
               >
-                <Link to="/contact" className="flex items-center gap-2 text-white">
-                  SAY HELLO
-                  <ArrowRight className="w-3.5 h-3.5" />
+                <Link to="/contact" className="flex items-center gap-1.5 text-white">
+                  <span className="hidden xs:inline">SAY HELLO</span>
+                  <span className="xs:hidden">HELLO</span>
+                  <ArrowRight className="w-3 h-3" />
                 </Link>
               </Button>
               
               <button
                 ref={menuButtonRef}
                 type="button"
-                className={`p-3 rounded-xl relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-90 active:opacity-70 transition-transform ${
+                className={`p-2.5 rounded-xl relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-90 active:opacity-70 transition-transform ${
                   showDarkText 
                     ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" 
                     : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
@@ -233,7 +234,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu"
               >
-                {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+                {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
               </button>
             </div>
           </div>
