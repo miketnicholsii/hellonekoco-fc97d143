@@ -47,8 +47,8 @@ const floatVariants: Variants = {
 
 const fields = [
   { icon: Layers, title: "Digital Structures", body: "Websites, identities, and systems designed to work — not just look good." },
-  { icon: Target, title: "Strategic Exploration", body: "Positioning, business models, and brand strategy tested in practice." },
   { icon: FileText, title: "Case Studies", body: "Real builds. Real results. Selected work with permission to share." },
+  { icon: Target, title: "Digital & Business Strategy", body: "Positioning, business models, and brand strategy tested in practice." },
 ];
 
 export default function Index() {
