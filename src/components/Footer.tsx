@@ -140,15 +140,18 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
           {/* Bottom bar */}
           <div className="pt-8 border-t border-white/10 flex flex-col items-center justify-center gap-6 text-center">
-            {/* Pronunciation & Easter Egg - Subtle */}
-            <div className="flex flex-col items-center gap-1">
-              <Link 
-                to="/meet"
-                className="text-xs text-white/30 hover:text-white/50 transition-colors duration-300"
-              >
+            {/* Pronunciation & Meet NÈKO */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="text-xs text-white/30">
                 <span className="font-display">NÈKO</span>
                 <span className="mx-1.5 text-white/20">•</span>
                 <span className="italic text-white/25">/NEH-koh/</span>
+              </div>
+              <Link 
+                to="/meet"
+                className="text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
+              >
+                Meet NÈKO.
               </Link>
             </div>
             
