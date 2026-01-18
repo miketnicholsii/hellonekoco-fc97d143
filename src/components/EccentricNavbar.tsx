@@ -81,8 +81,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   const isHeroPage = location.pathname === "/";
   const showDarkText = !isHeroPage || isScrolled;
 
-  // Nav height changes on scroll - taller on mobile for better touch
-  const navHeight = isScrolled ? "h-16 sm:h-14" : "h-18 sm:h-16 lg:h-[72px]";
+  // Nav height changes on scroll - more compact on mobile
+  const navHeight = isScrolled ? "h-14" : "h-16 sm:h-18 lg:h-[72px]";
   const pillFocusClass = showDarkText
     ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     : "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
