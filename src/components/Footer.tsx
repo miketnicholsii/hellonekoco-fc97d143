@@ -84,6 +84,7 @@ const itemVariants = {
 const WhoIsNekoEasterEgg = () => {
   const [isRevealed, setIsRevealed] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  const [showMilestone, setShowMilestone] = useState(false);
   
   const mysteryResponses = [
     "Nice try.",
@@ -117,14 +118,25 @@ const WhoIsNekoEasterEgg = () => {
     "Some things are better left unsaid. This is one of them.",
     "*mysterious cat noises*",
   ];
+
+  const milestoneResponse = "Fine. Here's a clue: 🌙✨ The answer lies where the sun meets the code. ✨🌙";
   
   const handleClick = () => {
-    setIsRevealed(true);
-    setClickCount(prev => prev + 1);
-    setTimeout(() => setIsRevealed(false), 2000);
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    
+    // Show milestone at exactly 10 clicks
+    if (newCount === 10) {
+      setShowMilestone(true);
+      setTimeout(() => setShowMilestone(false), 4000);
+    } else {
+      setIsRevealed(true);
+      setTimeout(() => setIsRevealed(false), 2000);
+    }
   };
   
   const currentResponse = mysteryResponses[clickCount % mysteryResponses.length];
+  const isPersistent = clickCount >= 10;
   
   return (
     <motion.button
@@ -136,8 +148,64 @@ const WhoIsNekoEasterEgg = () => {
       <HelpCircle className="w-3 h-3 opacity-50 group-hover:opacity-80 transition-opacity" />
       <span className="italic">Who is NÈKO?</span>
       
+      {/* Persistent badge after 10 clicks */}
+      {isPersistent && (
+        <motion.span
+          className="ml-1 text-[8px] text-[#E5530A]/60"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          🔓
+        </motion.span>
+      )}
+      
       <AnimatePresence>
-        {isRevealed && (
+        {/* Milestone reveal at 10 clicks */}
+        {showMilestone && (
+          <motion.div
+            className="absolute -top-16 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl text-xs font-medium whitespace-nowrap pointer-events-none"
+            style={{ 
+              background: "linear-gradient(135deg, rgba(229, 83, 10, 0.5) 0%, rgba(255, 140, 50, 0.4) 100%)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 200, 100, 0.5)",
+              boxShadow: "0 0 30px rgba(229, 83, 10, 0.4), 0 0 60px rgba(229, 83, 10, 0.2)"
+            }}
+            initial={{ opacity: 0, y: 20, scale: 0.5 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: 1,
+            }}
+            exit={{ opacity: 0, y: -20, scale: 0.8 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            {/* Sparkle effects */}
+            <motion.span
+              className="absolute -top-1 -left-1 text-sm"
+              animate={{ 
+                rotate: [0, 20, 0],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ duration: 1, repeat: 3 }}
+            >
+              ✨
+            </motion.span>
+            <motion.span
+              className="absolute -bottom-1 -right-1 text-sm"
+              animate={{ 
+                rotate: [0, -20, 0],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ duration: 1, repeat: 3, delay: 0.2 }}
+            >
+              ✨
+            </motion.span>
+            <span className="relative z-10 text-white">{milestoneResponse}</span>
+          </motion.div>
+        )}
+        
+        {/* Regular responses */}
+        {isRevealed && !showMilestone && (
           <motion.span
             className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full text-xs font-medium text-white/80 whitespace-nowrap pointer-events-none"
             style={{ 
