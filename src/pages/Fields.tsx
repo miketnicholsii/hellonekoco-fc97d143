@@ -1,10 +1,9 @@
 // src/pages/Fields.tsx
-import { Link } from "react-router-dom";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Layers, Target, FileText, Sparkles } from "lucide-react";
+import { SayHelloCTA } from "@/components/CTAButton";
+import { Layers, Target, FileText, Sparkles } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -220,20 +219,7 @@ export default function Fields() {
               For-profit, invitation-led, and built on fit.
             </motion.p>
             <motion.div variants={itemVariants}>
-              <Button 
-                asChild 
-                size="lg" 
-                className="group rounded-full px-12 py-6 font-semibold shadow-xl text-base border-0"
-                style={{ 
-                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
-                  boxShadow: "0 8px 30px rgba(229, 83, 10, 0.35)"
-                }}
-              >
-                <Link to="/contact" className="flex items-center gap-3 text-white">
-                  Say hello.
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+              <SayHelloCTA size="lg" />
             </motion.div>
           </motion.div>
         </div>
