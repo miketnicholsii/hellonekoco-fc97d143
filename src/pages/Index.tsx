@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { WorkBreakdownCharts } from "@/components/WorkBreakdownCharts";
 import { AnimatedRateCard } from "@/components/AnimatedRateCard";
 import CompaniesSection from "@/components/CompaniesSection";
+import { RotatingPill } from "@/components/RotatingPill";
 import { motion, useReducedMotion, useScroll, useTransform, Variants } from "framer-motion";
-import { ArrowRight, Layers, Target, FileText } from "lucide-react";
+import { ArrowRight, Layers, Target, BarChart3 } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -49,23 +50,23 @@ const fields = [
   { 
     icon: Layers, 
     title: "Digital Structures", 
-    body: "Websites, identities, and systems designed to work — not just look good.",
-    details: "Production-grade code. Modern tools. Built for clarity, longevity, and real use.",
-    badge: "Core"
+    body: "Revenue systems designed to hold under load, break cleanly, and recover fast.",
+    details: "Built for scale, decay, and reality — not demos.",
+    badge: "FAILURE-TOLERANT"
   },
   { 
-    icon: FileText, 
-    title: "Case Studies", 
-    body: "Real builds. Real results. Selected work with permission to share.",
-    details: "Documented outcomes from real projects. Shared with permission.",
-    badge: "New"
+    icon: BarChart3, 
+    title: "Numbers", 
+    body: "Profit. Engagement. Conversions. Measured before opinions get involved.",
+    details: "If it can't be tracked over time, it doesn't count.",
+    badge: "NO VANITY METRICS"
   },
   { 
     icon: Target, 
     title: "Digital & Business Strategy", 
-    body: "Positioning, business models, and brand strategy tested in practice.",
-    details: "No templates. No theater. Just honest thinking applied to real problems.",
-    badge: "Popular"
+    body: "Positioning and decisions made where mistakes cost time and money.",
+    details: "We fix the thinking before the build.",
+    badge: "NO SAFETY NET"
   },
 ];
 
@@ -469,9 +470,9 @@ export default function Index() {
       <WorkBreakdownCharts variant="home" />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          FIELDS — Warm Muted (#C8BFB5)
+          THE WORK — Warm Muted (#C8BFB5)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section id="fields" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#C8BFB5" }}>
+      <section id="the-work" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#C8BFB5" }}>
         {/* Animated background elements */}
         <motion.div
           className="absolute top-20 left-10 w-64 h-64 rounded-full pointer-events-none"
@@ -487,6 +488,7 @@ export default function Index() {
         />
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          {/* THE WORK Header */}
           <motion.div
             className="text-center max-w-3xl mx-auto mb-16 sm:mb-20"
             variants={prefersReducedMotion ? undefined : containerVariants}
@@ -495,46 +497,84 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/60 mb-6">
-              Fields
-            </motion.span>
-            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-12" style={{ color: "#334336" }}>
               The Work
+            </motion.span>
+            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6" style={{ color: "#334336" }}>
+              THE WORK
             </motion.h2>
-            
-            {/* Three Pillars */}
-            <motion.div 
-              variants={itemVariants}
-              className="grid sm:grid-cols-3 gap-6 sm:gap-8 text-left"
-            >
-              <div className="space-y-2">
-                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
-                  Chosen:
-                </h3>
-                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
-                  Only work that earns its place.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
-                  Refined:
-                </h3>
-                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
-                  Pressure-tested, not theoretical.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight" style={{ color: "#334336" }}>
-                  Controlled:
-                </h3>
-                <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
-                  Access is intentional.
-                </p>
-              </div>
+            <motion.p variants={itemVariants} className="text-base sm:text-lg text-[#334336]/60">
+              Built where performance is measurable.
+            </motion.p>
+          </motion.div>
+
+          {/* Horizontal Divider */}
+          <motion.div 
+            className="w-full max-w-2xl mx-auto h-px bg-[#334336]/20 mb-16"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          />
+
+          {/* Three Pillars */}
+          <motion.div 
+            className="grid sm:grid-cols-3 gap-8 sm:gap-12 max-w-4xl mx-auto mb-16 text-center"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div variants={itemVariants} className="space-y-3">
+              <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                Chosen
+              </h3>
+              <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                Only work that earns its place.
+              </p>
+            </motion.div>
+            <motion.div variants={itemVariants} className="space-y-3">
+              <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                Refined
+              </h3>
+              <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                Built under real pressure.
+              </p>
+            </motion.div>
+            <motion.div variants={itemVariants} className="space-y-3">
+              <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                Controlled
+              </h3>
+              <p className="text-sm sm:text-base text-[#334336]/70 leading-relaxed">
+                Access is intentional.
+              </p>
             </motion.div>
           </motion.div>
 
+          {/* Horizontal Divider */}
+          <motion.div 
+            className="w-full max-w-2xl mx-auto h-px bg-[#334336]/20 mb-16"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          />
+
+          {/* TILE GRID Label */}
           <motion.div
-            className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-14"
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/40">
+              Tile Grid
+            </span>
+          </motion.div>
+
+          {/* Service Cards Grid */}
+          <motion.div
+            className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-16"
             variants={prefersReducedMotion ? undefined : containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -559,13 +599,7 @@ export default function Index() {
                 {/* Badge with pulse animation */}
                 <div className="absolute top-4 right-4">
                   <motion.span 
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      field.badge === "Core" 
-                        ? "bg-[#334336] text-white" 
-                        : field.badge === "New" 
-                          ? "bg-[#E5530A] text-white" 
-                          : "bg-[#334336]/10 text-[#334336]"
-                    }`}
+                    className="inline-flex items-center px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[#334336] text-white"
                     initial={{ scale: 1 }}
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 2, repeat: 2, delay: i * 0.3 }}
@@ -583,7 +617,7 @@ export default function Index() {
                   <field.icon className="w-5 h-5 text-white" />
                 </motion.div>
                 <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-3 relative" style={{ color: "#334336" }}>{field.title}</h3>
-                <p className="text-[#334336]/70 leading-relaxed relative">{field.body}</p>
+                <p className="text-[#334336]/70 leading-relaxed relative text-sm sm:text-base">{field.body}</p>
                 
                 {/* Hover reveal details */}
                 <motion.div 
@@ -614,15 +648,17 @@ export default function Index() {
             ))}
           </motion.div>
 
-          <motion.p
-            className="text-center text-sm text-[#334336]/50"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          {/* Horizontal Divider before Rotating Pill */}
+          <motion.div 
+            className="w-full max-w-2xl mx-auto h-px bg-[#334336]/20 mb-10"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            Not everything is available. Everything is intentional.
-          </motion.p>
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
+
+          {/* Rotating Pill */}
+          <RotatingPill />
         </div>
       </section>
 
@@ -633,10 +669,10 @@ export default function Index() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          NO CHECKOUT — Dark Forest Green (#334336)
+          PRICING — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
-        id="how-it-works"
+        id="pricing"
         className="py-24 sm:py-32 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #263029 100%)" }}
       >
@@ -657,76 +693,141 @@ export default function Index() {
           animate={prefersReducedMotion ? {} : { opacity: [0.5, 1, 0.5], y: [0, -20, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
-        {/* Floating particles */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-[#E5530A]/30"
-            style={{ 
-              left: `${20 + i * 15}%`, 
-              top: `${30 + (i % 3) * 20}%` 
-            }}
-            animate={prefersReducedMotion ? {} : { 
-              y: [-20, 20, -20], 
-              opacity: [0.2, 0.6, 0.2],
-              scale: [1, 1.5, 1]
-            }}
-            transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
-          />
-        ))}
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          {/* Pricing Header */}
           <motion.div
-            className="max-w-2xl mx-auto text-center"
+            className="text-center max-w-3xl mx-auto mb-16"
             variants={prefersReducedMotion ? undefined : containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
-              How work happens
+              Pricing
             </motion.span>
             <motion.h2 
               variants={itemVariants} 
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-10"
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-8"
             >
-              Not for sale.<br />
-              <motion.span 
-                className="text-[#E5530A]"
-                animate={prefersReducedMotion ? {} : { opacity: [1, 0.7, 1] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                But it'll cost ya.
-              </motion.span>
+              Engagements
             </motion.h2>
-            <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl text-white/60 leading-relaxed">
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                NÈKO is for-profit — not free, not available on demand.
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                Work begins through conversation, timing, and mutual fit.
-              </motion.p>
-              <motion.p 
-                className="text-white/45"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-              >
-                Sometimes that leads to collaboration.<br />
-                Sometimes it doesn't.<br />
-                Both outcomes are fine.
-              </motion.p>
+          </motion.div>
+
+          {/* Engagements Content */}
+          <motion.div
+            className="max-w-2xl mx-auto space-y-16"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {/* There is no menu */}
+            <motion.div variants={itemVariants} className="text-center space-y-6">
+              <p className="text-lg sm:text-xl text-white/70 leading-relaxed">
+                There is no menu.<br />
+                There is no fixed scope.
+              </p>
+              <div className="space-y-4">
+                <p className="text-white/50 text-sm uppercase tracking-widest">Pricing reflects:</p>
+                <div className="flex flex-col items-center gap-2 text-white/80">
+                  <span>The size of the problem</span>
+                  <span>The speed required</span>
+                  <span>The cost of getting it wrong</span>
+                </div>
+              </div>
+              <p className="text-sm text-white/40 pt-4">
+                Most engagements begin with a paid diagnostic.<br />
+                Some continue.<br />
+                Many shouldn't.
+              </p>
+            </motion.div>
+
+            {/* Horizontal Divider */}
+            <motion.div 
+              className="w-full max-w-md mx-auto h-px bg-white/10"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            />
+
+            {/* What You're Paying For */}
+            <motion.div variants={itemVariants} className="text-center space-y-6">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                What You're Paying For
+              </h3>
+              <div className="flex flex-col items-center gap-2 text-white/80">
+                <span>Clear decisions.</span>
+                <span>Reduced risk.</span>
+                <span>Systems that don't collapse under use.</span>
+              </div>
+              <div className="pt-6 space-y-2">
+                <p className="text-white/50 text-sm uppercase tracking-widest">You are not paying for:</p>
+                <div className="flex flex-col items-center gap-1 text-white/40">
+                  <span>Decks</span>
+                  <span>Hours</span>
+                  <span>Exploration without commitment</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Horizontal Divider */}
+            <motion.div 
+              className="w-full max-w-md mx-auto h-px bg-white/10"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            />
+
+            {/* Typical Range */}
+            <motion.div variants={itemVariants} className="text-center space-y-6">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                Typical Range
+              </h3>
+              <p className="text-lg sm:text-xl text-white/70">
+                Projects commonly land between<br />
+                <span className="text-2xl sm:text-3xl font-bold text-[#E5530A]">$25k – $150k+</span>
+              </p>
+              <div className="pt-4 space-y-2">
+                <p className="text-white/50 text-sm uppercase tracking-widest">The number moves when:</p>
+                <div className="flex flex-col items-center gap-1 text-white/60">
+                  <span>Stakes increase</span>
+                  <span>Timelines compress</span>
+                  <span>Responsibility expands</span>
+                </div>
+              </div>
+              <p className="text-sm text-white/40 pt-4 italic">
+                If you need certainty before a conversation,<br />
+                we're not a fit.
+              </p>
+            </motion.div>
+
+            {/* Horizontal Divider */}
+            <motion.div 
+              className="w-full max-w-md mx-auto h-px bg-white/10"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            />
+
+            {/* How This Starts */}
+            <motion.div variants={itemVariants} className="text-center space-y-6">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
+                How This Starts
+              </h3>
+              <div className="flex flex-col items-center gap-2 text-white/80">
+                <span>A short intake.</span>
+                <span>A direct conversation.</span>
+                <span>A clear yes or no.</span>
+              </div>
+              <div className="pt-4 flex flex-col items-center gap-1 text-white/40">
+                <span>No pitches.</span>
+                <span>No courting.</span>
+                <span>No pressure.</span>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -747,7 +848,7 @@ export default function Index() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          NOT A PITCH — Soft Neutral (#EDE7E3)
+          FINAL LINE — Soft Neutral (#EDE7E3)
           ═══════════════════════════════════════════════════════════════════ */}
       <section id="philosophy" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
         {/* Decorative corner accents */}
@@ -760,20 +861,6 @@ export default function Index() {
           style={{ background: "linear-gradient(-45deg, rgba(229, 83, 10, 0.03) 0%, transparent 50%)" }}
         />
         
-        {/* Subtle moving shapes */}
-        <motion.div
-          className="absolute top-1/4 right-0 w-96 h-96 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(51, 67, 54, 0.04) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { x: [0, -30, 0], rotate: [0, 180, 360] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute bottom-1/3 left-10 w-64 h-64 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.03) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { y: [0, 20, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-        
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             className="max-w-2xl mx-auto text-center"
@@ -782,52 +869,35 @@ export default function Index() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Subtle "who the f*ck is NÈKO?" easter egg */}
-            <motion.span 
-              variants={itemVariants} 
-              className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/30 mb-6 cursor-default select-none"
-              whileHover={{ 
-                color: "#E5530A",
-                letterSpacing: "0.3em",
-                transition: { duration: 0.3 }
-              }}
-              title="Just say hello."
-            >
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                who the f*ck is NÈKO?
-              </motion.span>
-            </motion.span>
-            <motion.h2 
-              variants={itemVariants} 
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" 
-              style={{ color: "#334336" }}
-            >
-              Want to build cool sh*t?
-            </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
               <motion.p
-                className="font-display text-2xl sm:text-3xl font-bold"
+                className="text-base sm:text-lg opacity-70"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.7 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                We choose carefully.<br />
+                We don't need your money.
+              </motion.p>
+              <motion.p
+                className="font-display text-xl sm:text-2xl font-bold"
                 style={{ color: "#E5530A" }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                Just say hello.
-              </motion.p>
-              <motion.p 
-                className="opacity-60 text-base sm:text-lg"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.6 }}
-                viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                NÈKO is invite-only — because that's how the best work happens.<br />
-                If it fits, we'll shape something together.
+                Bring your heart and your hustle — those are scarce.
+              </motion.p>
+              <motion.p 
+                className="opacity-50 text-sm pt-4"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.5 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+              >
+                An invoice will follow.
               </motion.p>
             </motion.div>
           </motion.div>
