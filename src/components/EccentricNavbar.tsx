@@ -278,28 +278,43 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               
               <div className="flex flex-col h-full pt-2 pb-8 px-6">
                 <nav className="flex-1 space-y-2" aria-label="Primary">
-                  {NAV_LINKS.map((link) => {
+                  {NAV_LINKS.map((link, index) => {
                     const isActive = location.pathname === link.href;
 
                     return (
-                      <Link 
-                        key={link.href} 
-                        to={link.href} 
-                        onClick={closeMenu}
-                        aria-current={isActive ? "page" : undefined}
-                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] active:scale-[0.98] active:bg-muted/50 ${mobileLinkFocusClass} ${
-                          isActive 
-                            ? "text-secondary bg-secondary/10 border border-secondary/20" 
-                            : "text-foreground hover:bg-muted hover:pl-6"
-                        }`}
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ 
+                          delay: 0.1 + index * 0.05,
+                          duration: 0.3,
+                          ease: "easeOut"
+                        }}
                       >
-                        {link.label}
-                      </Link>
+                        <Link 
+                          to={link.href} 
+                          onClick={closeMenu}
+                          aria-current={isActive ? "page" : undefined}
+                          className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] active:scale-[0.98] active:bg-muted/50 ${mobileLinkFocusClass} ${
+                            isActive 
+                              ? "text-secondary bg-secondary/10 border border-secondary/20" 
+                              : "text-foreground hover:bg-muted hover:pl-6"
+                          }`}
+                        >
+                          {link.label}
+                        </Link>
+                      </motion.div>
                     );
                   })}
                 </nav>
                 
-                <div className="space-y-4 pt-8 border-t border-border">
+                <motion.div 
+                  className="space-y-4 pt-8 border-t border-border"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.3 }}
+                >
                   <Button 
                     asChild
                     size="lg" 
@@ -317,7 +332,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   <p className="text-center text-xs text-muted-foreground pt-2">
                     Invite-only. By alignment.
                   </p>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>
