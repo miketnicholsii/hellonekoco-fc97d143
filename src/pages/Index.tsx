@@ -5,6 +5,7 @@ import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { WorkBreakdownCharts } from "@/components/WorkBreakdownCharts";
+import CompaniesSection from "@/components/CompaniesSection";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { ArrowRight, Layers, Target, FileText } from "lucide-react";
 
@@ -311,6 +312,8 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
+
+      <CompaniesSection />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA — Dark Forest Green (#334336)
