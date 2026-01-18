@@ -947,7 +947,7 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                Bring your heart and your hustle, mf.
+                Bring your heart and your hustle, <span className="blur-[3px] hover:blur-none transition-all duration-300 select-none cursor-pointer">mf</span>.
               </motion.p>
               <motion.p 
                 className="opacity-50 text-sm pt-4"
