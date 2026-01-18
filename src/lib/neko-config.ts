@@ -62,10 +62,10 @@ export const nekoConfig = {
   
   // Work mix for donut chart
   workMix: [
-    { name: "Digital Structures", value: 40, color: "#334336" },
-    { name: "Strategy", value: 25, color: "#E5530A" },
-    { name: "Experiments", value: 20, color: "#C8BFB5" },
-    { name: "Sharing", value: 15, color: "#BCB3A5" },
+    { name: "Digital Structures", value: 42, color: "#334336" },
+    { name: "Strategy", value: 28, color: "#E5530A" },
+    { name: "Experiments", value: 18, color: "#C8BFB5" },
+    { name: "Sharing", value: 12, color: "#BCB3A5" },
   ],
   
   // Brand
@@ -89,7 +89,7 @@ export const nekoConfig = {
   
   // Social / External
   external: {
-    donate: "mailto:neko@helloneko.co?subject=Donation%20Inquiry",
+    donate: "/donate", // Stripe donation page
   },
 };
 
