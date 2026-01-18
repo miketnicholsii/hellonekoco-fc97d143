@@ -96,11 +96,11 @@ export const EccentricNavbar = memo(function EccentricNavbar({
         aria-label="Main navigation"
         role="navigation"
       >
-        {/* Nav background - subtle on scroll */}
+        {/* Nav background - subtle on scroll with mobile shadow */}
         <div 
           className={`absolute inset-0 transition-all duration-300 ${
             isScrolled 
-              ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm" 
+              ? "bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.12)] sm:shadow-sm" 
               : isHeroPage 
                 ? "bg-transparent" 
                 : "bg-background/90 backdrop-blur-lg border-b border-border/50"
