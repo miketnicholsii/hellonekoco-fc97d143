@@ -218,10 +218,35 @@ export default function Index() {
             {/* Descriptor with typing effect feel */}
             <motion.p 
               variants={itemVariants} 
-              className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-10 tracking-tight"
+              className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-white/90 mb-8 tracking-tight"
             >
               An independent creative sandbox.
             </motion.p>
+
+            {/* Subtle decorative divider */}
+            <motion.div 
+              variants={itemVariants}
+              className="flex items-center justify-center gap-3 mb-10"
+            >
+              <motion.span 
+                className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-white/20"
+                initial={{ scaleX: 0, originX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+              />
+              <motion.span 
+                className="w-1.5 h-1.5 rounded-full bg-[#E5530A]/60"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 1, duration: 0.3 }}
+              />
+              <motion.span 
+                className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-white/20"
+                initial={{ scaleX: 0, originX: 1 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+              />
+            </motion.div>
 
             {/* Body copy - consolidated for cleaner flow */}
             <motion.div 
