@@ -96,6 +96,7 @@ const WhoIsNekoEasterEgg = () => {
     "We are everywhere.",
     "We are nowhere.",
     "Just vibes.",
+    "Hell nope, you'd have better luck finding where Bobby Shmurda's hat went.",
   ];
   
   const handleClick = () => {
@@ -150,16 +151,17 @@ const BottomBar = () => (
         <span className="mx-1.5 text-white/20">•</span>
         <span className="italic text-white/25">/NEH-koh/</span>
       </div>
-      <motion.div whileHover="hover" initial="rest">
+      <motion.div whileHover="hover" initial="rest" className="relative inline-flex justify-center">
         <Link 
           to="/meet"
-          className="inline-flex items-center gap-1.5 text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
+          className="relative inline-flex items-center justify-center text-base font-display font-semibold text-white hover:text-[#E5530A] transition-colors duration-300"
         >
           <span>Meet NÈKO.</span>
           <motion.span
+            className="absolute -right-5"
             variants={{
-              rest: { opacity: 0, x: -8, scale: 0.8 },
-              hover: { opacity: 1, x: 0, scale: 1 }
+              rest: { opacity: 0, scale: 0.8 },
+              hover: { opacity: 1, scale: 1 }
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
