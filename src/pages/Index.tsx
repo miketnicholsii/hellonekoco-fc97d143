@@ -193,9 +193,19 @@ export default function Index() {
               </motion.span>
               <motion.span 
                 className="block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl relative"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: [0.9, 1.08, 0.96, 1.02, 1], 
+                  rotate: [-3, 2, -1, 0.5, 0] 
+                }}
+                transition={{ 
+                  duration: 0.9, 
+                  delay: 0.4, 
+                  ease: [0.22, 1, 0.36, 1],
+                  scale: { duration: 0.7, times: [0, 0.4, 0.6, 0.8, 1] },
+                  rotate: { duration: 0.7, times: [0, 0.4, 0.6, 0.8, 1] }
+                }}
               >
                 NÈKO
                 <motion.span 
