@@ -230,7 +230,7 @@ export default function Fields() {
                 }}
               >
                 <Link to="/contact" className="flex items-center gap-3 text-white">
-                  Start a conversation
+                  Say hello.
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
