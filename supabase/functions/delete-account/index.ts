@@ -122,7 +122,7 @@ serve(async (req) => {
         const resend = new Resend(resendApiKey);
         
         await resend.emails.send({
-          from: "NÈKO <noreply@hellonekoco.lovable.app>",
+          from: "NÈKO <noreply@helloneko.co>",
           to: [user.email],
           subject: "Your NÈKO account has been deleted",
           html: `
@@ -160,7 +160,7 @@ serve(async (req) => {
                 <p style="margin: 0; color: #92400e; font-size: 14px;">
                   <strong>Changed your mind?</strong><br>
                   You're always welcome back. Simply create a new account at 
-                  <a href="https://hellonekoco.lovable.app" style="color: #92400e;">hellonekoco.lovable.app</a>
+                  <a href="https://helloneko.co" style="color: #92400e;">helloneko.co</a>
                 </p>
               </div>
               

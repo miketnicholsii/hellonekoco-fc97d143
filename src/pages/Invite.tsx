@@ -5,6 +5,7 @@ import { motion, useReducedMotion, Variants } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
+import { DynamicRateCard } from "@/components/DynamicRateCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -354,76 +355,16 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
             <motion.div variants={itemVariants} className="text-center mb-16">
               <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-4">
                 <Clock className="w-4 h-4" />
-                Rate Signal
+                Dynamic Rate Signal
               </span>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                {nekoConfig.rate.description}
+                Rates shift based on capacity and demand. Lock in current pricing before it changes.
               </p>
             </motion.div>
 
-            {/* Big Rate Card */}
-            <motion.div variants={cardVariants} className="relative">
-              <motion.div
-                className="absolute -inset-1 rounded-[2.5rem] opacity-60 blur-xl"
-                style={{ background: "linear-gradient(135deg, hsl(135 22% 18%) 0%, hsl(16 100% 42%) 100%)" }}
-                variants={prefersReducedMotion ? undefined : glowVariants}
-                animate="animate"
-              />
-              
-              <div 
-                className="relative p-10 sm:p-14 lg:p-16 rounded-[2rem] overflow-hidden"
-                style={{ background: "linear-gradient(160deg, hsl(135 22% 16%) 0%, hsl(135 28% 12%) 50%, hsl(140 30% 8%) 100%)" }}
-              >
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-                  {/* Rate Display */}
-                  <div className="text-center lg:text-left">
-                    <motion.div
-                      className="inline-flex items-baseline gap-2"
-                      variants={prefersReducedMotion ? undefined : pulseVariants}
-                      animate="animate"
-                    >
-                      <span 
-                        className="font-display text-7xl sm:text-8xl lg:text-9xl font-bold tracking-tight"
-                        style={{ 
-                          background: "linear-gradient(135deg, hsl(16 100% 50%) 0%, hsl(16 100% 42%) 50%, hsl(25 90% 45%) 100%)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                        }}
-                      >
-                        {nekoConfig.rate.formatted}
-                      </span>
-                    </motion.div>
-                    <div className="flex items-center justify-center lg:justify-start gap-2 mt-4">
-                      <span className="text-xl sm:text-2xl text-white/60 font-light">{nekoConfig.rate.unit}</span>
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide text-secondary bg-secondary/20 border border-secondary/30">
-                        BASELINE
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Options */}
-                  <div className="space-y-4">
-                    <p className="text-white/70 text-lg mb-6">Other ways to engage:</p>
-                    {[
-                      { icon: MessageCircle, text: "Preview Session", desc: nekoConfig.preview.formatted + " — explore fit" },
-                      { icon: Gift, text: "Name your budget", desc: "Flexible, justified contribution" },
-                    ].map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5"
-                      >
-                        <div className="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                          <item.icon className="w-4 h-4 text-secondary" />
-                        </div>
-                        <div>
-                          <span className="text-white font-medium block">{item.text}</span>
-                          <span className="text-white/40 text-sm">{item.desc}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            {/* Dynamic Rate Card */}
+            <motion.div variants={cardVariants}>
+              <DynamicRateCard />
             </motion.div>
           </motion.div>
         </div>
