@@ -353,11 +353,11 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-6">
                 {workMix.map((item, i) => (
                   <motion.div 
                     key={i} 
-                    className="flex items-center justify-between p-3 rounded-xl"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-xl gap-1 sm:gap-2"
                     style={{ background: `${item.color}10` }}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -365,14 +365,14 @@ export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownCharts
                     transition={{ delay: i * 0.1 + 0.5 }}
                     whileHover={{ scale: 1.02, x: 4 }}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                       <motion.div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-3 h-3 rounded-full flex-shrink-0" 
                         style={{ background: item.color }}
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                       />
-                      <span className="text-xs text-[#334336]/80 font-medium">{item.name}</span>
+                      <span className="text-xs text-[#334336]/80 font-medium truncate">{item.name}</span>
                     </div>
                     <LivePercentage value={item.value} color={item.color} />
                   </motion.div>
