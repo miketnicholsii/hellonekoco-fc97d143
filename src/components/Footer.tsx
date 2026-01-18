@@ -1,6 +1,7 @@
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Heart, Sparkles } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { nekoConfig } from "@/lib/neko-config";
 
 const footerLinks = {
@@ -21,6 +22,18 @@ const footerLinks = {
 };
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Parallax transforms for ambient glow
+  const glowY = useTransform(scrollYProgress, [0, 1], [80, -40]);
+  const glowScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.1, 1]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.6]);
+
   return (
     <footer 
       ref={ref} 
@@ -28,11 +41,29 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
       className="relative overflow-hidden noise-texture"
       style={{ background: "linear-gradient(180deg, hsl(135 25% 12%) 0%, hsl(135 28% 8%) 100%)" }}
     >
-      {/* Subtle ambient glow */}
-      <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, hsl(16 100% 42% / 0.04) 0%, transparent 70%)" }}
-      />
+      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
+        {/* Primary ambient glow with parallax */}
+        <motion.div 
+          className="absolute left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full"
+          style={{ 
+            background: "radial-gradient(ellipse, hsl(16 100% 42% / 0.06) 0%, hsl(16 100% 42% / 0.02) 40%, transparent 70%)",
+            y: glowY,
+            scale: glowScale,
+            opacity: glowOpacity,
+            top: -50
+          }}
+        />
+        {/* Secondary subtle glow */}
+        <motion.div 
+          className="absolute left-1/3 w-[400px] h-[200px] rounded-full"
+          style={{ 
+            background: "radial-gradient(ellipse, hsl(135 30% 40% / 0.03) 0%, transparent 60%)",
+            y: useTransform(scrollYProgress, [0, 1], [60, -20]),
+            opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.8, 0.4]),
+            top: 100
+          }}
+        />
+      </div>
       
       <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 z-10">
         
