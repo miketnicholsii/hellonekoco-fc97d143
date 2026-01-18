@@ -21,9 +21,26 @@ const pulseVariants: Variants = {
   },
 };
 
+// Live timestamp display - synced style with charts
+const LiveTimestamp = ({ timestamp }: { timestamp: string }) => (
+  <motion.div 
+    className="flex items-center gap-2 text-[10px] font-mono"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+  >
+    <motion.span
+      className="w-1.5 h-1.5 rounded-full bg-green-500"
+      animate={{ opacity: [1, 0.4, 1] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    />
+    <span className="text-white/50">LIVE RATE</span>
+    <span className="text-white/70 tabular-nums">{timestamp}</span>
+  </motion.div>
+);
+
 export function DynamicRateCard() {
   const prefersReducedMotion = useReducedMotion();
-  const { currentPeriod, nextPeriod, countdown, isIncreasing, formattedRate } = useDynamicPricing();
+  const { currentPeriod, nextPeriod, countdown, isIncreasing, formattedRate, timestamp } = useDynamicPricing();
 
   const pad = (n: number) => n.toString().padStart(2, "0");
 
@@ -43,6 +60,11 @@ export function DynamicRateCard() {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           {/* Rate Display */}
           <div className="text-center lg:text-left">
+            {/* Live timestamp */}
+            <div className="mb-4">
+              <LiveTimestamp timestamp={timestamp} />
+            </div>
+            
             {/* Period label */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/30 mb-4">
               <span className="text-xs font-bold tracking-wider text-secondary uppercase">
@@ -93,9 +115,15 @@ export function DynamicRateCard() {
                   { value: countdown.seconds, label: "sec" },
                 ].map((item, i) => (
                   <div key={i} className="flex flex-col">
-                    <span className="font-display text-2xl sm:text-3xl font-bold text-white tabular-nums">
+                    <motion.span 
+                      key={`${i}-${item.value}`}
+                      className="font-display text-2xl sm:text-3xl font-bold text-white tabular-nums"
+                      initial={{ opacity: 0.7, y: -2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
                       {pad(item.value)}
-                    </span>
+                    </motion.span>
                     <span className="text-[10px] text-white/40 uppercase tracking-wider">{item.label}</span>
                   </div>
                 ))}
