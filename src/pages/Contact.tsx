@@ -163,24 +163,29 @@ export default function Contact() {
             </motion.p>
 
             {/* Big email display */}
-            <motion.a
-              variants={itemVariants}
-              href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`}
-              className="group inline-flex flex-col items-center gap-4 p-8 sm:p-10 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+            <Button
+              asChild
+              variant="ghost"
+              className="group h-auto flex-col items-center gap-4 whitespace-normal rounded-3xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:text-white active:scale-[0.99] sm:p-10"
             >
-              <div 
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-2"
-                style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}
+              <motion.a
+                variants={itemVariants}
+                href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`}
               >
-                <Mail className="w-7 h-7 text-white" />
-              </div>
-              <span className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white group-hover:text-[#E5530A] transition-colors">
-                {nekoConfig.email}
-              </span>
-              <span className="text-sm text-white/40 group-hover:text-white/60 transition-colors">
-                Click to open your email client
-              </span>
-            </motion.a>
+                <div 
+                  className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl"
+                  style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}
+                >
+                  <Mail className="h-7 w-7 text-white" />
+                </div>
+                <span className="font-display text-2xl font-bold text-white transition-colors group-hover:text-[#E5530A] sm:text-3xl lg:text-4xl">
+                  {nekoConfig.email}
+                </span>
+                <span className="text-sm text-white/40 transition-colors group-hover:text-white/60">
+                  Click to open your email client
+                </span>
+              </motion.a>
+            </Button>
 
             {/* Proposal link */}
             <motion.div variants={itemVariants} className="mt-14 pt-10 border-t border-white/10">

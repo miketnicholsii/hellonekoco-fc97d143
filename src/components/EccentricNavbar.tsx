@@ -122,7 +122,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2">
               <motion.div
                 layout
-                className="flex items-center gap-1 px-2 py-1.5 rounded-full transition-all duration-300"
+                className="flex h-11 items-center gap-1 rounded-full px-2 transition-all duration-300"
                 style={{ 
                   background: showDarkText 
                     ? "rgba(51, 67, 54, 0.08)" 
@@ -136,7 +136,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 {/* Home link */}
                 <Link
                   to="/"
-                  className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-full ${
+                  className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${
                     location.pathname === "/" 
                       ? showDarkText 
                         ? "text-white bg-primary" 
@@ -150,7 +150,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 </Link>
 
                 {/* Separator */}
-                <div className={`w-px h-4 ${showDarkText ? "bg-primary/10" : "bg-white/20"}`} />
+                <div className={`w-px h-5 ${showDarkText ? "bg-primary/10" : "bg-white/20"}`} />
 
                 {/* Other nav links */}
                 {NAV_ITEMS.map((link) => {
@@ -160,7 +160,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                     <Link
                       key={link.href}
                       to={link.href}
-                      className={`relative px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-full whitespace-nowrap ${
+                      className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${
                         isActive
                           ? showDarkText 
                             ? "text-white bg-primary" 

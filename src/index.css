@@ -113,6 +113,10 @@
     scroll-padding-top: var(--scroll-offset);
   }
 
+  body {
+    overflow-x: hidden;
+  }
+
   section[id] {
     scroll-margin-top: var(--scroll-offset);
   }
