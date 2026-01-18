@@ -27,8 +27,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   
   const isHome = location.pathname === "/";
   const activeSection = useSectionScrollspy({ enabled: isHome });
-  // Increased threshold for smoother transition - SAY HELLO stays visible longer
-  const isScrolled = useScrollPosition(80);
+  // Much higher threshold so SAY HELLO stays white/visible longer on hero
+  const isScrolled = useScrollPosition(200);
 
   // Close menu on route change
   useEffect(() => {
@@ -208,7 +208,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               <Button
                 asChild
                 size="sm"
-                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px] haptic-tap-strong"
+                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px] active:scale-95 active:opacity-90 transition-transform"
                 style={{ 
                   background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                   boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
@@ -222,7 +222,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               
               <button
                 ref={menuButtonRef}
-                className={`p-3 rounded-xl transition-colors relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center haptic-tap-icon ${
+                type="button"
+                className={`p-3 rounded-xl relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center active:scale-90 active:opacity-70 transition-transform ${
                   showDarkText 
                     ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" 
                     : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
@@ -239,7 +240,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
         </div>
       </nav>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu overlay - z-index must be HIGHER than nav */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -247,7 +248,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
             transition={{ duration: 0.2 }} 
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-[60] lg:hidden"
           >
             <div 
               className="absolute inset-0 bg-background/95 backdrop-blur-lg" 
@@ -273,7 +274,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] haptic-tap-subtle ${mobileLinkFocusClass} ${
+                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] active:scale-[0.98] active:bg-muted/50 ${mobileLinkFocusClass} ${
                           isActive 
                             ? "text-secondary bg-secondary/10 border border-secondary/20" 
                             : "text-foreground hover:bg-muted hover:pl-6"
@@ -289,7 +290,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   <Button 
                     asChild
                     size="lg" 
-                    className="w-full rounded-full font-semibold border-0 min-h-[56px] text-base haptic-tap-strong"
+                    className="w-full rounded-full font-semibold border-0 min-h-[56px] text-base active:scale-95 active:opacity-90 transition-transform"
                     style={{ 
                       background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                       boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
