@@ -146,9 +146,25 @@ export function AnimatedRateCard() {
             >
               <Sparkles className="w-4 h-4 text-[#E5530A]" />
             </motion.div>
-            <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50">
+            <motion.span 
+              className="text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50 relative overflow-hidden"
+              animate={{ 
+                textShadow: [
+                  "0 0 0px rgba(229, 83, 10, 0)",
+                  "0 0 8px rgba(229, 83, 10, 0.4)",
+                  "0 0 0px rgba(229, 83, 10, 0)"
+                ]
+              }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
               Rate Signal
-            </span>
+              {/* Shimmer overlay */}
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#E5530A]/20 to-transparent"
+                animate={{ x: ["-100%", "100%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
+              />
+            </motion.span>
           </motion.div>
           
           {/* Animated rate number */}
