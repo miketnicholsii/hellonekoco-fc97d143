@@ -131,25 +131,30 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
 
         {/* Bottom section - symmetrical with legacy note */}
         <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-center">
-            <p className="text-[11px] text-white/30 order-2 sm:order-1">
-              © {new Date().getFullYear()} NÈKO. All rights reserved.
-            </p>
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="space-y-1">
+              <p className="text-[11px] text-white/30">
+                © {new Date().getFullYear()} NÈKO. All rights reserved.
+              </p>
+              <p className="text-[11px] text-white/30">
+                Hello, NÈKO.
+              </p>
+            </div>
             
-            {/* Legacy note - subtle, linked, orange */}
-            <a 
-              href="https://miketnicholsii.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-[11px] italic transition-colors order-1 sm:order-2 hover:opacity-80"
-              style={{ color: "hsl(16 100% 55% / 0.45)" }}
-            >
-              miketnicholsii.com is being folded into NÈKO
-            </a>
-            
-            <p className="text-[11px] text-white/30 order-3">
-              Hello, NÈKO.
-            </p>
+            <div className="space-y-1">
+              <a 
+                href="https://miketnicholsii.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[12px] font-medium tracking-wide transition-colors hover:text-secondary"
+                style={{ color: "hsl(16 100% 55% / 0.7)" }}
+              >
+                Mike T. Nichols II
+              </a>
+              <p className="text-[10px] text-white/35">
+                {nekoConfig.legacyNote}
+              </p>
+            </div>
           </div>
         </div>
       </div>
