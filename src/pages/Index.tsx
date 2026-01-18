@@ -893,10 +893,10 @@ export default function Index() {
                 <div className="relative inline-block mb-4">
                   <span 
                     className="text-xl sm:text-2xl font-bold text-[#E5530A] select-none"
-                    style={{ filter: "blur(8px)" }}
+                    style={{ filter: "blur(3px)" }}
                     aria-hidden="true"
                   >
-                    $25k – $150k+
+                    $4k – $15k
                   </span>
                   <span className="sr-only">Price range hidden - let's talk</span>
                 </div>
