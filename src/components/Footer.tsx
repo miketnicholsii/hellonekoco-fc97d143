@@ -1,7 +1,7 @@
-import { forwardRef, useRef } from "react";
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Heart, Sparkles } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight, Heart } from "lucide-react";
+import { motion } from "framer-motion";
 import { nekoConfig } from "@/lib/neko-config";
 
 const footerLinks = {
@@ -12,7 +12,7 @@ const footerLinks = {
   ],
   connect: [
     { href: "/invite", label: "Work With Me" },
-    { href: "/notes", label: "Notes" },
+    { href: "/donate", label: "Donate" },
     { href: "/contact", label: "Say Hello" },
   ],
   legal: [
@@ -21,26 +21,14 @@ const footerLinks = {
   ],
 };
 
-// Animated link component with glow effect
+// Animated link component
 const FooterLink = ({ href, label, showArrow = true }: { href: string; label: string; showArrow?: boolean }) => (
-  <motion.div
-    className="relative inline-block"
-    whileHover="hover"
-    initial="rest"
-  >
+  <motion.div className="relative inline-block" whileHover="hover" initial="rest">
     <Link 
       to={href} 
-      className="relative inline-flex items-center justify-center gap-1 text-sm text-white/45 transition-colors z-10"
+      className="relative inline-flex items-center justify-center gap-1 text-sm text-white/50 transition-colors hover:text-[#E5530A]"
     >
-      <motion.span
-        variants={{
-          rest: { color: "rgba(255, 255, 255, 0.45)" },
-          hover: { color: "hsl(16, 100%, 55%)" }
-        }}
-        transition={{ duration: 0.2 }}
-      >
-        {label}
-      </motion.span>
+      <span>{label}</span>
       {showArrow && (
         <motion.span
           variants={{
@@ -49,169 +37,101 @@ const FooterLink = ({ href, label, showArrow = true }: { href: string; label: st
           }}
           transition={{ duration: 0.2 }}
         >
-          <ArrowUpRight className="h-3 w-3" style={{ color: "hsl(16, 100%, 55%)" }} />
+          <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
         </motion.span>
       )}
     </Link>
-    {/* Glow effect */}
-    <motion.div
-      className="absolute inset-0 -inset-x-3 -inset-y-1 rounded-full pointer-events-none"
-      style={{ background: "radial-gradient(ellipse, hsl(16 100% 50% / 0.15) 0%, transparent 70%)" }}
-      variants={{
-        rest: { opacity: 0, scale: 0.8 },
-        hover: { opacity: 1, scale: 1 }
-      }}
-      transition={{ duration: 0.25 }}
-    />
   </motion.div>
 );
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Parallax transforms for ambient glow
-  const glowY = useTransform(scrollYProgress, [0, 1], [80, -40]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.1, 1]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.6]);
-
   return (
     <footer 
       ref={ref} 
       role="contentinfo" 
-      className="relative overflow-hidden noise-texture"
-      style={{ background: "linear-gradient(180deg, hsl(135 25% 12%) 0%, hsl(135 28% 8%) 100%)" }}
+      className="relative overflow-hidden"
+      style={{ background: "#1f2a21" }}
     >
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
-        {/* Primary ambient glow with parallax */}
-        <motion.div 
-          className="absolute left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full"
-          style={{ 
-            background: "radial-gradient(ellipse, hsl(16 100% 42% / 0.06) 0%, hsl(16 100% 42% / 0.02) 40%, transparent 70%)",
-            y: glowY,
-            scale: glowScale,
-            opacity: glowOpacity,
-            top: -50
-          }}
-        />
-        {/* Secondary subtle glow */}
-        <motion.div 
-          className="absolute left-1/3 w-[400px] h-[200px] rounded-full"
-          style={{ 
-            background: "radial-gradient(ellipse, hsl(135 30% 40% / 0.03) 0%, transparent 60%)",
-            y: useTransform(scrollYProgress, [0, 1], [60, -20]),
-            opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.8, 0.4]),
-            top: 100
-          }}
-        />
-      </div>
-      
-      <div className="relative container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 z-10">
+      <div className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
         
-        {/* Top section - centered brand */}
-        <div className="text-center mb-14 sm:mb-16">
-          <Link to="/" className="inline-block mb-5 group" aria-label="NÈKO home">
-            <span className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white transition-colors group-hover:text-secondary">
-              NÈKO<span className="text-secondary">.</span>
-            </span>
-          </Link>
-          <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto mb-5">
-            {nekoConfig.brand.tagline}
-          </p>
-          <span 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-medium tracking-wide"
-            style={{ 
-              background: "hsl(16 100% 42% / 0.12)", 
-              color: "hsl(16 100% 55%)", 
-              border: "1px solid hsl(16 100% 42% / 0.25)" 
-            }}
-          >
-            <Sparkles className="w-3 h-3" />
-            {nekoConfig.brand.badge}
-          </span>
-        </div>
-
-        {/* Middle section - symmetrical nav columns */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 max-w-2xl mx-auto mb-14 sm:mb-16">
-          {/* Explore */}
-          <nav aria-label="Explore links" className="text-center">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-              Explore
-            </h4>
-            <ul className="space-y-2.5">
-              {footerLinks.explore.map((link) => (
-                <li key={link.label}>
-                  <FooterLink href={link.href} label={link.label} />
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Connect */}
-          <nav aria-label="Connect links" className="text-center">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-              Connect
-            </h4>
-            <ul className="space-y-2.5">
-              {footerLinks.connect.map((link) => (
-                <li key={link.label}>
-                  <FooterLink href={link.href} label={link.label} />
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Legal */}
-          <nav aria-label="Legal links" className="text-center col-span-2 sm:col-span-1">
-            <h4 className="font-display text-[10px] sm:text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-              Legal
-            </h4>
-            <ul className="space-y-2.5">
-              {footerLinks.legal.map((link) => (
-                <li key={link.label}>
-                  <FooterLink href={link.href} label={link.label} showArrow={false} />
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-
-        {/* Mission statement - centered */}
-        <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 text-[11px] text-white/35">
-            <Heart className="w-3 h-3 text-[#E5530A]/50" />
-            {nekoConfig.brand.missionStatement}
-          </span>
-        </div>
-
-        {/* Bottom section */}
-        <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div className="space-y-1">
-              <p className="text-[11px] text-white/30">
-                © {new Date().getFullYear()} NÈKO. All rights reserved.
-              </p>
-              <p className="text-[11px] text-white/30">
-                Hello, NÈKO.
-              </p>
-            </div>
-            
-            <div className="space-y-1">
-              <a 
-                href="https://miketnicholsii.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-[12px] font-medium tracking-wide transition-colors hover:text-secondary"
-                style={{ color: "hsl(16 100% 55% / 0.7)" }}
-              >
-                Mike T. Nichols II
-              </a>
+        {/* Main grid layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
+          
+          {/* Brand column */}
+          <div className="lg:col-span-4">
+            <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
+              <span className="font-display text-2xl font-bold tracking-tight text-white">
+                NÈKO<span className="text-[#E5530A]">.</span>
+              </span>
+            </Link>
+            <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-6">
+              {nekoConfig.brand.tagline}
+            </p>
+            <div className="flex items-center gap-2 text-xs text-white/30">
+              <Heart className="w-3 h-3 text-[#E5530A]/60" />
+              <span>{nekoConfig.brand.missionLine}</span>
             </div>
           </div>
+
+          {/* Nav columns */}
+          <div className="lg:col-span-8 grid grid-cols-3 gap-8">
+            {/* Explore */}
+            <nav aria-label="Explore links">
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Explore
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.explore.map((link) => (
+                  <li key={link.label}>
+                    <FooterLink href={link.href} label={link.label} />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Connect */}
+            <nav aria-label="Connect links">
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Connect
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.connect.map((link) => (
+                  <li key={link.label}>
+                    <FooterLink href={link.href} label={link.label} />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Legal */}
+            <nav aria-label="Legal links">
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Legal
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.label}>
+                    <FooterLink href={link.href} label={link.label} showArrow={false} />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-white/30">
+            © {new Date().getFullYear()} NÈKO. All rights reserved.
+          </p>
+          <a 
+            href="https://miketnicholsii.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
+          >
+            Mike T. Nichols II
+          </a>
         </div>
       </div>
     </footer>

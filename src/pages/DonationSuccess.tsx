@@ -115,18 +115,10 @@ export default function DonationSuccess() {
 
             <motion.p 
               variants={itemVariants}
-              className="text-lg sm:text-xl text-white/60 leading-relaxed mb-4"
+              className="text-lg sm:text-xl text-white/60 leading-relaxed mb-12"
             >
               Your donation will help support mental health nonprofits. 
               Every contribution makes a difference.
-            </motion.p>
-
-            <motion.p 
-              variants={itemVariants}
-              className="text-base text-white/40 leading-relaxed mb-12"
-            >
-              A receipt has been sent to your email.<br />
-              Quarterly transparency notes are shared with all supporters.
             </motion.p>
 
             <motion.div variants={itemVariants}>
