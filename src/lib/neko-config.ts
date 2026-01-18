@@ -31,7 +31,7 @@ export const nekoConfig = {
     { value: "not-sure", label: "Not sure — estimate" },
   ],
   
-  // Proof page metrics (editable placeholders)
+  // Numbers page metrics (editable placeholders)
   metrics: {
     projectsShipped: "20+",
     yearsBuilding: "8+",

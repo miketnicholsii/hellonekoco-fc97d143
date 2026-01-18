@@ -4,6 +4,7 @@ import { nekoConfig } from "@/lib/neko-config";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { WorkBreakdownCharts } from "@/components/WorkBreakdownCharts";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { ArrowRight, Layers, Target, FileText } from "lucide-react";
 
@@ -189,6 +190,8 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
+
+      <WorkBreakdownCharts variant="home" />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FIELDS — Warm Muted (#C8BFB5)
