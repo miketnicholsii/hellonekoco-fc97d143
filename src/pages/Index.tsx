@@ -64,9 +64,10 @@ export default function Index() {
             initial="hidden"
             animate="visible"
           >
-            {/* Signature */}
-            <motion.h1 variants={itemVariants} className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-8">
-              Hello, NÈKO<span className="text-[#E5530A]">.</span>
+            {/* Signature - "Hello," smaller than "NÈKO" */}
+            <motion.h1 variants={itemVariants} className="font-display font-bold tracking-tight text-white mb-8">
+              <span className="block text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white/70 mb-2">Hello,</span>
+              <span className="block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">NÈKO<span className="text-[#E5530A]">.</span></span>
             </motion.h1>
 
             {/* Descriptor */}
@@ -89,8 +90,8 @@ export default function Index() {
               </p>
             </motion.div>
 
-            {/* Primary CTA */}
-            <motion.div variants={itemVariants} className="flex flex-col items-center gap-6 mb-10">
+            {/* Primary CTA - Single button only */}
+            <motion.div variants={itemVariants} className="mb-10">
               <Button 
                 asChild 
                 size="lg" 
@@ -105,13 +106,6 @@ export default function Index() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              
-              <Link 
-                to="/sandbox" 
-                className="text-sm text-white/40 hover:text-white/70 transition-colors underline underline-offset-4"
-              >
-                Read the sandbox note
-              </Link>
             </motion.div>
 
             {/* Badge */}
@@ -288,7 +282,7 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          YES THIS IS REAL — Soft Neutral (#EDE7E3)
+          NOT A PITCH — Soft Neutral (#EDE7E3)
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 sm:py-32" style={{ background: "#EDE7E3" }}>
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
@@ -300,16 +294,16 @@ export default function Index() {
             viewport={{ once: true }}
           >
             <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50 mb-6">
-              Reality check
+              The fine print
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-10" style={{ color: "#334336" }}>
-              Yes, this is real.
+              Built different. On purpose.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl leading-relaxed" style={{ color: "#334336" }}>
-              <p>I do professional-level work.<br />
-              I accept payment when it aligns.</p>
-              <p className="opacity-70">But NÈKO isn't "for hire" on demand — it's invite-only by design.</p>
-              <p className="opacity-50">If it fits, we'll find a shape that works.</p>
+              <p>Professional-level work. Real outcomes.<br />
+              Payment when alignment exists.</p>
+              <p className="opacity-70">NÈKO isn't "for hire" on demand.<br />It's invite-only — because that's how the best work happens.</p>
+              <p className="opacity-50">If it fits, we'll shape something together.</p>
             </motion.div>
           </motion.div>
         </div>

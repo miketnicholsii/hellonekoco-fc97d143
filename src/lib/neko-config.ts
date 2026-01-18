@@ -9,9 +9,9 @@ export const nekoConfig = {
   rate: {
     hourly: 375,
     currency: "$",
-    formatted: "$375",
+    formatted: "$375+",
     unit: "/ hour",
-    description: "Baseline for expectations — not a menu.",
+    description: "Varies by build, project, and task.",
   },
   
   // Preview Session pricing
