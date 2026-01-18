@@ -1,5 +1,5 @@
-import { forwardRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { forwardRef, useState, useCallback } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Heart, Instagram, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { nekoConfig } from "@/lib/neko-config";
@@ -206,6 +206,20 @@ const BottomBar = () => (
 );
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const handleLogoClick = useCallback((e: React.MouseEvent) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Navigate to home, then scroll to top
+      navigate("/");
+      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 100);
+    }
+  }, [location.pathname, navigate]);
+  
   return (
     <>
       {/* Divider before footer */}
@@ -234,7 +248,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           
           {/* Top section - Brand info centered */}
           <motion.div className="flex flex-col items-center text-center mb-10 sm:mb-16" variants={itemVariants}>
-            <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
+            <button onClick={handleLogoClick} className="inline-block mb-4 group cursor-pointer" aria-label="Scroll to top">
               <motion.span 
                 className="font-display text-2xl font-bold tracking-tight text-white relative inline-block"
                 whileHover={{ scale: 1.05 }}
@@ -278,7 +292,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
                   transition={{ duration: 0.3 }}
                 />
               </motion.span>
-            </Link>
+            </button>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-4">
               {nekoConfig.brand.tagline}
             </p>
