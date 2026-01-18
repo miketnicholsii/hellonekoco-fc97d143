@@ -47,8 +47,8 @@ const reachOutReasons = [
 
 export default function Contact() {
   const prefersReducedMotion = useReducedMotion();
-  const emailSubject = encodeURIComponent("Hello, NÈKO");
-
+  const emailSubject = encodeURIComponent("Hello.");
+  const emailBody = encodeURIComponent("Hello, NÈKO.\n\n");
   return (
     <main className="min-h-screen bg-background overflow-hidden">
       <EccentricNavbar />
@@ -171,7 +171,7 @@ export default function Contact() {
             >
               <motion.a
                 variants={itemVariants}
-                href={`mailto:${nekoConfig.email}?subject=${emailSubject}`}
+                href={`mailto:${nekoConfig.email}?subject=${emailSubject}&body=${emailBody}`}
               >
                 <div 
                   className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl"

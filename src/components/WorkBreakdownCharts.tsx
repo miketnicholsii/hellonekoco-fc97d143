@@ -29,16 +29,34 @@ const cardVariants: Variants = {
   visible: { opacity: 1, y: 0, scale: 1, rotateX: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const focusData = [
-  { month: "Jan", exploration: 70, delivery: 30 },
-  { month: "Feb", exploration: 60, delivery: 40 },
-  { month: "Mar", exploration: 45, delivery: 55 },
-  { month: "Apr", exploration: 55, delivery: 45 },
-  { month: "May", exploration: 40, delivery: 60 },
-  { month: "Jun", exploration: 50, delivery: 50 },
-  { month: "Jul", exploration: 35, delivery: 65 },
-  { month: "Aug", exploration: 45, delivery: 55 },
-];
+// Generate dynamic focus data based on current date
+const generateFocusData = () => {
+  const now = new Date();
+  const months = [];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+  // Generate 8 months of data ending with current month
+  for (let i = 7; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthLabel = `${monthNames[date.getMonth()]} '${String(date.getFullYear()).slice(-2)}`;
+    
+    // Create realistic wave pattern with some randomness seeded by month
+    const seed = date.getMonth() + date.getFullYear();
+    const baseExploration = 35 + Math.sin(seed * 0.8) * 20;
+    const variance = ((seed * 7) % 15) - 7;
+    const exploration = Math.max(25, Math.min(75, Math.round(baseExploration + variance)));
+    
+    months.push({
+      month: monthLabel,
+      exploration,
+      delivery: 100 - exploration,
+    });
+  }
+  
+  return months;
+};
+
+const focusData = generateFocusData();
 
 // Animated pie chart segment
 const AnimatedPieSegment = ({ 
