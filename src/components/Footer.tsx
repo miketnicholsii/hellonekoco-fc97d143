@@ -123,7 +123,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         style={{ background: "#1f2a21" }}
       >
         <motion.div 
-          className="container mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10"
+          className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 relative z-10"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -131,7 +131,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         >
           
           {/* Top section - Brand info centered */}
-          <motion.div className="flex flex-col items-center text-center mb-16" variants={itemVariants}>
+          <motion.div className="flex flex-col items-center text-center mb-10 sm:mb-16" variants={itemVariants}>
             <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
               <motion.span 
                 className="font-display text-2xl font-bold tracking-tight text-white relative inline-block"
@@ -188,49 +188,95 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </motion.a>
           </motion.div>
 
-          {/* Nav columns - stack on mobile, 3 columns on desktop */}
-          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 text-center mb-16">
-            {/* Explore */}
-            <motion.nav aria-label="Explore links" variants={itemVariants}>
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Explore
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.explore.map((link) => (
-                  <li key={link.label} className="flex justify-center">
-                    <FooterLink href={link.href} label={link.label} />
-                  </li>
-                ))}
-              </ul>
-            </motion.nav>
+          {/* Nav columns - stack on mobile with dividers, 3 columns on desktop */}
+          <div className="max-w-3xl mx-auto mb-10 sm:mb-16">
+            {/* Desktop: 3 columns */}
+            <div className="hidden sm:grid sm:grid-cols-3 gap-12 text-center">
+              <motion.nav aria-label="Explore links" variants={itemVariants}>
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Explore
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.explore.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
 
-            {/* Connect */}
-            <motion.nav aria-label="Connect links" variants={itemVariants}>
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Connect
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.connect.map((link) => (
-                  <li key={link.label} className="flex justify-center">
-                    <FooterLink href={link.href} label={link.label} />
-                  </li>
-                ))}
-              </ul>
-            </motion.nav>
+              <motion.nav aria-label="Connect links" variants={itemVariants}>
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Connect
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.connect.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
 
-            {/* Legal */}
-            <motion.nav aria-label="Legal links" variants={itemVariants}>
-              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                Legal
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.label} className="flex justify-center">
-                    <FooterLink href={link.href} label={link.label} showArrow={false} />
-                  </li>
-                ))}
-              </ul>
-            </motion.nav>
+              <motion.nav aria-label="Legal links" variants={itemVariants}>
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Legal
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.legal.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} showArrow={false} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
+            </div>
+
+            {/* Mobile: stacked with dividers */}
+            <div className="sm:hidden flex flex-col text-center">
+              <motion.nav aria-label="Explore links" variants={itemVariants} className="py-6">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Explore
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.explore.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
+
+              <div className="w-16 h-px bg-white/10 mx-auto" />
+
+              <motion.nav aria-label="Connect links" variants={itemVariants} className="py-6">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Connect
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.connect.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
+
+              <div className="w-16 h-px bg-white/10 mx-auto" />
+
+              <motion.nav aria-label="Legal links" variants={itemVariants} className="py-6">
+                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                  Legal
+                </h4>
+                <ul className="space-y-3">
+                  {footerLinks.legal.map((link) => (
+                    <li key={link.label} className="flex justify-center">
+                      <FooterLink href={link.href} label={link.label} showArrow={false} />
+                    </li>
+                  ))}
+                </ul>
+              </motion.nav>
+            </div>
           </div>
 
           {/* Bottom bar */}
