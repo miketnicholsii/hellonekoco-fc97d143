@@ -216,7 +216,7 @@ export default function Fields() {
               Want to build some <span className="text-[#E5530A] blur-[4px] hover:blur-none transition-all duration-300 select-none cursor-pointer">sh*t</span>?
             </motion.h2>
             <motion.p variants={itemVariants} className="text-white/60 text-lg mb-10">
-              For-profit, invitation-led, and built on fit.
+              For-profit, invitation-led, and we give some of it away. <span className="text-[#E5530A]/80">#mentalhealth</span>
             </motion.p>
             <motion.div variants={itemVariants}>
               <SayHelloCTA size="lg" />
