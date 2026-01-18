@@ -749,83 +749,104 @@ export default function Index() {
             </motion.h2>
           </motion.div>
 
-          {/* Engagements Content */}
+          {/* Engagements Content - Modular Grid */}
           <motion.div
-            className="max-w-2xl mx-auto space-y-16"
+            className="max-w-4xl mx-auto"
             variants={prefersReducedMotion ? undefined : containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* There is no menu */}
-            <motion.div variants={itemVariants} className="text-center space-y-6">
-              <p className="text-lg sm:text-xl text-white/70 leading-relaxed">
-                There is no menu.<br />
-                There is no fixed scope.
-              </p>
-              <div className="space-y-4">
-                <p className="text-white/50 text-sm uppercase tracking-widest">Pricing reflects:</p>
-                <div className="flex flex-col items-center gap-2 text-white/80">
-                  <span>The size of the problem</span>
-                  <span>The speed required</span>
-                  <span>The cost of getting it wrong</span>
-                </div>
-              </div>
-              <p className="text-sm text-white/40 pt-4">
-                Most engagements begin with a paid diagnostic.<br />
-                Some continue.<br />
-                Many shouldn't.
+            {/* Opening Statement */}
+            <motion.div variants={itemVariants} className="text-center mb-16">
+              <p className="text-xl sm:text-2xl text-white/80 leading-relaxed font-light">
+                There is no menu. There is no fixed scope.
               </p>
             </motion.div>
 
+            {/* Three Column Grid */}
+            <div className="grid md:grid-cols-3 gap-8 lg:gap-10 mb-16">
+              {/* Pricing Reflects */}
+              <motion.div 
+                variants={itemVariants} 
+                className="text-center p-6 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
+                  Pricing reflects
+                </p>
+                <div className="space-y-2 text-white/70 text-sm">
+                  <p>The size of the problem</p>
+                  <p>The speed required</p>
+                  <p>The cost of getting it wrong</p>
+                </div>
+              </motion.div>
+
+              {/* What You Get */}
+              <motion.div 
+                variants={itemVariants} 
+                className="text-center p-6 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
+                  What you get
+                </p>
+                <div className="space-y-2 text-white/70 text-sm">
+                  <p>Clear decisions</p>
+                  <p>Reduced risk</p>
+                  <p>Systems that hold</p>
+                </div>
+              </motion.div>
+
+              {/* Not Included */}
+              <motion.div 
+                variants={itemVariants} 
+                className="text-center p-6 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/40 mb-4">
+                  Not included
+                </p>
+                <div className="space-y-2 text-white/40 text-sm">
+                  <p>Decks</p>
+                  <p>Hours</p>
+                  <p>Exploration without commitment</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Diagnostic Note */}
+            <motion.p 
+              variants={itemVariants} 
+              className="text-center text-sm text-white/50 mb-16"
+            >
+              Most engagements begin with a paid diagnostic. Some continue. Many shouldn't.
+            </motion.p>
+
             {/* Horizontal Divider */}
             <motion.div 
-              className="w-full max-w-md mx-auto h-px bg-white/10"
+              className="w-full max-w-lg mx-auto h-px bg-white/10 my-12"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             />
 
-            {/* What You're Paying For */}
-            <motion.div variants={itemVariants} className="text-center space-y-6">
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                What You're Paying For
-              </h3>
-              <div className="flex flex-col items-center gap-2 text-white/80">
-                <span>Clear decisions.</span>
-                <span>Reduced risk.</span>
-                <span>Systems that don't collapse under use.</span>
-              </div>
-              <div className="pt-6 space-y-2">
-                <p className="text-white/50 text-sm uppercase tracking-widest">You are not paying for:</p>
-                <div className="flex flex-col items-center gap-1 text-white/40">
-                  <span>Decks</span>
-                  <span>Hours</span>
-                  <span>Exploration without commitment</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Horizontal Divider */}
-            <motion.div 
-              className="w-full max-w-md mx-auto h-px bg-white/10"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            />
-
-            {/* Typical Range */}
-            <motion.div variants={itemVariants} className="text-center space-y-6">
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                Typical Range
-              </h3>
-              <div className="text-lg sm:text-xl text-white/70">
-                <span>Projects commonly land between</span>
-                <div className="mt-2 relative inline-block">
+            {/* Two Column: Range & Process */}
+            <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
+              {/* Typical Range */}
+              <motion.div 
+                variants={itemVariants} 
+                className="text-center p-8 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-4">
+                  Typical Range
+                </h3>
+                <p className="text-sm text-white/50 mb-3">Projects commonly land between</p>
+                <div className="relative inline-block mb-4">
                   <span 
-                    className="text-2xl sm:text-3xl font-bold text-[#E5530A] select-none"
+                    className="text-xl sm:text-2xl font-bold text-[#E5530A] select-none"
                     style={{ filter: "blur(8px)" }}
                     aria-hidden="true"
                   >
@@ -833,45 +854,40 @@ export default function Index() {
                   </span>
                   <span className="sr-only">Price range hidden - let's talk</span>
                 </div>
-              </div>
-              <div className="pt-4 space-y-2">
-                <p className="text-white/50 text-sm uppercase tracking-widest">The number moves when:</p>
-                <div className="flex flex-col items-center gap-1 text-white/60">
-                  <span>Stakes increase</span>
-                  <span>Timelines compress</span>
-                  <span>Responsibility expands</span>
+                <div className="space-y-1 text-xs text-white/40 mt-4">
+                  <p>Stakes increase → number moves</p>
+                  <p>Timelines compress → number moves</p>
+                  <p>Responsibility expands → number moves</p>
                 </div>
-              </div>
-              <p className="text-sm text-white/50 pt-4">
-                Curious? Start the conversation.
-              </p>
-            </motion.div>
+              </motion.div>
 
-            {/* Horizontal Divider */}
-            <motion.div 
-              className="w-full max-w-md mx-auto h-px bg-white/10"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            />
+              {/* How This Starts */}
+              <motion.div 
+                variants={itemVariants} 
+                className="text-center p-8 rounded-2xl"
+                style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-4">
+                  How This Starts
+                </h3>
+                <div className="space-y-2 text-sm text-white/70 mb-6">
+                  <p>A short intake.</p>
+                  <p>A direct conversation.</p>
+                  <p>A clear yes or no.</p>
+                </div>
+                <div className="space-y-1 text-xs text-white/40">
+                  <p>No pitches. No courting. No pressure.</p>
+                </div>
+              </motion.div>
+            </div>
 
-            {/* How This Starts */}
-            <motion.div variants={itemVariants} className="text-center space-y-6">
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                How This Starts
-              </h3>
-              <div className="flex flex-col items-center gap-2 text-white/80">
-                <span>A short intake.</span>
-                <span>A direct conversation.</span>
-                <span>A clear yes or no.</span>
-              </div>
-              <div className="pt-4 flex flex-col items-center gap-1 text-white/40">
-                <span>No pitches.</span>
-                <span>No courting.</span>
-                <span>No pressure.</span>
-              </div>
-            </motion.div>
+            {/* CTA Note */}
+            <motion.p 
+              variants={itemVariants} 
+              className="text-center text-sm text-white/50 mt-12"
+            >
+              Curious? Start the conversation.
+            </motion.p>
           </motion.div>
         </div>
       </section>
