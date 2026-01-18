@@ -21,27 +21,69 @@ const footerLinks = {
   ],
 };
 
-// Animated link component
+// Animated link component - enhanced with scale effect
 const FooterLink = ({ href, label, showArrow = true }: { href: string; label: string; showArrow?: boolean }) => (
   <motion.div className="relative inline-block" whileHover="hover" initial="rest">
     <Link 
       to={href} 
-      className="relative inline-flex items-center justify-center gap-1 text-sm text-white/50 transition-colors hover:text-[#E5530A]"
+      className="relative inline-flex items-center gap-1.5 text-sm text-white/50 transition-colors hover:text-[#E5530A]"
     >
-      <span>{label}</span>
+      <motion.span
+        variants={{
+          rest: { x: 0 },
+          hover: { x: showArrow ? 2 : 0 }
+        }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
+        {label}
+      </motion.span>
       {showArrow && (
         <motion.span
           variants={{
-            rest: { opacity: 0, x: -4 },
-            hover: { opacity: 1, x: 0 }
+            rest: { opacity: 0, x: -8, scale: 0.8 },
+            hover: { opacity: 1, x: 0, scale: 1 }
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
         </motion.span>
       )}
     </Link>
+    {/* Underline animation for non-arrow links */}
+    {!showArrow && (
+      <motion.div
+        className="absolute bottom-0 left-0 h-px bg-[#E5530A]"
+        variants={{
+          rest: { width: 0 },
+          hover: { width: "100%" }
+        }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      />
+    )}
   </motion.div>
+);
+
+// Animated external link component
+const ExternalLink = ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
+  <motion.a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={className}
+    whileHover="hover"
+    initial="rest"
+  >
+    <motion.span
+      className="inline-flex items-center gap-2"
+      variants={{
+        rest: { scale: 1 },
+        hover: { scale: 1.02 }
+      }}
+      transition={{ duration: 0.2 }}
+    >
+      {children}
+    </motion.span>
+  </motion.a>
 );
 
 export const Footer = forwardRef<HTMLElement>((_, ref) => {
@@ -77,19 +119,31 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               </div>
               
               {/* Instagram callout */}
-              <a 
+              <motion.a 
                 href="https://www.instagram.com/helloneko.co"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 hover:text-[#E5530A] transition-all duration-300 hover:scale-105"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 transition-colors duration-300"
                 style={{ 
                   background: "rgba(255, 255, 255, 0.05)",
                   border: "1px solid rgba(255, 255, 255, 0.1)"
                 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  borderColor: "rgba(229, 83, 10, 0.4)",
+                  color: "#E5530A"
+                }}
+                transition={{ duration: 0.2 }}
               >
                 <Instagram className="w-4 h-4" />
                 <span>@helloneko.co</span>
-              </a>
+                <motion.span
+                  initial={{ opacity: 0, x: -4 }}
+                  whileHover={{ opacity: 1, x: 0 }}
+                >
+                  <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
+                </motion.span>
+              </motion.a>
             </div>
 
             {/* Nav columns */}
@@ -169,14 +223,33 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             <p className="text-xs text-white/30">
               © 2026 NÈKO. All rights reserved.
             </p>
-            <a 
-              href="https://miketnicholsii.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
-            >
-              Mike T. Nichols II
-            </a>
+            <motion.div whileHover="hover" initial="rest" className="relative">
+              <a 
+                href="https://miketnicholsii.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#E5530A]/70 hover:text-[#E5530A] transition-colors"
+              >
+                <motion.span
+                  variants={{
+                    rest: { x: 0 },
+                    hover: { x: 2 }
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Mike T. Nichols II
+                </motion.span>
+                <motion.span
+                  variants={{
+                    rest: { opacity: 0, x: -6, scale: 0.8 },
+                    hover: { opacity: 1, x: 0, scale: 1 }
+                  }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  <ArrowUpRight className="h-3 w-3" />
+                </motion.span>
+              </a>
+            </motion.div>
           </div>
         </div>
       </footer>
