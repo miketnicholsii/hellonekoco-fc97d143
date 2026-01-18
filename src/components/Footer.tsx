@@ -7,7 +7,7 @@ const footerLinks = {
   explore: [
     { href: "/sandbox", label: "The Sandbox" },
     { href: "/fields", label: "Fields" },
-    { href: "/proof", label: "Proof" },
+    { href: "/proof", label: "Numbers" },
   ],
   connect: [
     { href: "/invite", label: "Work With Me" },
