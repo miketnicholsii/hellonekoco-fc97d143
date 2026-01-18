@@ -40,9 +40,16 @@ export const nekoConfig = {
   // Numbers page metrics (editable placeholders)
   metrics: {
     projectsShipped: "20+",
-    yearsBuilding: "8+",
+    yearsBuilding: "12+ years",
     domainsLaunched: "15+",
-    avgResponseTime: "Varies — invite-only",
+    avgResponseTime: "48h window",
+  },
+
+  // Numbers page pricing signal (directional)
+  pricingSignal: {
+    label: "Typical engagement bands",
+    range: "$8k–$40k",
+    detail: "Focused sprints start around $4k. Directional, not a quote.",
   },
   
   // Toolbox proficiency ratings (0-100)

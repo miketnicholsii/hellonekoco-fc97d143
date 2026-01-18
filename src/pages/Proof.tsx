@@ -36,9 +36,16 @@ const cardVariants: Variants = {
 // Metric cards data
 const metrics = [
   { icon: Rocket, label: "Projects shipped", value: nekoConfig.metrics.projectsShipped, color: "#E5530A" },
-  { icon: Calendar, label: "Years building", value: nekoConfig.metrics.yearsBuilding, color: "#334336" },
+  { icon: Calendar, label: "Crafted systems & taste", value: nekoConfig.metrics.yearsBuilding, color: "#334336" },
   { icon: Globe, label: "Domains launched", value: nekoConfig.metrics.domainsLaunched, color: "#C8BFB5" },
-  { icon: Clock, label: "Response time", value: nekoConfig.metrics.avgResponseTime, color: "#334336" },
+  { 
+    icon: Clock, 
+    label: "Response cadence", 
+    value: nekoConfig.metrics.avgResponseTime, 
+    color: "#334336",
+    valueClassName: "text-2xl sm:text-3xl font-semibold tracking-[0.25em] uppercase",
+    labelClassName: "text-[11px] uppercase tracking-[0.3em] text-[#334336]/70",
+  },
 ];
 
 // Toolbox icons
@@ -120,12 +127,33 @@ export default function Proof() {
                 >
                   <metric.icon className="w-5 h-5" style={{ color: metric.color }} />
                 </div>
-                <div className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-2" style={{ color: "#334336" }}>
+                <div 
+                  className={metric.valueClassName ?? "font-display text-3xl sm:text-4xl font-bold tracking-tight mb-2"}
+                  style={{ color: "#334336" }}
+                >
                   {metric.value}
                 </div>
-                <div className="text-sm text-[#334336]/60">{metric.label}</div>
+                <div className={metric.labelClassName ?? "text-sm text-[#334336]/60"}>{metric.label}</div>
               </motion.div>
             ))}
+          </motion.div>
+          <motion.div
+            variants={cardVariants}
+            className="mt-10 sm:mt-12 max-w-3xl mx-auto rounded-2xl border border-[#C8BFB5]/40 bg-white/90 px-6 sm:px-8 py-6 shadow-lg"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="text-[11px] uppercase tracking-[0.3em] text-[#334336]/60 mb-2">
+                  {nekoConfig.pricingSignal.label}
+                </div>
+                <div className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-[#334336]">
+                  {nekoConfig.pricingSignal.range}
+                </div>
+                <div className="text-sm text-[#334336]/60 mt-2">
+                  {nekoConfig.pricingSignal.detail}
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
