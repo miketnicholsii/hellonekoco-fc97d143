@@ -11,9 +11,9 @@ const footerLinks = {
     { href: "/proof", label: "Signals" },
   ],
   connect: [
-    { href: "/invite", label: "Work With Me" },
+    { href: "/invite", label: "Work with NÈKO." },
     { href: "/donate", label: "Donate" },
-    { href: "/contact", label: "Say Hello" },
+    { href: "/contact", label: "Say hello." },
   ],
   legal: [
     { href: "/legal/privacy", label: "Privacy" },
