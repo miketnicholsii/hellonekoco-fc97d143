@@ -979,29 +979,45 @@ export default function Index() {
               say hello. We'll talk.
             </motion.p>
             <motion.div 
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
-              <Button 
-                asChild 
-                size="lg" 
-                className="group relative rounded-full px-12 py-8 text-lg font-semibold shadow-2xl transition-all duration-300 border-0 overflow-hidden"
-                style={{ 
-                  background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
-                  boxShadow: "0 12px 40px rgba(229, 83, 10, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)"
-                }}
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <Link to="/contact" className="flex items-center gap-3 text-white relative z-10">
-                  Say hello.
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                <Button 
+                  asChild 
+                  size="lg" 
+                  className="group relative rounded-full px-12 py-8 text-lg font-semibold transition-all duration-500 border-0 overflow-hidden"
+                  style={{ 
+                    background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                    boxShadow: "0 8px 32px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                  }}
+                >
+                  <Link 
+                    to="/contact" 
+                    className="flex items-center gap-3 text-white relative z-10 group-hover:gap-4 transition-all duration-300"
                   >
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.span>
-                </Link>
-              </Button>
+                    Say hello.
+                    <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    {/* Subtle glow on hover */}
+                    <span 
+                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                      style={{ 
+                        background: "radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)" 
+                      }}
+                    />
+                  </Link>
+                </Button>
+              </motion.div>
             </motion.div>
             
             {/* Decorative line */}
