@@ -47,6 +47,7 @@ const reachOutReasons = [
 
 export default function Contact() {
   const prefersReducedMotion = useReducedMotion();
+  const emailSubject = encodeURIComponent("Hello, NÈKO");
 
   return (
     <main className="min-h-screen bg-background overflow-hidden">
@@ -170,7 +171,7 @@ export default function Contact() {
             >
               <motion.a
                 variants={itemVariants}
-                href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`}
+                href={`mailto:${nekoConfig.email}?subject=${emailSubject}`}
               >
                 <div 
                   className="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl"

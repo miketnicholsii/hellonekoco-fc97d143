@@ -81,7 +81,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   const showDarkText = !isHeroPage || isScrolled;
 
   // Nav height changes on scroll
-  const navHeight = isScrolled ? "h-14" : "h-16 sm:h-18";
+  const navHeight = isScrolled ? "h-14" : "h-16 sm:h-[72px]";
   const pillFocusClass = showDarkText
     ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     : "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
@@ -124,7 +124,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             </Link>
 
             {/* Center: Pill-shaped nav capsule (Desktop only) */}
-            <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2">
+            <div className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 w-full max-w-[560px] px-6">
               <motion.div
                 layout
                 className="flex h-11 items-center gap-1 rounded-full px-2 transition-all duration-300"
@@ -141,6 +141,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 {/* Home link */}
                 <Link
                   to="/"
+                  aria-current={location.pathname === "/" ? "page" : undefined}
                   className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${pillFocusClass} ${
                     location.pathname === "/" 
                       ? showDarkText 
@@ -165,6 +166,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                       <Link
                         key={link.href}
                         to={link.href}
+                        aria-current={isActive ? "page" : undefined}
                         className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${pillFocusClass} ${
                           isActive
                             ? showDarkText 

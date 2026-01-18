@@ -6,14 +6,14 @@ const CompaniesSection = () => {
       <div className="container mx-auto px-5 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-12 sm:mb-16">
           <span className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/45 mb-5">
-            Credibility
+            Select collaborators
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#334336] mb-5">
-            Companies I&apos;ve worked for
+            Companies I&apos;ve built with
           </h2>
           <p className="text-base sm:text-lg text-[#334336]/60">
-            A small, selective list of collaborators across product, strategy, and digital systems.
-            Quiet work, real outcomes.
+            A small, selective list across product, strategy, and digital systems.
+            Quiet work. Real outcomes.
           </p>
         </div>
 
@@ -58,6 +58,10 @@ const CompaniesSection = () => {
             );
           })}
         </div>
+
+        <p className="mt-10 text-center text-xs text-[#334336]/50">
+          Not exhaustive. Just a glimpse of the kinds of teams that show up here.
+        </p>
       </div>
     </section>
   );

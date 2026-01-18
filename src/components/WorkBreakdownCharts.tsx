@@ -38,13 +38,13 @@ const focusData = [
   { month: "A", exploration: 45, delivery: 55 },
 ];
 
-type WorkBreakdownVariant = "home" | "numbers";
+type WorkBreakdownVariant = "home" | "signals";
 
 interface WorkBreakdownChartsProps {
   variant?: WorkBreakdownVariant;
 }
 
-export function WorkBreakdownCharts({ variant = "numbers" }: WorkBreakdownChartsProps) {
+export function WorkBreakdownCharts({ variant = "signals" }: WorkBreakdownChartsProps) {
   const prefersReducedMotion = useReducedMotion();
   const workMixData = [...nekoConfig.workMix];
 
@@ -75,7 +75,7 @@ export function WorkBreakdownCharts({ variant = "numbers" }: WorkBreakdownCharts
           {variant === "home" && (
             <motion.div variants={itemVariants} className="mt-6">
               <Link to="/proof" className="text-xs font-semibold tracking-[0.2em] uppercase text-[#334336]/60 hover:text-[#334336] transition-colors">
-                View full numbers
+                View the signal index
               </Link>
             </motion.div>
           )}
