@@ -310,7 +310,7 @@ export default function Index() {
       {/* ═══════════════════════════════════════════════════════════════════
           RATE SIGNAL CARD — Soft Neutral (#EDE7E3)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 sm:py-28 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
+      <section id="rate-signal" className="py-20 sm:py-28 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
         {/* Subtle animated background pattern */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
@@ -358,7 +358,7 @@ export default function Index() {
       {/* ═══════════════════════════════════════════════════════════════════
           WORK IN MOTION — White (#FFFFFF)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 relative overflow-hidden bg-white">
+      <section id="work-in-motion" className="py-24 sm:py-32 relative overflow-hidden bg-white">
         {/* Subtle animated grid pattern */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -553,6 +553,7 @@ export default function Index() {
           NO CHECKOUT — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
+        id="how-it-works"
         className="py-24 sm:py-32 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #263029 100%)" }}
       >
@@ -665,7 +666,7 @@ export default function Index() {
       {/* ═══════════════════════════════════════════════════════════════════
           NOT A PITCH — Soft Neutral (#EDE7E3)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
+      <section id="philosophy" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#EDE7E3" }}>
         {/* Decorative corner accents */}
         <div 
           className="absolute top-0 left-0 w-32 h-32 pointer-events-none"
@@ -748,6 +749,7 @@ export default function Index() {
           FINAL CTA — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
+        id="cta"
         className="py-28 sm:py-36 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #1f2a21 100%)" }}
       >
