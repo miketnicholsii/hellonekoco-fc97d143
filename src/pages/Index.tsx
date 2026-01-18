@@ -1014,6 +1014,29 @@ export default function Index() {
               >
                 Trust us, an invoice will follow.
               </motion.p>
+
+              {/* Need Something Free */}
+              <motion.div 
+                className="mt-12 pt-8 border-t border-foreground/10"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8 }}
+              >
+                <p className="text-lg font-medium mb-2" style={{ color: "#E5530A" }}>
+                  Need something free?
+                </p>
+                <p className="opacity-70 text-sm mb-4">
+                  We got you. Let's chat about it.
+                </p>
+                <a 
+                  href="/contact"
+                  className="inline-flex items-center gap-2 text-sm font-medium opacity-60 hover:opacity-100 transition-opacity duration-300 group"
+                >
+                  <span>Reach out</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </a>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
