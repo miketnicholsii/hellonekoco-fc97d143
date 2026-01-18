@@ -23,15 +23,15 @@ const footerLinks = {
 
 // Animated link component - arrow space reserved to prevent layout shift
 const FooterLink = ({ href, label, showArrow = true }: { href: string; label: string; showArrow?: boolean }) => (
-  <motion.div className="relative inline-block" whileHover="hover" initial="rest">
+  <motion.div className="relative inline-flex justify-center" whileHover="hover" initial="rest">
     <Link 
       to={href} 
-      className="relative inline-flex items-center text-sm text-white/50 transition-colors hover:text-[#E5530A]"
+      className="relative inline-flex items-center justify-center text-sm text-white/50 transition-colors hover:text-[#E5530A]"
     >
       <span>{label}</span>
       {showArrow && (
         <motion.span
-          className="ml-1 w-3"
+          className="absolute -right-4"
           variants={{
             rest: { opacity: 0, scale: 0.8 },
             hover: { opacity: 1, scale: 1 }
