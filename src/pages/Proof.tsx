@@ -368,31 +368,29 @@ export default function Proof() {
             viewport={{ once: true }}
           >
             <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-6">
-              Convinced enough?
+              Selective by design. Open to the right work.
             </motion.h2>
             <motion.p variants={itemVariants} className="text-lg text-white/60 mb-10">
-              If something here resonates, let's talk.
+              If it feels like a fit, request an invite. If you&apos;re still curious, start with a simple hello.
             </motion.p>
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <motion.div variants={itemVariants} className="flex flex-col items-center justify-center gap-4">
               <Button 
                 asChild 
                 size="lg" 
                 className="group rounded-full px-8 py-6 text-base font-semibold"
                 style={{ background: "#E5530A", color: "white" }}
               >
-                <Link to="/contact" className="flex items-center gap-2">
-                  Say hello
+                <Link to="/invite" className="flex items-center gap-2">
+                  Request an invite
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                size="lg" 
-                className="rounded-full px-8 py-6 text-base border-white/20 text-white hover:bg-white/10"
+              <Link
+                to="/contact"
+                className="text-sm font-medium text-white/70 underline underline-offset-4 transition-colors hover:text-white"
               >
-                <Link to="/invite">Work with me</Link>
-              </Button>
+                Start with a hello
+              </Link>
             </motion.div>
           </motion.div>
         </div>

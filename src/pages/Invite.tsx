@@ -673,7 +673,7 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
               If something here <span className="text-secondary">resonates</span>…
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-muted-foreground mb-10">
-              Reach out. Not to buy — but to talk.
+              Reach out to see if there's alignment.
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button

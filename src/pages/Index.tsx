@@ -268,11 +268,11 @@ export default function Index() {
               How work happens
             </motion.span>
             <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-10">
-              There's no checkout.
+              Not for sale. Still for real.
             </motion.h2>
             <motion.div variants={itemVariants} className="space-y-6 text-lg sm:text-xl text-white/60 leading-relaxed">
-              <p>NÈKO isn't an agency pipeline or a product you purchase.</p>
-              <p>Work happens through conversation, timing, and mutual interest.</p>
+              <p>NÈKO is for-profit — not free, not a commodity for sale.</p>
+              <p>Work begins through conversation, timing, and mutual fit.</p>
               <p className="text-white/45">Sometimes that leads to collaboration.<br />
               Sometimes it doesn't.<br />
               Both outcomes are fine.</p>
@@ -339,7 +339,7 @@ export default function Index() {
               If something here resonates…
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-white/60 mb-12">
-              Reach out. Not to buy — but to talk.
+              Reach out to see if there's alignment.
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button 
