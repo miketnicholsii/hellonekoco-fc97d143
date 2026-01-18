@@ -185,11 +185,11 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               >
                 <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
               </motion.span>
-            </motion.a>
+          </motion.a>
           </motion.div>
 
-          {/* Nav columns - mathematically centered with equal spacing */}
-          <div className="max-w-3xl mx-auto grid grid-cols-3 gap-12 text-center mb-16">
+          {/* Nav columns - stack on mobile, 3 columns on desktop */}
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12 text-center mb-16">
             {/* Explore */}
             <motion.nav aria-label="Explore links" variants={itemVariants}>
               <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
