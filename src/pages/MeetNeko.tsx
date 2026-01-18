@@ -31,7 +31,7 @@ export default function MeetNeko() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          lol, hell Nope.
+          lol, hell <span className="text-[#E5530A]">Nope.</span>
         </motion.h1>
         
         <motion.p
