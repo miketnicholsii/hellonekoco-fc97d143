@@ -57,16 +57,16 @@ const fields = [
   { 
     icon: BarChart3, 
     title: "Numbers", 
-    body: "Profit. Engagement. Conversions. Measured before opinions get involved.",
-    details: "If it can't be tracked over time, it doesn't count.",
-    badge: "NO VANITY METRICS"
+    body: "Profit. Engagement. Conversions. The only metrics that matter — tracked before opinions enter the room.",
+    details: "If it can't be measured, it doesn't exist here.",
+    badge: "RESULTS FIRST"
   },
   { 
     icon: Target, 
     title: "Digital & Business Strategy", 
-    body: "Positioning and decisions made where mistakes cost time and money.",
-    details: "We fix the thinking before the build.",
-    badge: "NO SAFETY NET"
+    body: "Positioning and decisions made where real stakes exist. We fix the thinking before the build.",
+    details: "No safety nets. No theoretical frameworks. Just clarity that compounds.",
+    badge: "MOMENTUM MATTERS"
   },
 ];
 
@@ -786,10 +786,19 @@ export default function Index() {
               <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
                 Typical Range
               </h3>
-              <p className="text-lg sm:text-xl text-white/70">
-                Projects commonly land between<br />
-                <span className="text-2xl sm:text-3xl font-bold text-[#E5530A]">$25k – $150k+</span>
-              </p>
+              <div className="text-lg sm:text-xl text-white/70">
+                <span>Projects commonly land between</span>
+                <div className="mt-2 relative inline-block">
+                  <span 
+                    className="text-2xl sm:text-3xl font-bold text-[#E5530A] select-none"
+                    style={{ filter: "blur(8px)" }}
+                    aria-hidden="true"
+                  >
+                    $25k – $150k+
+                  </span>
+                  <span className="sr-only">Price range hidden - let's talk</span>
+                </div>
+              </div>
               <div className="pt-4 space-y-2">
                 <p className="text-white/50 text-sm uppercase tracking-widest">The number moves when:</p>
                 <div className="flex flex-col items-center gap-1 text-white/60">
@@ -798,9 +807,8 @@ export default function Index() {
                   <span>Responsibility expands</span>
                 </div>
               </div>
-              <p className="text-sm text-white/40 pt-4 italic">
-                If you need certainty before a conversation,<br />
-                we're not a fit.
+              <p className="text-sm text-white/50 pt-4">
+                Curious? Start the conversation.
               </p>
             </motion.div>
 
@@ -888,7 +896,7 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                Bring your heart and your hustle — those are scarce.
+                Bring your heart and your hustle, mf.
               </motion.p>
               <motion.p 
                 className="opacity-50 text-sm pt-4"
