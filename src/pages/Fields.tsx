@@ -26,19 +26,22 @@ const fields = [
     icon: Layers,
     title: "Digital Structures",
     description: "Websites, identities, and systems designed to work — not just look good.",
-    expanded: "Production-grade code. Modern tools. Built for clarity, longevity, and real use.",
+    details: "Production-grade code. Modern tools. Built for clarity, longevity, and real use.",
+    badge: "Core",
   },
   {
     icon: FileText,
     title: "Case Studies",
     description: "Real builds. Real results. Selected work with permission to share.",
-    expanded: "Documented outcomes from real projects. Shared with permission.",
+    details: "Documented outcomes from real projects. Shared with permission.",
+    badge: "New",
   },
   {
     icon: Target,
     title: "Digital & Business Strategy",
     description: "Positioning, business models, and brand strategy tested in practice.",
-    expanded: "No templates. No theater. Just honest thinking applied to real problems.",
+    details: "No templates. No theater. Just honest thinking applied to real problems.",
+    badge: "Popular",
   },
 ];
 
@@ -67,7 +70,7 @@ export default function Fields() {
             animate="visible"
           >
             <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-8">
-              Things that exist here.
+              The work that lives here.
             </motion.h1>
             
             <motion.p variants={itemVariants} className="text-lg sm:text-xl text-white/60 leading-relaxed">
@@ -95,36 +98,75 @@ export default function Fields() {
               <motion.div 
                 key={i}
                 variants={cardVariants} 
-                className="group relative p-8 sm:p-10 rounded-2xl bg-white border border-[#C8BFB5]/30 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden"
+                className="group relative p-8 sm:p-10 rounded-2xl bg-white border border-[#C8BFB5]/30 shadow-lg transition-all duration-500 overflow-hidden"
                 whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 {/* Background accent on hover */}
                 <motion.div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(135deg, rgba(229, 83, 10, 0.03) 0%, transparent 60%)" }}
+                  style={{ background: "radial-gradient(circle at 50% 0%, rgba(229, 83, 10, 0.12) 0%, transparent 60%)" }}
                 />
 
+                {/* Badge with pulse animation */}
+                <div className="absolute top-4 right-4">
+                  <motion.span 
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      field.badge === "Core" 
+                        ? "bg-[#334336] text-white" 
+                        : field.badge === "New" 
+                          ? "bg-[#E5530A] text-white" 
+                          : "bg-[#334336]/10 text-[#334336]"
+                    }`}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: 2, delay: i * 0.3 }}
+                  >
+                    {field.badge}
+                  </motion.span>
+                </div>
+
                 {/* Icon */}
-                <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110"
+                <motion.div 
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
                   style={{ background: "#334336" }}
+                  whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+                  transition={{ duration: 0.4 }}
                 >
                   <field.icon className="w-6 h-6 text-white" />
-                </div>
+                </motion.div>
                 
-                <h2 className="font-display text-xl sm:text-2xl font-bold mb-4 tracking-tight" style={{ color: "#334336" }}>
+                <h2 className="font-display text-xl sm:text-2xl font-bold mb-3 tracking-tight" style={{ color: "#334336" }}>
                   {field.title}
                 </h2>
-                <p className="leading-relaxed mb-4" style={{ color: "#334336", opacity: 0.7 }}>
+                <p className="leading-relaxed" style={{ color: "#334336", opacity: 0.7 }}>
                   {field.description}
                 </p>
-                <p className="text-sm italic" style={{ color: "#334336", opacity: 0.5 }}>
-                  {field.expanded}
-                </p>
 
-                {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-8 right-8 h-1 rounded-full transition-colors duration-500" style={{ background: "#C8BFB5" }} />
-                <div className="absolute bottom-0 left-8 right-8 h-1 rounded-full scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" style={{ background: "#E5530A" }} />
+                {/* Hover reveal details */}
+                <motion.div 
+                  className="overflow-hidden"
+                  initial={{ height: 0, opacity: 0 }}
+                  whileHover={{ height: "auto", opacity: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  <div className="pt-4 mt-4 border-t border-[#334336]/10">
+                    <p className="text-sm text-[#E5530A] font-medium leading-relaxed">
+                      {field.details}
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Animated progress bar */}
+                <motion.div className="mt-6 h-1 rounded-full overflow-hidden relative" style={{ background: "#C8BFB5" }}>
+                  <motion.div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ background: "#E5530A" }}
+                    initial={{ width: "0%" }}
+                    whileHover={{ width: "100%" }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  />
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
