@@ -143,9 +143,24 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
             {/* Brand column - centered on mobile */}
             <motion.div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left" variants={itemVariants}>
               <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
-                <span className="font-display text-2xl font-bold tracking-tight text-white">
-                  NÈKO<span className="text-[#E5530A]">.</span>
-                </span>
+                <motion.span 
+                  className="font-display text-2xl font-bold tracking-tight text-white relative"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <span className="relative z-10">NÈKO<span className="text-[#E5530A]">.</span></span>
+                  {/* Hover glow effect */}
+                  <motion.span
+                    className="absolute inset-0 -inset-x-4 -inset-y-2 rounded-full pointer-events-none"
+                    style={{ 
+                      background: "radial-gradient(circle, rgba(229, 83, 10, 0.3) 0%, transparent 70%)",
+                      filter: "blur(8px)"
+                    }}
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.span>
               </Link>
               <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-6">
                 {nekoConfig.brand.tagline}
