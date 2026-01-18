@@ -250,9 +250,13 @@ export const EccentricNavbar = memo(function EccentricNavbar({
             transition={{ duration: 0.2 }} 
             className="fixed inset-0 z-[60] lg:hidden"
           >
-            <div 
-              className="absolute inset-0 bg-background/95 backdrop-blur-lg" 
-              onClick={closeMenu} 
+            <motion.div 
+              className="absolute inset-0 bg-background/95" 
+              onClick={closeMenu}
+              initial={{ backdropFilter: "blur(0px)" }}
+              animate={{ backdropFilter: "blur(16px)" }}
+              exit={{ backdropFilter: "blur(0px)" }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             />
             <motion.div
               id="mobile-menu"
