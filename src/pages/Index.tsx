@@ -10,7 +10,7 @@ import { AnimatedRateCard } from "@/components/AnimatedRateCard";
 import CompaniesSection from "@/components/CompaniesSection";
 import { RotatingPill } from "@/components/RotatingPill";
 import { motion, useReducedMotion, useScroll, useTransform, Variants } from "framer-motion";
-import { ArrowRight, Layers, Target, BarChart3, Check, X } from "lucide-react";
+import { ArrowRight, Layers, Target, BarChart3, Check, X, Heart } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -1023,7 +1023,8 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.8 }}
               >
-                <p className="text-lg font-medium mb-2" style={{ color: "#E5530A" }}>
+                <p className="text-lg font-medium mb-2 inline-flex items-center gap-2" style={{ color: "#E5530A" }}>
+                  <Heart className="w-4 h-4" fill="#E5530A" />
                   Need something free?
                 </p>
                 <p className="opacity-70 text-sm mb-4">
