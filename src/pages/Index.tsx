@@ -46,9 +46,27 @@ const floatVariants: Variants = {
 };
 
 const fields = [
-  { icon: Layers, title: "Digital Structures", body: "Websites, identities, and systems designed to work — not just look good." },
-  { icon: FileText, title: "Case Studies", body: "Real builds. Real results. Selected work with permission to share." },
-  { icon: Target, title: "Digital & Business Strategy", body: "Positioning, business models, and brand strategy tested in practice." },
+  { 
+    icon: Layers, 
+    title: "Digital Structures", 
+    body: "Websites, identities, and systems designed to work — not just look good.",
+    details: "Production-grade code. Modern tools. Built for clarity, longevity, and real use.",
+    badge: "Core"
+  },
+  { 
+    icon: FileText, 
+    title: "Case Studies", 
+    body: "Real builds. Real results. Selected work with permission to share.",
+    details: "Documented outcomes from real projects. Shared with permission.",
+    badge: "New"
+  },
+  { 
+    icon: Target, 
+    title: "Digital & Business Strategy", 
+    body: "Positioning, business models, and brand strategy tested in practice.",
+    details: "No templates. No theater. Just honest thinking applied to real problems.",
+    badge: "Popular"
+  },
 ];
 
 export default function Index() {
@@ -496,7 +514,7 @@ export default function Index() {
                 key={i}
                 variants={cardVariants} 
                 className="group relative p-8 sm:p-10 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/50 shadow-lg transition-all duration-500 cursor-default overflow-hidden"
-                whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.03 }}
+                whileHover={prefersReducedMotion ? {} : { y: -8, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 {/* Card hover glow */}
@@ -504,8 +522,21 @@ export default function Index() {
                   className="absolute inset-0 pointer-events-none"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
-                  style={{ background: "radial-gradient(circle at 50% 0%, rgba(229, 83, 10, 0.08) 0%, transparent 60%)" }}
+                  style={{ background: "radial-gradient(circle at 50% 0%, rgba(229, 83, 10, 0.12) 0%, transparent 60%)" }}
                 />
+                
+                {/* Badge */}
+                <div className="absolute top-4 right-4">
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    field.badge === "Core" 
+                      ? "bg-[#334336] text-white" 
+                      : field.badge === "New" 
+                        ? "bg-[#E5530A] text-white" 
+                        : "bg-[#334336]/10 text-[#334336]"
+                  }`}>
+                    {field.badge}
+                  </span>
+                </div>
                 
                 <motion.div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative"
@@ -515,8 +546,24 @@ export default function Index() {
                 >
                   <field.icon className="w-5 h-5 text-white" />
                 </motion.div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-4 relative" style={{ color: "#334336" }}>{field.title}</h3>
+                <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-3 relative" style={{ color: "#334336" }}>{field.title}</h3>
                 <p className="text-[#334336]/70 leading-relaxed relative">{field.body}</p>
+                
+                {/* Hover reveal details */}
+                <motion.div 
+                  className="overflow-hidden"
+                  initial={{ height: 0, opacity: 0 }}
+                  whileHover={{ height: "auto", opacity: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  <div className="pt-4 mt-4 border-t border-[#334336]/10">
+                    <p className="text-sm text-[#E5530A] font-medium leading-relaxed">
+                      {field.details}
+                    </p>
+                  </div>
+                </motion.div>
+                
+                {/* Animated progress bar */}
                 <motion.div 
                   className="mt-6 h-1 rounded-full bg-[#EDE7E3] overflow-hidden relative"
                 >
