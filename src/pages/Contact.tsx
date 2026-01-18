@@ -154,7 +154,7 @@ export default function Contact() {
               Get in touch
             </motion.span>
             
-            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-8">
+            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-8 text-balance">
               Ready when you are.
             </motion.h2>
 

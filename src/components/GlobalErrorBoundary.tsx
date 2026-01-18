@@ -43,10 +43,6 @@ export class GlobalErrorBoundary extends Component<Props, State> {
     window.location.reload();
   };
 
-  private handleGoHome = () => {
-    window.location.href = "/";
-  };
-
   private handleReportProblem = () => {
     const subject = encodeURIComponent("Problem Report - NÈKO App");
     const errorDetails = this.state.error?.message || "Unknown error";
@@ -102,9 +98,11 @@ export class GlobalErrorBoundary extends Component<Props, State> {
                   Reload App
                 </Button>
                 
-                <Button onClick={this.handleGoHome} variant="outline" className="w-full gap-2">
-                  <Home className="h-4 w-4" aria-hidden="true" />
-                  Go to Homepage
+                <Button asChild variant="outline" className="w-full gap-2">
+                  <a href="/" className="flex items-center justify-center gap-2">
+                    <Home className="h-4 w-4" aria-hidden="true" />
+                    Go to Homepage
+                  </a>
                 </Button>
                 
                 <Button 

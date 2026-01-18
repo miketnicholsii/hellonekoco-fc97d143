@@ -641,6 +641,8 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
             <motion.div variants={cardVariants}>
               <a
                 href={nekoConfig.external.donate}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-5 p-6 rounded-2xl bg-secondary/10 border border-secondary/30 hover:bg-secondary/15 transition-colors"
               >
                 <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
@@ -669,7 +671,7 @@ Donation Intent: ${formData.donationIntent ? "Yes" : "No"}
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            <motion.h2 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
               If something here <span className="text-secondary">resonates</span>…
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-muted-foreground mb-10">
