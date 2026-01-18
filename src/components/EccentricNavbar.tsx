@@ -263,7 +263,20 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               className="absolute right-0 top-0 h-full w-full max-w-xs bg-card border-l border-border shadow-xl"
               aria-label="Mobile navigation"
             >
-              <div className="flex flex-col h-full pt-24 pb-8 px-6">
+              {/* Close button at top of panel */}
+              <div className="flex items-center justify-between px-6 pt-6 pb-4">
+                <span className="text-sm font-medium text-muted-foreground">Menu</span>
+                <button
+                  type="button"
+                  onClick={closeMenu}
+                  aria-label="Close menu"
+                  className="p-2.5 rounded-xl bg-muted/50 hover:bg-muted text-foreground min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-90 transition-transform focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="flex flex-col h-full pt-2 pb-8 px-6">
                 <nav className="flex-1 space-y-2" aria-label="Primary">
                   {NAV_LINKS.map((link) => {
                     const isActive = location.pathname === link.href;
