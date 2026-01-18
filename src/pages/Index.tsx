@@ -10,7 +10,7 @@ import { AnimatedRateCard } from "@/components/AnimatedRateCard";
 import CompaniesSection from "@/components/CompaniesSection";
 import { RotatingPill } from "@/components/RotatingPill";
 import { motion, useReducedMotion, useScroll, useTransform, Variants } from "framer-motion";
-import { ArrowRight, Layers, Target, BarChart3 } from "lucide-react";
+import { ArrowRight, Layers, Target, BarChart3, Check, X } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -809,10 +809,19 @@ export default function Index() {
                 <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
                   What you get
                 </p>
-                <div className="space-y-2 text-white/70 text-sm">
-                  <p>Clear decisions</p>
-                  <p>Reduced risk</p>
-                  <p>Systems that hold</p>
+                <div className="space-y-3 text-white/70 text-sm">
+                  <p className="flex items-center justify-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                    <span>Clear decisions</span>
+                  </p>
+                  <p className="flex items-center justify-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                    <span>Reduced risk</span>
+                  </p>
+                  <p className="flex items-center justify-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                    <span>Systems that hold</span>
+                  </p>
                 </div>
               </motion.div>
 
@@ -825,10 +834,19 @@ export default function Index() {
                 <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
                   Not included
                 </p>
-                <div className="space-y-2 text-white/40 text-sm">
-                  <p>Decks</p>
-                  <p>Hours</p>
-                  <p>Exploration without commitment</p>
+                <div className="space-y-3 text-white/40 text-sm">
+                  <p className="flex items-center justify-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30" />
+                    <span>Decks</span>
+                  </p>
+                  <p className="flex items-center justify-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30" />
+                    <span>Hours</span>
+                  </p>
+                  <p className="flex items-center justify-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30" />
+                    <span>Exploration without commitment</span>
+                  </p>
                 </div>
               </motion.div>
             </div>
