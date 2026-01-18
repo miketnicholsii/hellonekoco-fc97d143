@@ -137,111 +137,107 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           viewport={{ once: true, margin: "-100px" }}
         >
           
-          {/* Main grid layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
-            
-            {/* Brand column - centered on mobile */}
-            <motion.div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left" variants={itemVariants}>
-              <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
-                <motion.span 
-                  className="font-display text-2xl font-bold tracking-tight text-white relative"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <span className="relative z-10">NÈKO<span className="text-[#E5530A]">.</span></span>
-                  {/* Hover glow effect */}
-                  <motion.span
-                    className="absolute inset-0 -inset-x-4 -inset-y-2 rounded-full pointer-events-none"
-                    style={{ 
-                      background: "radial-gradient(circle, rgba(229, 83, 10, 0.3) 0%, transparent 70%)",
-                      filter: "blur(8px)"
-                    }}
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.span>
-              </Link>
-              <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-6">
-                {nekoConfig.brand.tagline}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-white/30 mb-6">
-                <Heart className="w-3 h-3 text-[#E5530A]/60" />
-                <span>{nekoConfig.brand.missionLine}</span>
-              </div>
-              
-              {/* Instagram callout */}
-              <motion.a 
-                href="https://www.instagram.com/helloneko.co"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 transition-colors duration-300"
-                style={{ 
-                  background: "rgba(255, 255, 255, 0.05)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)"
-                }}
-                whileHover={{ 
-                  scale: 1.05, 
-                  borderColor: "rgba(229, 83, 10, 0.4)",
-                  color: "#E5530A"
-                }}
-                transition={{ duration: 0.2 }}
+          {/* Top section - Brand info centered */}
+          <motion.div className="flex flex-col items-center text-center mb-16" variants={itemVariants}>
+            <Link to="/" className="inline-block mb-4 group" aria-label="NÈKO home">
+              <motion.span 
+                className="font-display text-2xl font-bold tracking-tight text-white relative inline-block"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <Instagram className="w-4 h-4" />
-                <span>@helloneko.co</span>
+                <span className="relative z-10">NÈKO<span className="text-[#E5530A]">.</span></span>
+                {/* Hover glow effect */}
                 <motion.span
-                  initial={{ opacity: 0, x: -4 }}
-                  whileHover={{ opacity: 1, x: 0 }}
-                >
-                  <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
-                </motion.span>
-              </motion.a>
-            </motion.div>
-
-            {/* Nav columns - centered on mobile */}
-            <div className="lg:col-span-8 grid grid-cols-3 gap-8 text-center lg:text-left">
-              {/* Explore */}
-              <motion.nav aria-label="Explore links" variants={itemVariants}>
-                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                  Explore
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.explore.map((link) => (
-                    <li key={link.label} className="flex justify-center lg:justify-start">
-                      <FooterLink href={link.href} label={link.label} />
-                    </li>
-                  ))}
-                </ul>
-              </motion.nav>
-
-              {/* Connect */}
-              <motion.nav aria-label="Connect links" variants={itemVariants}>
-                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                  Connect
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.connect.map((link) => (
-                    <li key={link.label} className="flex justify-center lg:justify-start">
-                      <FooterLink href={link.href} label={link.label} />
-                    </li>
-                  ))}
-                </ul>
-              </motion.nav>
-
-              {/* Legal */}
-              <motion.nav aria-label="Legal links" variants={itemVariants}>
-                <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
-                  Legal
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.legal.map((link) => (
-                    <li key={link.label} className="flex justify-center lg:justify-start">
-                      <FooterLink href={link.href} label={link.label} showArrow={false} />
-                    </li>
-                  ))}
-                </ul>
-              </motion.nav>
+                  className="absolute -inset-x-4 -inset-y-2 rounded-full pointer-events-none"
+                  style={{ 
+                    background: "radial-gradient(circle, rgba(229, 83, 10, 0.3) 0%, transparent 70%)",
+                    filter: "blur(8px)"
+                  }}
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.span>
+            </Link>
+            <p className="text-white/40 text-sm leading-relaxed max-w-xs mb-4">
+              {nekoConfig.brand.tagline}
+            </p>
+            <div className="flex items-center gap-2 text-xs text-white/30 mb-6">
+              <Heart className="w-3 h-3 text-[#E5530A]/60" />
+              <span>{nekoConfig.brand.missionLine}</span>
             </div>
+            
+            {/* Instagram callout */}
+            <motion.a 
+              href="https://www.instagram.com/helloneko.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 transition-colors duration-300"
+              style={{ 
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)"
+              }}
+              whileHover={{ 
+                scale: 1.05, 
+                borderColor: "rgba(229, 83, 10, 0.4)",
+                color: "#E5530A"
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <Instagram className="w-4 h-4" />
+              <span>@helloneko.co</span>
+              <motion.span
+                initial={{ opacity: 0, x: -4 }}
+                whileHover={{ opacity: 1, x: 0 }}
+              >
+                <ArrowUpRight className="h-3 w-3 text-[#E5530A]" />
+              </motion.span>
+            </motion.a>
+          </motion.div>
+
+          {/* Nav columns - mathematically centered with equal spacing */}
+          <div className="max-w-3xl mx-auto grid grid-cols-3 gap-12 text-center mb-16">
+            {/* Explore */}
+            <motion.nav aria-label="Explore links" variants={itemVariants}>
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Explore
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.explore.map((link) => (
+                  <li key={link.label} className="flex justify-center">
+                    <FooterLink href={link.href} label={link.label} />
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
+
+            {/* Connect */}
+            <motion.nav aria-label="Connect links" variants={itemVariants}>
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Connect
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.connect.map((link) => (
+                  <li key={link.label} className="flex justify-center">
+                    <FooterLink href={link.href} label={link.label} />
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
+
+            {/* Legal */}
+            <motion.nav aria-label="Legal links" variants={itemVariants}>
+              <h4 className="font-display text-xs font-bold tracking-[0.15em] text-white/60 mb-4 uppercase">
+                Legal
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.label} className="flex justify-center">
+                    <FooterLink href={link.href} label={link.label} showArrow={false} />
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
           </div>
 
           {/* Bottom bar */}
