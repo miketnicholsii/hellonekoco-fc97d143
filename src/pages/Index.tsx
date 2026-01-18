@@ -92,8 +92,8 @@ export default function Index() {
               </p>
             </motion.div>
 
-            {/* Primary CTA - Single button only */}
-            <motion.div variants={itemVariants} className="mb-10">
+            {/* Primary CTA */}
+            <motion.div variants={itemVariants} className="mb-10 flex flex-col items-center gap-4">
               <Button 
                 asChild 
                 size="lg" 
@@ -104,10 +104,16 @@ export default function Index() {
                 }}
               >
                 <Link to="/contact" className="flex items-center gap-3 text-white">
-                  SAY HELLO
+                  Say hello
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
+              <Link
+                to="/fields"
+                className="text-sm font-semibold tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors"
+              >
+                See the fields
+              </Link>
             </motion.div>
 
             {/* Badge */}
@@ -160,6 +166,9 @@ export default function Index() {
               <p className="text-sm text-[#334336]/50">{nekoConfig.rate.description}</p>
             </div>
           </motion.div>
+          <p className="mt-6 text-center text-xs sm:text-sm text-[#334336]/45">
+            {nekoConfig.brand.missionLine}
+          </p>
         </div>
       </section>
 
@@ -345,7 +354,7 @@ export default function Index() {
               If something here resonates…
             </motion.h2>
             <motion.p variants={itemVariants} className="text-xl text-white/60 mb-12">
-              Reach out to see if there's alignment.
+              Reach out. Not to buy — but to talk.
             </motion.p>
             <motion.div variants={itemVariants}>
               <Button 
@@ -358,7 +367,7 @@ export default function Index() {
                 }}
               >
                 <Link to="/contact" className="flex items-center gap-3 text-white">
-                  SAY HELLO
+                  Start a conversation
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>

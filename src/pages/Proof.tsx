@@ -86,15 +86,15 @@ export default function Proof() {
               className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase mb-6 px-4 py-1.5 rounded-full"
               style={{ background: "rgba(229, 83, 10, 0.15)", color: "#E5530A", border: "1px solid rgba(229, 83, 10, 0.3)" }}
             >
-              Stats & Signals
+              Signal Index
             </motion.span>
             
             <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-8">
-              Numbers
+              Signals
             </motion.h1>
             
             <motion.p variants={itemVariants} className="text-lg sm:text-xl text-white/60 leading-relaxed mb-4">
-              Quiet signals from shipped work and sustained focus.
+              Directional signals from shipped work and sustained focus.
             </motion.p>
             
             <motion.p variants={itemVariants} className="text-sm text-white/40">
@@ -158,7 +158,7 @@ export default function Proof() {
         </div>
       </section>
 
-      <WorkBreakdownCharts variant="numbers" />
+      <WorkBreakdownCharts variant="signals" />
 
       {/* Toolbox Section - Warm Muted */}
       <section className="py-20 sm:py-28" style={{ background: "#C8BFB5" }}>

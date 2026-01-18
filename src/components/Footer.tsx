@@ -7,7 +7,7 @@ const footerLinks = {
   explore: [
     { href: "/sandbox", label: "The Sandbox" },
     { href: "/fields", label: "Fields" },
-    { href: "/proof", label: "Numbers" },
+    { href: "/proof", label: "Signals" },
   ],
   connect: [
     { href: "/invite", label: "Work With Me" },
@@ -38,7 +38,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
         
         {/* Top section - centered brand */}
         <div className="text-center mb-14 sm:mb-16">
-          <Link to="/" className="inline-block mb-5 group">
+          <Link to="/" className="inline-block mb-5 group" aria-label="NÈKO home">
             <span className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white transition-colors group-hover:text-secondary">
               NÈKO<span className="text-secondary">.</span>
             </span>
