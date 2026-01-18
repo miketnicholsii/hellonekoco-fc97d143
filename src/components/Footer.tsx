@@ -129,7 +129,7 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
           </span>
         </div>
 
-        {/* Bottom section - symmetrical with legacy note */}
+        {/* Bottom section */}
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="space-y-1">
@@ -151,9 +151,6 @@ export const Footer = forwardRef<HTMLElement>((_, ref) => {
               >
                 Mike T. Nichols II
               </a>
-              <p className="text-[10px] text-white/35">
-                {nekoConfig.legacyNote}
-              </p>
             </div>
           </div>
         </div>

@@ -64,9 +64,6 @@ export const nekoConfig = {
     missionStatement: "NÈKO is for-profit. Proceeds support mental health institutions.",
   },
   
-  // Legacy domain note
-  legacyNote: "miketnicholsii.com is being folded into NÈKO.",
-  
   // Social / External
   external: {
     donate: "mailto:neko@helloneko.co?subject=Donation%20Inquiry",
