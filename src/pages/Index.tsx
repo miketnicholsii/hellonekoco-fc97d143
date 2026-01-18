@@ -809,17 +809,17 @@ export default function Index() {
                 <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
                   What you get
                 </p>
-                <div className="space-y-3 text-white/70 text-sm">
-                  <p className="flex items-center justify-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                <div className="space-y-3 text-white/70 text-sm inline-flex flex-col items-start mx-auto">
+                  <p className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70 flex-shrink-0" />
                     <span>Clear decisions</span>
                   </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                  <p className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70 flex-shrink-0" />
                     <span>Reduced risk</span>
                   </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70" />
+                  <p className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#E5530A]/70 flex-shrink-0" />
                     <span>Systems that hold</span>
                   </p>
                 </div>
@@ -834,17 +834,17 @@ export default function Index() {
                 <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
                   Not included
                 </p>
-                <div className="space-y-3 text-white/40 text-sm">
-                  <p className="flex items-center justify-center gap-2">
-                    <X className="w-3.5 h-3.5 text-white/30" />
+                <div className="space-y-3 text-white/40 text-sm inline-flex flex-col items-start mx-auto">
+                  <p className="flex items-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
                     <span>Decks</span>
                   </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <X className="w-3.5 h-3.5 text-white/30" />
+                  <p className="flex items-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
                     <span>Hours</span>
                   </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <X className="w-3.5 h-3.5 text-white/30" />
+                  <p className="flex items-center gap-2">
+                    <X className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
                     <span>Exploration without commitment</span>
                   </p>
                 </div>
