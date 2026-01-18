@@ -165,3 +165,10 @@ export const VALIDATION_LIMITS = {
   SLUG_MAX: 50,
   URL_MAX: 500,
 } as const;
+
+// ============================================================================
+// STRIPE CONFIGURATION
+// ============================================================================
+export const STRIPE_CONFIG = {
+  PUBLISHABLE_KEY: "pk_live_51SksSbLlRyOCUFRXOm9HEK3FY3O20lKzG5KONmJhaN0cNcELYUz6uKBp0gIPGjrMwRycx2I9uX0AmZXKWPtr9Rrt00hjBPC4Ak",
+} as const;
