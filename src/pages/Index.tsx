@@ -993,7 +993,7 @@ export default function Index() {
                 }}
               >
                 <Link to="/contact" className="flex items-center gap-3 text-white relative z-10">
-                  Start a conversation
+                  Say hello.
                   <motion.span
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
