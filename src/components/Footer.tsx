@@ -21,27 +21,20 @@ const footerLinks = {
   ],
 };
 
-// Animated link component - enhanced with scale effect
+// Animated link component - arrow space reserved to prevent layout shift
 const FooterLink = ({ href, label, showArrow = true }: { href: string; label: string; showArrow?: boolean }) => (
   <motion.div className="relative inline-block" whileHover="hover" initial="rest">
     <Link 
       to={href} 
-      className="relative inline-flex items-center gap-1.5 text-sm text-white/50 transition-colors hover:text-[#E5530A]"
+      className="relative inline-flex items-center text-sm text-white/50 transition-colors hover:text-[#E5530A]"
     >
-      <motion.span
-        variants={{
-          rest: { x: 0 },
-          hover: { x: showArrow ? 2 : 0 }
-        }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
-        {label}
-      </motion.span>
+      <span>{label}</span>
       {showArrow && (
         <motion.span
+          className="ml-1 w-3"
           variants={{
-            rest: { opacity: 0, x: -8, scale: 0.8 },
-            hover: { opacity: 1, x: 0, scale: 1 }
+            rest: { opacity: 0, scale: 0.8 },
+            hover: { opacity: 1, scale: 1 }
           }}
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
