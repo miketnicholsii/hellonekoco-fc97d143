@@ -171,7 +171,7 @@ export default function Fields() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-6">
+            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-6 text-balance">
               Something here match what you're <span className="text-[#E5530A]">building</span>?
             </motion.h2>
             <motion.p variants={itemVariants} className="text-white/60 text-lg mb-10">

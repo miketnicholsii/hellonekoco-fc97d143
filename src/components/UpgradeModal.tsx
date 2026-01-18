@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Crown, Lock, Sparkles, Check, ArrowRight } from "lucide-react";
 import {
   Dialog,
@@ -148,8 +148,6 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   ctaText,
   onUpgrade,
 }) => {
-  const navigate = useNavigate();
-
   // Derive values from feature if provided
   const featureConfig = feature ? FEATURE_ENTITLEMENTS[feature] : null;
   const requiredTier = featureConfig?.requiredTier ?? "starter";
@@ -163,18 +161,28 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     "This feature requires a higher subscription tier.";
 
   const handleUpgrade = () => {
-    if (onUpgrade) {
-      onUpgrade();
-    } else {
-      navigate("/pricing");
-    }
+    onUpgrade?.();
     onOpenChange(false);
   };
 
-  const handleViewPlans = () => {
-    navigate("/pricing");
-    onOpenChange(false);
-  };
+  const upgradeLabel = ctaText ?? "Upgrade Now";
+  const upgradeButton = onUpgrade ? (
+    <Button onClick={handleUpgrade} className="w-full gap-2 sm:w-auto">
+      {upgradeLabel}
+      <ArrowRight className="h-4 w-4" />
+    </Button>
+  ) : (
+    <Button asChild className="w-full gap-2 sm:w-auto">
+      <Link
+        to="/pricing"
+        onClick={() => onOpenChange(false)}
+        className="flex items-center gap-2"
+      >
+        {upgradeLabel}
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    </Button>
+  );
 
   // Determine tiers to show
   const currentTierIndex = getTierIndex(currentTier);
@@ -239,22 +247,17 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
           >
             Maybe Later
           </Button>
-          <Button
-            onClick={handleUpgrade}
-            className="w-full gap-2 sm:w-auto"
-          >
-            {ctaText ?? "Upgrade Now"}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          {upgradeButton}
         </DialogFooter>
 
         <p className="text-center text-xs text-muted-foreground">
-          <button
-            onClick={handleViewPlans}
+          <Link
+            to="/pricing"
+            onClick={() => onOpenChange(false)}
             className="underline underline-offset-2 hover:text-foreground"
           >
             Compare all plans
-          </button>
+          </Link>
         </p>
       </DialogContent>
     </Dialog>

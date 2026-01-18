@@ -60,19 +60,18 @@ export const FloatingCTA = memo(function FloatingCTA() {
           role="complementary"
           aria-label="Quick action"
         >
-          <Link to="/contact">
-            <Button 
-              variant="cta" 
-              size="lg" 
-              className="shadow-xl group"
-              aria-label="Contact us - Say Hello"
-            >
-              <span className="flex items-center gap-2">
-                Say Hello
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
-              </span>
-            </Button>
-          </Link>
+          <Button 
+            asChild
+            variant="cta" 
+            size="lg" 
+            className="shadow-xl group"
+            aria-label="Contact us - Say Hello"
+          >
+            <Link to="/contact" className="flex items-center gap-2">
+              Say Hello
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+          </Button>
         </motion.div>
       )}
     </AnimatePresence>

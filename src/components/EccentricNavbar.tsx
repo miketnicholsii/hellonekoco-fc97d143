@@ -82,6 +82,11 @@ export const EccentricNavbar = memo(function EccentricNavbar({
 
   // Nav height changes on scroll
   const navHeight = isScrolled ? "h-14" : "h-16 sm:h-18";
+  const pillFocusClass = showDarkText
+    ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    : "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  const mobileLinkFocusClass =
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
   return (
     <>
@@ -136,7 +141,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 {/* Home link */}
                 <Link
                   to="/"
-                  className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${
+                  className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${pillFocusClass} ${
                     location.pathname === "/" 
                       ? showDarkText 
                         ? "text-white bg-primary" 
@@ -156,15 +161,15 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 {NAV_ITEMS.map((link) => {
                   const isActive = location.pathname === link.href;
                   
-                  return (
-                    <Link
-                      key={link.href}
-                      to={link.href}
-                      className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${
-                        isActive
-                          ? showDarkText 
-                            ? "text-white bg-primary" 
-                            : "text-primary bg-white"
+                    return (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        className={`relative flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-all duration-200 ${pillFocusClass} ${
+                          isActive
+                            ? showDarkText 
+                              ? "text-white bg-primary" 
+                              : "text-primary bg-white"
                           : showDarkText 
                             ? "text-primary/70 hover:text-primary hover:bg-primary/5" 
                             : "text-white/70 hover:text-white hover:bg-white/10"
@@ -265,7 +270,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-200 ${
+                        className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-200 ${mobileLinkFocusClass} ${
                           isActive 
                             ? "text-secondary bg-secondary/10 border border-secondary/20" 
                             : "text-foreground hover:bg-muted hover:pl-5"
@@ -278,21 +283,20 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 </nav>
                 
                 <div className="space-y-3 pt-6 border-t border-border">
-                  <Link to="/contact" onClick={closeMenu}>
-                    <Button 
-                      size="lg" 
-                      className="w-full rounded-full font-semibold border-0"
-                      style={{ 
-                        background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
-                        boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
-                      }}
-                    >
-                      <span className="text-white flex items-center gap-2">
-                        SAY HELLO
-                        <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </Button>
-                  </Link>
+                  <Button 
+                    asChild
+                    size="lg" 
+                    className="w-full rounded-full font-semibold border-0"
+                    style={{ 
+                      background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                      boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
+                    }}
+                  >
+                    <Link to="/contact" onClick={closeMenu} className="flex items-center justify-center gap-2 text-white">
+                      SAY HELLO
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
                   <p className="text-center text-[10px] text-muted-foreground pt-1">
                     Invite-only. By alignment.
                   </p>
