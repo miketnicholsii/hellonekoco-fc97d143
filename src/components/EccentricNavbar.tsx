@@ -96,19 +96,21 @@ export const EccentricNavbar = memo(function EccentricNavbar({
         aria-label="Main navigation"
         role="navigation"
       >
-        {/* Nav background - subtle on scroll with animated shadow */}
+        {/* Nav background - subtle on scroll with animated shadow and tint */}
         <motion.div 
           className="absolute inset-0 border-b transition-colors duration-300"
           initial={false}
           animate={{
-            backgroundColor: isScrolled || !isHeroPage 
-              ? "rgba(255, 255, 255, 0.9)" 
-              : "transparent",
+            backgroundColor: isScrolled 
+              ? "rgba(250, 248, 246, 0.92)" 
+              : !isHeroPage 
+                ? "rgba(255, 255, 255, 0.9)" 
+                : "transparent",
             borderColor: isScrolled || !isHeroPage 
-              ? "rgba(0, 0, 0, 0.08)" 
+              ? "rgba(51, 67, 54, 0.08)" 
               : "transparent",
             boxShadow: isScrolled 
-              ? "0 4px 20px -4px rgba(0, 0, 0, 0.1)" 
+              ? "0 4px 20px -4px rgba(51, 67, 54, 0.12)" 
               : "0 0px 0px 0px rgba(0, 0, 0, 0)",
           }}
           transition={{ duration: 0.4, ease: "easeOut" }}
