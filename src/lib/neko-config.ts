@@ -1,6 +1,12 @@
 // src/lib/neko-config.ts
 // Central configuration for NÈKO - edit values here to update across the site
 
+type Company = {
+  name: string;
+  logo?: string;
+  url?: string;
+};
+
 export const nekoConfig = {
   // Contact & Communication
   email: "neko@helloneko.co",
@@ -63,6 +69,15 @@ export const nekoConfig = {
     forProfit: true,
     missionStatement: "NÈKO is for-profit. Proceeds support mental health institutions.",
   },
+
+  // Companies & collaborators (use optional logo + URL where appropriate)
+  companies: [
+    { name: "Civic Orchard" },
+    { name: "Quiet Signal Studio" },
+    { name: "Blue Harbor Health" },
+    { name: "Starlight Labs" },
+    { name: "Arcadia Collective" },
+  ] as Company[],
   
   // Legacy domain note
   legacyNote: "miketnicholsii.com is being folded into NÈKO.",
@@ -71,7 +86,7 @@ export const nekoConfig = {
   external: {
     donate: "mailto:neko@helloneko.co?subject=Donation%20Inquiry",
   },
-} as const;
+};
 
 // Type for budget options
 export type BudgetOption = typeof nekoConfig.budgetOptions[number];
