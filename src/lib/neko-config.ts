@@ -74,7 +74,7 @@ export const nekoConfig = {
     tagline: "An independent creative sandbox.",
     badge: "Invite-only. By alignment.",
     forProfit: true,
-    missionStatement: "NÈKO is for-profit. Proceeds support mental health institutions.",
+    missionStatement: "NÈKO is for-profit—10% of proceeds support mental health nonprofits, with quarterly transparency notes.",
   },
 
   // Companies & collaborators (use optional logo + URL where appropriate)
