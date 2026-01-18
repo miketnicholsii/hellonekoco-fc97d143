@@ -1,134 +1,202 @@
 // src/pages/Contact.tsx
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { EccentricNavbar } from "@/components/EccentricNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { nekoConfig } from "@/lib/neko-config";
-import { Mail, Send, CheckCircle, ArrowRight } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { z } from "zod";
-
-const contactSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-  email: z.string().trim().email("Valid email required").max(255),
-  message: z.string().trim().min(10, "Please include a message").max(2000),
-  links: z.string().trim().max(500).optional(),
-});
+import { Mail, ArrowRight, Palette, Target, Users, Lightbulb } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 };
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
 };
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+};
+
+const reachOutReasons = [
+  {
+    icon: Palette,
+    title: "Design & Build",
+    description: "Websites, digital systems, visual identity — the craft side of things.",
+  },
+  {
+    icon: Target,
+    title: "Business Strategy",
+    description: "Positioning, messaging, business models, and strategic clarity.",
+  },
+  {
+    icon: Users,
+    title: "General Networking",
+    description: "Industry connections, referrals, or just a good conversation.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Something Else",
+    description: "Ideas, collaborations, questions — if it's interesting, send it.",
+  },
+];
 
 export default function Contact() {
   const prefersReducedMotion = useReducedMotion();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "", links: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-    const result = contactSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      result.error.errors.forEach((err) => {
-        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const { error } = await supabase.functions.invoke("contact-submit", {
-        body: { name: formData.name, email: formData.email, message: `${formData.message}${formData.links ? `\n\nLinks: ${formData.links}` : ""}`, goal: "contact", stage: "contact-form" },
-      });
-      if (error) throw error;
-      setIsSubmitted(true);
-      toast.success("Message sent. I'll be in touch if we're aligned.");
-    } catch {
-      const subject = encodeURIComponent("Hello from " + formData.name);
-      const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n\n${formData.links ? `Links: ${formData.links}` : ""}`.trim());
-      window.location.href = `mailto:${nekoConfig.email}?subject=${subject}&body=${body}`;
-      toast.info("Opening email client as fallback...");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <main className="min-h-screen bg-background overflow-hidden">
       <EccentricNavbar />
 
       {/* Hero */}
-      <section className="pt-36 sm:pt-44 pb-20 sm:pb-24 relative overflow-hidden noise-texture" style={{ background: "linear-gradient(180deg, #334336 0%, #2a3a2d 100%)" }}>
+      <section 
+        className="pt-36 sm:pt-44 pb-20 sm:pb-28 relative overflow-hidden noise-texture" 
+        style={{ background: "linear-gradient(180deg, #334336 0%, #2a3a2d 100%)" }}
+      >
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
-          <motion.div className="max-w-2xl mx-auto text-center" variants={prefersReducedMotion ? undefined : containerVariants} initial="hidden" animate="visible">
-            <motion.h1 variants={itemVariants} className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-10">Say hello</motion.h1>
+          <motion.div 
+            className="max-w-2xl mx-auto text-center" 
+            variants={prefersReducedMotion ? undefined : containerVariants} 
+            initial="hidden" 
+            animate="visible"
+          >
+            <motion.h1 
+              variants={itemVariants} 
+              className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-10"
+            >
+              Say hello
+            </motion.h1>
             <motion.div className="space-y-4 text-lg sm:text-xl text-white/60 leading-relaxed">
-              <motion.p variants={itemVariants}>If you've got a project, an idea, or a question — send it.</motion.p>
-              <motion.p variants={itemVariants} className="text-white/45">If it's aligned and the timing works, I'll respond.<br />If not, that's not rejection — it's focus.</motion.p>
+              <motion.p variants={itemVariants}>
+                If you've got a project, an idea, or a question — send it.
+              </motion.p>
+              <motion.p variants={itemVariants} className="text-white/45">
+                If it's aligned and the timing works, I'll respond.<br />
+                If not, that's not rejection — it's focus.
+              </motion.p>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Form */}
+      {/* What to reach out about */}
       <section className="py-20 sm:py-28" style={{ background: "#EDE7E3" }}>
         <div className="container mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <motion.div variants={prefersReducedMotion ? undefined : containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <motion.h2 variants={itemVariants} className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-8" style={{ color: "#334336" }}>Prefer email?</motion.h2>
-              <motion.a variants={itemVariants} href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`} className="group inline-flex items-center gap-4 px-6 py-5 rounded-2xl bg-white border border-[#C8BFB5]/30 hover:shadow-lg transition-all duration-300">
-                <span className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "#334336" }}><Mail className="w-5 h-5 text-white" /></span>
-                <span className="text-left"><span className="block text-xs text-[#334336]/50 mb-0.5">Email</span><span className="block text-lg font-display font-bold" style={{ color: "#334336" }}>{nekoConfig.email}</span></span>
-              </motion.a>
-              <motion.div variants={itemVariants} className="mt-10 p-6 rounded-2xl bg-white border border-[#C8BFB5]/30">
-                <h3 className="font-display font-bold mb-2" style={{ color: "#334336" }}>Have a bigger project?</h3>
-                <p className="text-sm mb-4" style={{ color: "#334336", opacity: 0.6 }}>Submit a full proposal with budget and timeline.</p>
-                <Button asChild variant="outline" className="rounded-full group"><Link to="/invite" className="flex items-center gap-2">Submit a proposal<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></Link></Button>
-              </motion.div>
+          <motion.div
+            className="max-w-4xl mx-auto"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div variants={itemVariants} className="text-center mb-14">
+              <span className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#334336]/50 mb-4">
+                Good reasons to reach out
+              </span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight" style={{ color: "#334336" }}>
+                What to talk about
+              </h2>
             </motion.div>
 
-            <motion.div variants={prefersReducedMotion ? undefined : containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              {isSubmitted ? (
-                <motion.div variants={itemVariants} className="p-10 rounded-2xl bg-white border border-[#C8BFB5]/30 text-center shadow-lg">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "#334336" }}><CheckCircle className="w-8 h-8 text-white" /></div>
-                  <h3 className="font-display text-2xl font-bold mb-3" style={{ color: "#334336" }}>Message sent</h3>
-                  <p style={{ color: "#334336", opacity: 0.6 }}>I'll be in touch if we're aligned.</p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-white border border-[#C8BFB5]/30 shadow-lg space-y-6">
-                  <h3 className="font-display text-xl font-bold mb-2" style={{ color: "#334336" }}>Quick message</h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-2"><Label htmlFor="name">Name *</Label><Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" className={errors.name ? "border-destructive" : ""} />{errors.name && <p className="text-xs text-destructive">{errors.name}</p>}</div>
-                    <div className="space-y-2"><Label htmlFor="email">Email *</Label><Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" className={errors.email ? "border-destructive" : ""} />{errors.email && <p className="text-xs text-destructive">{errors.email}</p>}</div>
+            <div className="grid sm:grid-cols-2 gap-5 lg:gap-6 mb-16">
+              {reachOutReasons.map((reason, i) => (
+                <motion.div
+                  key={i}
+                  variants={cardVariants}
+                  className="group p-6 sm:p-8 rounded-2xl bg-white border border-[#C8BFB5]/30 hover:shadow-lg transition-all duration-300"
+                  whileHover={prefersReducedMotion ? {} : { y: -4 }}
+                >
+                  <div 
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
+                    style={{ background: "#334336" }}
+                  >
+                    <reason.icon className="w-5 h-5 text-white" />
                   </div>
-                  <div className="space-y-2"><Label htmlFor="message">Message *</Label><Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="What's on your mind?" rows={5} className={errors.message ? "border-destructive" : ""} />{errors.message && <p className="text-xs text-destructive">{errors.message}</p>}</div>
-                  <div className="space-y-2"><Label htmlFor="links">Links (optional)</Label><Input id="links" name="links" value={formData.links} onChange={handleChange} placeholder="Portfolio, existing site, references..." /></div>
-                  <Button type="submit" size="lg" disabled={isSubmitting} className="w-full rounded-full py-6 font-semibold border-0 text-white" style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}>{isSubmitting ? "Sending..." : <><Send className="w-4 h-4 mr-2" />Send</>}</Button>
-                </form>
-              )}
+                  <h3 className="font-display text-lg sm:text-xl font-bold tracking-tight mb-2" style={{ color: "#334336" }}>
+                    {reason.title}
+                  </h3>
+                  <p className="text-[#334336]/60 leading-relaxed text-sm sm:text-base">
+                    {reason.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Email CTA - The main action */}
+      <section 
+        className="py-24 sm:py-32 relative overflow-hidden noise-texture"
+        style={{ background: "linear-gradient(180deg, #334336 0%, #1f2a21 100%)" }}
+      >
+        {/* Ambient glow */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.08) 0%, transparent 60%)" }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            className="max-w-2xl mx-auto text-center"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.span variants={itemVariants} className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-6">
+              Get in touch
+            </motion.span>
+            
+            <motion.h2 variants={itemVariants} className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-8">
+              Ready when you are.
+            </motion.h2>
+
+            <motion.p variants={itemVariants} className="text-lg text-white/50 mb-12">
+              Drop a line. Keep it simple or go deep — either works.
+            </motion.p>
+
+            {/* Big email display */}
+            <motion.a
+              variants={itemVariants}
+              href={`mailto:${nekoConfig.email}?subject=Hello%2C%20N%C3%88KO`}
+              className="group inline-flex flex-col items-center gap-4 p-8 sm:p-10 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+            >
+              <div 
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-2"
+                style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}
+              >
+                <Mail className="w-7 h-7 text-white" />
+              </div>
+              <span className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white group-hover:text-[#E5530A] transition-colors">
+                {nekoConfig.email}
+              </span>
+              <span className="text-sm text-white/40 group-hover:text-white/60 transition-colors">
+                Click to open your email client
+              </span>
+            </motion.a>
+
+            {/* Proposal link */}
+            <motion.div variants={itemVariants} className="mt-14 pt-10 border-t border-white/10">
+              <p className="text-white/40 mb-4 text-sm">Have a bigger project with budget and timeline?</p>
+              <Button 
+                asChild 
+                variant="outline" 
+                className="rounded-full group border-white/20 text-white hover:bg-white/10 hover:border-white/30"
+              >
+                <Link to="/invite" className="flex items-center gap-2">
+                  Submit a full proposal
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
