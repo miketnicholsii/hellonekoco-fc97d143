@@ -822,7 +822,7 @@ export default function Index() {
                 className="text-center p-6 rounded-2xl"
                 style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-white/40 mb-4">
+                <p className="text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#E5530A] mb-4">
                   Not included
                 </p>
                 <div className="space-y-2 text-white/40 text-sm">
