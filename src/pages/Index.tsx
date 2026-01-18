@@ -73,16 +73,40 @@ const fields = [
 export default function Index() {
   const prefersReducedMotion = useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
+  const workRef = useRef<HTMLElement>(null);
+  const pricingRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLElement>(null);
   
   // Parallax scroll effects for hero
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"]
   });
   
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
+  const heroScale = useTransform(heroProgress, [0, 0.5], [1, 0.95]);
+  const heroY = useTransform(heroProgress, [0, 1], [0, 150]);
+
+  // Parallax for work section background
+  const { scrollYProgress: workProgress } = useScroll({
+    target: workRef,
+    offset: ["start end", "end start"]
+  });
+  const workBgY = useTransform(workProgress, [0, 1], ["-5%", "5%"]);
+  
+  // Parallax for pricing section
+  const { scrollYProgress: pricingProgress } = useScroll({
+    target: pricingRef,
+    offset: ["start end", "end start"]
+  });
+  const pricingBgY = useTransform(pricingProgress, [0, 1], ["-8%", "8%"]);
+
+  // Parallax for CTA section
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef,
+    offset: ["start end", "end start"]
+  });
+  const ctaBgScale = useTransform(ctaProgress, [0, 0.5, 1], [0.9, 1, 1.1]);
 
   return (
     <main className="min-h-screen bg-background overflow-x-hidden">
@@ -235,49 +259,58 @@ export default function Index() {
               </motion.p>
             </motion.div>
 
-            {/* Primary CTA with enhanced hover */}
+            {/* Primary CTA with subtle hover */}
             <motion.div variants={itemVariants} className="mb-10 flex flex-col items-center gap-4">
               <motion.div
-                whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                <Button 
-                  asChild 
-                  size="lg" 
-                  className="group rounded-full px-10 py-7 text-lg font-semibold shadow-2xl transition-all duration-300 border-0 relative overflow-hidden"
-                  style={{ 
-                    background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
-                    boxShadow: "0 8px 30px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
-                  }}
+                <motion.div
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                 >
-                  <Link to="/contact" className="flex items-center gap-3 text-white relative z-10">
-                    Say hello
-                    <motion.span
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    className="group rounded-full px-10 py-7 text-lg font-semibold transition-all duration-500 border-0 relative overflow-hidden"
+                    style={{ 
+                      background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
+                      boxShadow: "0 8px 32px rgba(229, 83, 10, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
+                    }}
+                  >
+                    <Link 
+                      to="/contact" 
+                      className="flex items-center gap-3 text-white relative z-10 group-hover:gap-4 transition-all duration-300"
                     >
-                      <ArrowRight className="w-5 h-5" />
-                    </motion.span>
-                  </Link>
-                </Button>
+                      Say hello
+                      <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      <span 
+                        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                        style={{ background: "radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)" }}
+                      />
+                    </Link>
+                  </Button>
+                </motion.div>
               </motion.div>
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.6, duration: 0.5 }}
               >
-                <Link
-                  to="/fields"
-                  className="text-sm font-semibold tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors relative group"
+                <motion.div
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  See the fields
-                  <motion.span
-                    className="absolute -bottom-1 left-0 w-full h-px bg-white/40"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </Link>
+                  <Link
+                    to="/fields"
+                    className="text-sm font-semibold tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors relative group inline-block"
+                  >
+                    See the fields
+                    <span className="absolute -bottom-1 left-0 w-full h-px bg-white/40 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  </Link>
+                </motion.div>
               </motion.div>
             </motion.div>
 
@@ -472,19 +505,21 @@ export default function Index() {
       {/* ═══════════════════════════════════════════════════════════════════
           THE WORK — Warm Muted (#C8BFB5)
           ═══════════════════════════════════════════════════════════════════ */}
-      <section id="the-work" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#C8BFB5" }}>
-        {/* Animated background elements */}
+      <section ref={workRef} id="the-work" className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "#C8BFB5" }}>
+        {/* Parallax background elements */}
         <motion.div
           className="absolute top-20 left-10 w-64 h-64 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(51, 67, 54, 0.05) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          style={{ 
+            background: "radial-gradient(circle, rgba(51, 67, 54, 0.05) 0%, transparent 60%)",
+            y: prefersReducedMotion ? 0 : workBgY 
+          }}
         />
         <motion.div
           className="absolute bottom-20 right-10 w-80 h-80 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.04) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { x: [0, -25, 0], y: [0, 15, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          style={{ 
+            background: "radial-gradient(circle, rgba(229, 83, 10, 0.04) 0%, transparent 60%)",
+            y: prefersReducedMotion ? 0 : workBgY 
+          }}
         />
         
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
@@ -672,18 +707,18 @@ export default function Index() {
           PRICING — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
+        ref={pricingRef}
         id="pricing"
         className="py-24 sm:py-32 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #263029 100%)" }}
       >
-        {/* Multiple animated aurora layers */}
+        {/* Parallax aurora layers */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
           style={{ 
             background: "radial-gradient(ellipse 80% 40% at 20% 80%, rgba(229, 83, 10, 0.08) 0%, transparent 50%)",
+            y: prefersReducedMotion ? 0 : pricingBgY
           }}
-          animate={prefersReducedMotion ? {} : { opacity: [0.3, 0.8, 0.3], x: [0, 30, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute inset-0 pointer-events-none"
@@ -919,22 +954,25 @@ export default function Index() {
           FINAL CTA — Dark Forest Green (#334336)
           ═══════════════════════════════════════════════════════════════════ */}
       <section 
+        ref={ctaRef}
         id="cta"
         className="py-28 sm:py-36 relative overflow-hidden noise-texture"
         style={{ background: "linear-gradient(180deg, #334336 0%, #1f2a21 100%)" }}
       >
-        {/* Multiple layered glows for depth */}
+        {/* Parallax glows for depth */}
         <motion.div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(229, 83, 10, 0.1) 0%, transparent 50%)" }}
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1], rotate: [0, 45, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          style={{ 
+            background: "radial-gradient(circle, rgba(229, 83, 10, 0.1) 0%, transparent 50%)",
+            scale: prefersReducedMotion ? 1 : ctaBgScale
+          }}
         />
         <motion.div
           className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(200, 191, 181, 0.06) 0%, transparent 60%)" }}
-          animate={prefersReducedMotion ? {} : { x: [0, 50, 0], y: [0, -30, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          style={{ 
+            background: "radial-gradient(circle, rgba(200, 191, 181, 0.06) 0%, transparent 60%)",
+            scale: prefersReducedMotion ? 1 : ctaBgScale
+          }}
         />
         
         {/* Animated border accents */}
