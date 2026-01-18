@@ -27,7 +27,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   
   const isHome = location.pathname === "/";
   const activeSection = useSectionScrollspy({ enabled: isHome });
-  const isScrolled = useScrollPosition(20);
+  // Increased threshold for smoother transition - SAY HELLO stays visible longer
+  const isScrolled = useScrollPosition(80);
 
   // Close menu on route change
   useEffect(() => {
@@ -80,8 +81,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
   const isHeroPage = location.pathname === "/";
   const showDarkText = !isHeroPage || isScrolled;
 
-  // Nav height changes on scroll
-  const navHeight = isScrolled ? "h-14" : "h-16 sm:h-[72px]";
+  // Nav height changes on scroll - taller on mobile for better touch
+  const navHeight = isScrolled ? "h-16 sm:h-14" : "h-18 sm:h-16 lg:h-[72px]";
   const pillFocusClass = showDarkText
     ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     : "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
@@ -110,16 +111,16 @@ export const EccentricNavbar = memo(function EccentricNavbar({
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className={`flex items-center justify-between ${navHeight} transition-all duration-300`}>
             
-            {/* Left: Logo */}
+            {/* Left: Logo - More prominent */}
             <Link 
               to="/" 
               className="flex items-center relative z-10 group" 
               title="NÈKO - pronounced 'nay-ko'"
             >
-              <span className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors duration-200 ${
-                showDarkText ? "text-primary" : "text-white"
+              <span className={`font-display text-2xl sm:text-2xl lg:text-3xl font-black tracking-tight transition-all duration-300 ${
+                showDarkText ? "text-primary" : "text-white drop-shadow-lg"
               }`}>
-                NÈKO<span className="text-secondary group-hover:animate-pulse">.</span>
+                NÈKO<span className="text-secondary group-hover:animate-pulse text-3xl sm:text-3xl lg:text-4xl">.</span>
               </span>
             </Link>
 
@@ -202,26 +203,26 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               </Button>
             </div>
 
-            {/* Mobile: Menu button + SAY HELLO */}
-            <div className="flex lg:hidden items-center gap-2">
+            {/* Mobile: Menu button + SAY HELLO - Better touch targets */}
+            <div className="flex lg:hidden items-center gap-3">
               <Button
                 asChild
                 size="sm"
-                className="rounded-full px-4 py-2 font-semibold text-xs shadow-lg border-0"
+                className="rounded-full px-5 py-2.5 font-semibold text-sm shadow-lg border-0 min-h-[44px]"
                 style={{ 
                   background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                   boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
                 }}
               >
-                <Link to="/contact" className="flex items-center gap-1.5 text-white">
+                <Link to="/contact" className="flex items-center gap-2 text-white">
                   SAY HELLO
-                  <ArrowRight className="w-3 h-3" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </Button>
               
               <button
                 ref={menuButtonRef}
-                className={`p-2.5 rounded-lg transition-colors relative z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                className={`p-3 rounded-xl transition-colors relative z-10 min-h-[48px] min-w-[48px] flex items-center justify-center ${
                   showDarkText 
                     ? "text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring" 
                     : "text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/50"
@@ -231,7 +232,7 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu"
               >
-                {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+                {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
               </button>
             </div>
           </div>
@@ -261,8 +262,8 @@ export const EccentricNavbar = memo(function EccentricNavbar({
               className="absolute right-0 top-0 h-full w-full max-w-xs bg-card border-l border-border shadow-xl"
               aria-label="Mobile navigation"
             >
-              <div className="flex flex-col h-full pt-20 pb-6 px-5">
-                <nav className="flex-1 space-y-1" aria-label="Primary">
+              <div className="flex flex-col h-full pt-24 pb-8 px-6">
+                <nav className="flex-1 space-y-2" aria-label="Primary">
                   {NAV_LINKS.map((link) => {
                     const isActive = location.pathname === link.href;
 
@@ -272,10 +273,10 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                         to={link.href} 
                         onClick={closeMenu}
                         aria-current={isActive ? "page" : undefined}
-                        className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-all duration-200 ${mobileLinkFocusClass} ${
+                        className={`flex items-center px-5 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-h-[52px] ${mobileLinkFocusClass} ${
                           isActive 
                             ? "text-secondary bg-secondary/10 border border-secondary/20" 
-                            : "text-foreground hover:bg-muted hover:pl-5"
+                            : "text-foreground hover:bg-muted hover:pl-6"
                         }`}
                       >
                         {link.label}
@@ -284,11 +285,11 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   })}
                 </nav>
                 
-                <div className="space-y-3 pt-6 border-t border-border">
+                <div className="space-y-4 pt-8 border-t border-border">
                   <Button 
                     asChild
                     size="lg" 
-                    className="w-full rounded-full font-semibold border-0"
+                    className="w-full rounded-full font-semibold border-0 min-h-[56px] text-base"
                     style={{ 
                       background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)",
                       boxShadow: "0 4px 14px rgba(229, 83, 10, 0.35)"
@@ -296,10 +297,10 @@ export const EccentricNavbar = memo(function EccentricNavbar({
                   >
                     <Link to="/contact" onClick={closeMenu} className="flex items-center justify-center gap-2 text-white">
                       SAY HELLO
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-5 h-5" />
                     </Link>
                   </Button>
-                  <p className="text-center text-[10px] text-muted-foreground pt-1">
+                  <p className="text-center text-xs text-muted-foreground pt-2">
                     Invite-only. By alignment.
                   </p>
                 </div>

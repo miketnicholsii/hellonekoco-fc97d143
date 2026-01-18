@@ -137,6 +137,9 @@ export default {
         wide: "0.12em",
         wider: "0.2em",
       },
+      height: {
+        "18": "4.5rem",
+      },
       transitionDuration: {
         "400": "400ms",
         "600": "600ms",
