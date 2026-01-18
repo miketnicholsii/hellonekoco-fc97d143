@@ -272,12 +272,19 @@ export default function Index() {
                 Want to build cool sh*t?
               </motion.p>
               <motion.p 
-                className="text-lg text-[#E5530A] font-semibold mt-2"
+                className="text-lg text-[#E5530A] font-semibold mt-2 cursor-default relative inline-block"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.1, duration: 0.6 }}
+                whileHover={{ scale: 1.05, x: 3 }}
               >
                 Just say hello.
+                <motion.span 
+                  className="absolute -bottom-0.5 left-0 h-px bg-[#E5530A]/50 w-full origin-left"
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
               </motion.p>
             </motion.div>
 
