@@ -106,25 +106,25 @@ export default function Donate() {
             initial="hidden" 
             animate="visible"
           >
-            <motion.div
+            <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-              style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}
+              className="flex flex-col items-center mb-8"
             >
-              <motion.div
-                animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+              <div
+                className="flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
+                style={{ background: "linear-gradient(135deg, #E5530A 0%, #C74A09 100%)" }}
               >
-                <Heart className="w-7 h-7 text-white" />
-              </motion.div>
+                <motion.div
+                  animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Heart className="w-7 h-7 text-white" />
+                </motion.div>
+              </div>
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A]">
+                Support Mental Health
+              </span>
             </motion.div>
-
-            <motion.span 
-              variants={itemVariants}
-              className="inline-block text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#E5530A] mb-4"
-            >
-              Support Mental Health
-            </motion.span>
 
             <motion.h1 
               variants={itemVariants} 
