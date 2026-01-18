@@ -72,6 +72,32 @@ export function AnimatedRateCard() {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
     >
+      {/* Pulsing ring animations */}
+      <motion.div
+        className="absolute inset-0 rounded-3xl border-2 border-[#E5530A]/20 pointer-events-none"
+        animate={{ 
+          scale: [1, 1.08, 1.08],
+          opacity: [0.6, 0, 0]
+        }}
+        transition={{ 
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeOut"
+        }}
+      />
+      <motion.div
+        className="absolute inset-0 rounded-3xl border-2 border-[#E5530A]/15 pointer-events-none"
+        animate={{ 
+          scale: [1, 1.12, 1.12],
+          opacity: [0.4, 0, 0]
+        }}
+        transition={{ 
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeOut",
+          delay: 0.5
+        }}
+      />
       <motion.div
         className="relative p-8 sm:p-10 rounded-3xl text-center overflow-hidden cursor-default"
         style={{
